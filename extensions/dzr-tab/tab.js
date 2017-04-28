@@ -21,16 +21,29 @@ var Tab = function () {
 
 		logo.href = self.__link(logo.href);
 
-		browser.storage.sync.get(['api_call', 'last_call'], function (storage) {
+		browser.storage.sync.get(['api_call', 'last_call', 'uuid'], function (storage) {
 
 			var storage_api_call = storage.api_call || 0,
 				storage_last_call = storage.last_call || null,
+				storage_uuid = storage.uuid || null,
 				date = new Date(),
 				timestamp = date.getTime(),
 				refresh_data = !storage_last_call || !localStorage.dzData || (timestamp - storage_last_call) > self.params.store.time;
 
-				_gaq.push(['_trackEvent', 'settings', 'api_call', self.params.calls[storage_api_call].title]);
-				_gaq.push(['_trackEvent', 'refresh_data', refresh_data?'true':'false']);
+				gae('settings', 'api_call', self.params.calls[storage_api_call].title);
+				gae('refresh_data', refresh_data ? 'true' : 'false');
+
+			if (!storage_uuid) {
+
+				var UUID = (Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
+
+				browser.storage.sync.set({
+					uuid: UUID
+				}, function() {
+					localStorage.uuid = UUID;
+				});
+				
+			}
 
 			if (refresh_data) {
 
@@ -43,8 +56,6 @@ var Tab = function () {
 						if (data_type == 'playlist' || data_type == 'album') {
 
 							response.data = response.data.slice(0, 5);
-
-							// console.log(response.data);
 
 							tool.getJson(self.params.urls.api + 'playlist/' + tool.random(response.data).id + '/tracks?limit=' + self.params.limit, function(response) {
 								if (response.data && response.data.length) {
@@ -81,7 +92,6 @@ var Tab = function () {
 		browser.storage.sync.set({
 			last_call: parseInt(timestamp)
 		}, function() {
-			
 			localStorage.dzData = JSON.stringify(data);
 			self.setTrack();
 			
@@ -94,7 +104,7 @@ var Tab = function () {
 		var dzData = JSON.parse(localStorage.dzData),
 			dzMedia = tool.random(dzData);
 
-		_gaq.push(['_trackEvent', 'media', dzMedia.type, dzMedia.id+'']);
+		gae('media', dzMedia.type, dzMedia.id+'');
 
 		//background url
 		var backgroundUrl = dzMedia.album.cover_big || 'https://api.deezer.com/album/' + dzMedia.album.id + '/image?size=500'
