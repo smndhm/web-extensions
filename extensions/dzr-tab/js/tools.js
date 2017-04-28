@@ -1,4 +1,4 @@
-console.log("%c▅"+"%c▃"+"%c▇"+"%c▅"+"%c█"+" %cDeezer Studio 🇫🇷","color:#f00;","color:#ffed00;","color:#ff0092;","color:#c2ff00;","color:#00c7f2;","color:#000;");
+//console.log("%c▅"+"%c▃"+"%c▇"+"%c▅"+"%c█"+" %cDeezer Studio 🇫🇷","color:#f00;","color:#ffed00;","color:#ff0092;","color:#c2ff00;","color:#00c7f2;","color:#000;");
 
 /**
  * Browser
@@ -46,14 +46,16 @@ var Tool = function () {
  * Analytics
  */
 
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', params.ga]);
-_gaq.push(['_trackPageview']);
+var gae = function (category, action, label, value) {
 
-(function() {
-    var ga = document.createElement('script');
-    ga.async = true;
-    ga.src = 'https://ssl.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(ga, s);
-})();
+    var request = new XMLHttpRequest(),
+        ga_params = "v=1&tid=" + params.ga + "&cid=" + localStorage.uuid + "&t=event";
+    if (category) ga_params += "&ec=" + category;
+    if (action) ga_params += "&ea=" + action;
+    if (label) ga_params += "&el=" + label;
+    if (value) ga_params += "&ev=" + value;
+
+    request.open("POST", "http://www.google-analytics.com/collect", true);
+    request.send(ga_params);
+
+};
