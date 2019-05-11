@@ -1,14 +1,13 @@
 /**
  * Params
  */
- 
+
 var params = {
 	app_id: 216424,
 	urls: {
 		api: "https://api.deezer.com/"
 	},
-	calls: [
-		{
+	calls: [{
 			title: "Top playlists",
 			url: "chart/0/playlists"
 		},
@@ -23,7 +22,7 @@ var params = {
 	],
 	limit: 50,
 	store: {
-		time: 60*60*1000,
+		time: 60 * 60 * 1000,
 	},
 	ga: "UA-18714908-8"
 };

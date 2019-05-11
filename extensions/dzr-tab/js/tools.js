@@ -16,29 +16,29 @@ window.browser = (function () {
 
 var Tool = function () {
 
-    this.document = document;
+  this.document = document;
 
-	var self = this;
+  var self = this;
 
-	this.getJson = function (url, callback) {
+  this.getJson = function (url, callback) {
 
-        var request = new XMLHttpRequest();
-        request.open('GET', url, true);
-        request.onreadystatechange = function() {
-            if (this.readyState === 4) {
-                if (this.status >= 200 && this.status < 400)
-                    callback(JSON.parse(this.responseText));
-            }
-        };
-        request.send();
-        request = null;
-
+    var request = new XMLHttpRequest();
+    request.open('GET', url, true);
+    request.onreadystatechange = function () {
+      if (this.readyState === 4) {
+        if (this.status >= 200 && this.status < 400)
+          callback(JSON.parse(this.responseText));
+      }
     };
+    request.send();
+    request = null;
 
-    this.random = function (array) {
-        if (array.constructor === Array)
-            return array[Math.floor(Math.random()*array.length)];
-    };
+  };
+
+  this.random = function (array) {
+    if (array.constructor === Array)
+      return array[Math.floor(Math.random() * array.length)];
+  };
 
 };
 
@@ -48,14 +48,14 @@ var Tool = function () {
 
 var gae = function (category, action, label, value) {
 
-    var request = new XMLHttpRequest(),
-        ga_params = "v=1&tid=" + params.ga + "&cid=" + localStorage.uuid + "&t=event";
-    if (category) ga_params += "&ec=" + category;
-    if (action) ga_params += "&ea=" + action;
-    if (label) ga_params += "&el=" + label;
-    if (value) ga_params += "&ev=" + value;
+  var request = new XMLHttpRequest(),
+    ga_params = "v=1&tid=" + params.ga + "&cid=" + localStorage.uuid + "&t=event";
+  if (category) ga_params += "&ec=" + category;
+  if (action) ga_params += "&ea=" + action;
+  if (label) ga_params += "&el=" + label;
+  if (value) ga_params += "&ev=" + value;
 
-    request.open("POST", "http://www.google-analytics.com/collect", true);
-    request.send(ga_params);
+  request.open("POST", "http://www.google-analytics.com/collect", true);
+  request.send(ga_params);
 
 };

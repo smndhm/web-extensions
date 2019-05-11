@@ -30,8 +30,8 @@ var Tab = function () {
 				timestamp = date.getTime(),
 				refresh_data = !storage_last_call || !localStorage.dzData || (timestamp - storage_last_call) > self.params.store.time;
 
-				gae('settings', 'api_call', self.params.calls[storage_api_call].title);
-				gae('refresh_data', refresh_data ? 'true' : 'false');
+			gae('settings', 'api_call', self.params.calls[storage_api_call].title);
+			gae('refresh_data', refresh_data ? 'true' : 'false');
 
 			if (!storage_uuid) {
 
@@ -39,47 +39,43 @@ var Tab = function () {
 
 				browser.storage.sync.set({
 					uuid: UUID
-				}, function() {
+				}, function () {
 					localStorage.uuid = UUID;
 				});
-				
+
 			}
 
 			if (refresh_data) {
 
-				tool.getJson(self.params.urls.api + self.params.calls[storage_api_call].url + '?limit=' + self.params.limit, function(response) {
+				tool.getJson(self.params.urls.api + self.params.calls[storage_api_call].url + '?limit=' + self.params.limit, function (response) {
 
 					if (response.data && response.data.length) {
 
 						var data_type = response.data[0].type;
-						
+
 						if (data_type == 'playlist' || data_type == 'album') {
 
 							response.data = response.data.slice(0, 5);
 
-							tool.getJson(self.params.urls.api + 'playlist/' + tool.random(response.data).id + '/tracks?limit=' + self.params.limit, function(response) {
+							tool.getJson(self.params.urls.api + 'playlist/' + tool.random(response.data).id + '/tracks?limit=' + self.params.limit, function (response) {
 								if (response.data && response.data.length) {
 									self.storeTracks(response.data, timestamp);
-								}
-								else {
+								} else {
 									self.setTrack();
 								}
 							});
 
-						}
-						else if (data_type == 'track') {
+						} else if (data_type == 'track') {
 							self.storeTracks(response.data, timestamp);
 						}
-						
-					}
-					else {
+
+					} else {
 						self.setTrack();
 					}
 
 				});
 
-			}
-			else {
+			} else {
 				self.setTrack();
 			}
 
@@ -91,10 +87,10 @@ var Tab = function () {
 
 		browser.storage.sync.set({
 			last_call: parseInt(timestamp)
-		}, function() {
+		}, function () {
 			localStorage.dzData = JSON.stringify(data);
 			self.setTrack();
-			
+
 		});
 
 	};
@@ -104,7 +100,7 @@ var Tab = function () {
 		var dzData = JSON.parse(localStorage.dzData),
 			dzMedia = tool.random(dzData);
 
-		gae('media', dzMedia.type, dzMedia.id+'');
+		gae('media', dzMedia.type, dzMedia.id + '');
 
 		//background url
 		var backgroundUrl = dzMedia.album.cover_big || 'https://api.deezer.com/album/' + dzMedia.album.id + '/image?size=500'
@@ -114,9 +110,9 @@ var Tab = function () {
 
 		//udate infos
 		infos.innerHtml = '';
-		var h2  = d.createElement('h2'),
+		var h2 = d.createElement('h2'),
 			h2a = d.createElement('a'),
-			h3  = d.createElement('h3'),
+			h3 = d.createElement('h3'),
 			h3a = d.createElement('a');
 		//h2
 		h2a.textContent = dzMedia.title;
@@ -141,7 +137,7 @@ var Tab = function () {
 	};
 
 	this.__link = function (link) {
-		return link + (self.params && self.params.app_id!=null ? '?app_id=' + self.params.app_id : '');
+		return link + (self.params && self.params.app_id != null ? '?app_id=' + self.params.app_id : '');
 	};
 
 };
