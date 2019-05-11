@@ -1,8 +1,8 @@
 *,
 *::before,
 *::after {
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 html,
@@ -45,10 +45,10 @@ body::after {
 	left: 0;
 
 	background-color: #191922;
-    border-radius: 4px;
-    opacity: .4;
-    
-    z-index: 1;
+	border-radius: 4px;
+	opacity: .4;
+
+	z-index: 1;
 }
 
 /**************************************************
@@ -86,23 +86,23 @@ body::after {
 #infos h2,
 #infos h3 {
 	display: block;
-    margin: 0 0 .1em 0px;
+	margin: 0 0 .1em 0px;
 
-    font-size: 3em;
-    text-transform: uppercase;
+	font-size: 3em;
+	text-transform: uppercase;
 }
 
 #infos h2 a,
 #infos h3 a {
 	display: inline;
-    padding: .25em .5em;
-    
-    background: #fff;
-    -webkit-box-decoration-break: clone;
+	padding: .25em .5em;
 
-    text-decoration: none;
-    color: #32323D;
-    line-height: 1.75em;
+	background: #fff;
+	-webkit-box-decoration-break: clone;
+
+	text-decoration: none;
+	color: #32323D;
+	line-height: 1.75em;
 }
 
 #infos h3 {
@@ -140,17 +140,17 @@ body::after {
 **************************************************/
 
 #background {
-    position: fixed;
-    left: -50px;
-    top: -50px;
-    right: -50px;
-    bottom: -50px;
-    z-index: -1;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: #000;
-    -webkit-filter: blur(30px);
-    filter: blur(60px);
-    transition: background-image 1s ease-in-out;
+	position: fixed;
+	left: -50px;
+	top: -50px;
+	right: -50px;
+	bottom: -50px;
+	z-index: -1;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-color: #000;
+	-webkit-filter: blur(30px);
+	filter: blur(60px);
+	transition: background-image 1s ease-in-out;
 }
