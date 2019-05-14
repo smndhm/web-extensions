@@ -18,7 +18,7 @@
 	},
 
 	"chrome_url_overrides": {
-		"newtab": "tab.html"
+		"newtab": "index.html"
 	},
 
 	"permissions": [
