@@ -3,10 +3,16 @@
   "version": "1.0.0",
   "description": "Discover a Deezer Track every time you open a new tab.",
   "main": "gulpfile.js",
-  "dependencies": {
-    "normalize.css": "^8.0.1"
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-clean-css": "^4.2.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-html-replace": "^1.6.2",
+    "gulp-htmlmin": "^5.0.1",
+    "gulp-sequence": "^1.0.0",
+    "gulp-uglify": "^3.0.2"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
