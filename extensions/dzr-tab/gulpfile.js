@@ -6,7 +6,6 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var htmlmin = require('gulp-htmlmin');
 var htmlreplace = require('gulp-html-replace');
-var gulpSequence = require('gulp-sequence');
 // var	del = require('del');
 // var	jsonminify = require('gulp-jsonminify');
 // var	imagemin = require('gulp-imagemin');
