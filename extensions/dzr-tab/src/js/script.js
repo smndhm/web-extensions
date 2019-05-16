@@ -1,8 +1,4 @@
-/**
- * Params
- */
-
-var params = {
+var Conf = {
 	app_id: 216424,
 	urls: {
 		api: "https://api.deezer.com/"
@@ -25,4 +21,10 @@ var params = {
 		time: 60 * 60 * 1000,
 	},
 	ga: "UA-18714908-8"
+};
+
+window.onload = function () {
+
+	Tab.init();
+
 };
