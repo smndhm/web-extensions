@@ -2,42 +2,36 @@
  * Tab
  */
 
-var Tab = function () {
+var Tab = {
 
-	var self = this,
-		tool = new Tool(),
-		d = tool.document,
-		logo = d.querySelector('#logo'),
-		background = d.querySelector('#background'),
-		infos = d.querySelector('#infos'),
-		cover = d.querySelector('#cover a'),
-		fs;
+	$: {
+		logo: document.querySelector('#logo'),
+		track: document.querySelector('#track')
+	},
 
-	this.params;
+	browser: Utils.browser(),
 
-	this.init = function (params) {
+	init: function () {
 
-		self.params = params || null;
+		Tab.$.logo.href = Tab.__link(Tab.$.logo.href);
 
-		logo.href = self.__link(logo.href);
+		Tab.browser.storage.sync.get(['api_call', 'last_call', 'uuid'], function (storage) {
 
-		browser.storage.sync.get(['api_call', 'last_call', 'uuid'], function (storage) {
+			var storage_api_call = storage.api_call || 0;
+			var storage_last_call = storage.last_call || null;
+			var storage_uuid = storage.uuid || null;
+			var date = new Date();
+			var timestamp = date.getTime();
+			var refresh_data = !storage_last_call || !localStorage.dzData || (timestamp - storage_last_call) > Conf.store.time;
 
-			var storage_api_call = storage.api_call || 0,
-				storage_last_call = storage.last_call || null,
-				storage_uuid = storage.uuid || null,
-				date = new Date(),
-				timestamp = date.getTime(),
-				refresh_data = !storage_last_call || !localStorage.dzData || (timestamp - storage_last_call) > self.params.store.time;
-
-			gae('settings', 'api_call', self.params.calls[storage_api_call].title);
-			gae('refresh_data', refresh_data ? 'true' : 'false');
+			Utils.analytics('settings', 'api_call', Conf.calls[storage_api_call].title);
+			Utils.analytics('refresh_data', refresh_data ? 'true' : 'false');
 
 			if (!storage_uuid) {
 
 				var UUID = (Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
 
-				browser.storage.sync.set({
+				Tab.browser.storage.sync.set({
 					uuid: UUID
 				}, function () {
 					localStorage.uuid = UUID;
@@ -47,7 +41,7 @@ var Tab = function () {
 
 			if (refresh_data) {
 
-				tool.getJson(self.params.urls.api + self.params.calls[storage_api_call].url + '?limit=' + self.params.limit, function (response) {
+				Utils.getJson(Conf.urls.api + Conf.calls[storage_api_call].url + '?limit=' + Conf.limit, function (response) {
 
 					if (response.data && response.data.length) {
 
@@ -57,89 +51,73 @@ var Tab = function () {
 
 							response.data = response.data.slice(0, 5);
 
-							tool.getJson(self.params.urls.api + 'playlist/' + tool.random(response.data).id + '/tracks?limit=' + self.params.limit, function (response) {
+							Utils.getJson(Conf.urls.api + 'playlist/' + Utils.random(response.data).id + '/tracks?limit=' + Conf.limit, function (response) {
 								if (response.data && response.data.length) {
-									self.storeTracks(response.data, timestamp);
+									Tab.storeTracks(response.data, timestamp);
 								} else {
-									self.setTrack();
+									Tab.setTrack();
 								}
 							});
 
 						} else if (data_type == 'track') {
-							self.storeTracks(response.data, timestamp);
+							Tab.storeTracks(response.data, timestamp);
 						}
 
 					} else {
-						self.setTrack();
+						Tab.setTrack();
 					}
 
 				});
 
 			} else {
-				self.setTrack();
+				Tab.setTrack();
 			}
 
 		});
 
-	}
+	},
 
-	this.storeTracks = function (data, timestamp) {
+	storeTracks: function (data, timestamp) {
 
-		browser.storage.sync.set({
+		Tab.browser.storage.sync.set({
 			last_call: parseInt(timestamp)
 		}, function () {
 			localStorage.dzData = JSON.stringify(data);
-			self.setTrack();
+			Tab.setTrack();
 
 		});
 
-	};
+	},
 
-	this.setTrack = function () {
+	setTrack: function () {
 
-		var dzData = JSON.parse(localStorage.dzData),
-			dzMedia = tool.random(dzData);
+		var dzData = JSON.parse(localStorage.dzData);
+		var dzMedia = Utils.random(dzData);
 
-		gae('media', dzMedia.type, dzMedia.id + '');
+		Utils.analytics('media', dzMedia.type, dzMedia.id + '');
 
 		//background url
 		var backgroundUrl = dzMedia.album.cover_big || 'https://api.deezer.com/album/' + dzMedia.album.id + '/image?size=500'
 
-		//set background
-		background.style.backgroundImage = 'url(' + backgroundUrl + ')';
-
-		//udate infos
-		infos.innerHtml = '';
-		var h2 = d.createElement('h2'),
-			h2a = d.createElement('a'),
-			h3 = d.createElement('h3'),
-			h3a = d.createElement('a');
+		//cover
+		var coverA = Tab.$.track.querySelector('.track-cover');
+		coverA.href = Tab.__link(dzMedia.link);
+		coverA.querySelector('img').src = backgroundUrl;
+		
 		//h2
-		h2a.textContent = dzMedia.title;
-		h2a.href = self.__link(dzMedia.link);
-		h2.appendChild(h2a);
-		infos.appendChild(h2);
+		var h2A = Tab.$.track.querySelector('.track-title a');
+		h2A.href = Tab.__link(dzMedia.link);
+		h2A.appendChild(document.createTextNode(dzMedia.title));
+		
 		//h3
-		h3a.textContent = dzMedia.artist.name;
-		h3a.href = self.__link(dzMedia.artist.link);
-		h3.appendChild(h3a);
-		infos.appendChild(h3);
+		var h3A = Tab.$.track.querySelector('.track-artist a');
+		h3A.href = Tab.__link(dzMedia.artist.link);
+		h3A.appendChild(document.createTextNode(dzMedia.artist.name));
 
-		//update link
-		cover.href = self.__link(dzMedia.link);
+	},
 
-		//insert cover
-		cover.innerHtml = '';
-		var img = d.createElement('img');
-		img.src = backgroundUrl;
-		cover.appendChild(img);
-
-	};
-
-	this.__link = function (link) {
-		return link + (self.params && self.params.app_id != null ? '?app_id=' + self.params.app_id : '');
-	};
+	__link: function (link) {
+		return link + (Conf && Conf.app_id != null ? '?app_id=' + Conf.app_id : '');
+	}
 
 };
-
-new Tab().init(params);

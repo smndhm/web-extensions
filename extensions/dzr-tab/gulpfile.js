@@ -26,9 +26,9 @@ const CONF = {
 	js: {
 		files: [
 			// 'js/*.js,
-			'js/params.js',
+			'js/utils.js',
 			'js/tab.js',
-			'js/tools.js',
+			'js/script.js',
 		],
 		file: 'js/script.min.css',
 	},
