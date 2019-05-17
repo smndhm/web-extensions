@@ -44,18 +44,23 @@ body {
  * Track
  */
 
- #track {
-	 display: flex;
-	 flex-direction: column;
- }
+#track {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	width: 100%;
+}
 
 #track .track-cover {
-	display: inline-flex;
+	display: flex;
+	justify-content: center;
 }
 
 #track .track-cover img {
-	max-width: 100%;
-	height: auto;
+	height: 100%;
+	width: -moz-available;
+	width: -webkit-fill-available;
+	width: fill-available;
 }
 
 /*
