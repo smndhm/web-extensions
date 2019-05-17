@@ -99,16 +99,33 @@ var Tab = {
 		//background url
 		var backgroundUrl = dzMedia.album.cover_big || 'https://api.deezer.com/album/' + dzMedia.album.id + '/image?size=500'
 
+		//background color
+		var imgCanvas = new Image();
+		imgCanvas.crossOrigin = 'Anonymous';
+		imgCanvas.onload = function () {
+			var canvas = document.createElement('canvas');
+			var ctx = canvas.getContext('2d');
+			ctx.imageSmoothingEnabled = false;
+			ctx.drawImage(imgCanvas, 0, 0, 1, 1);
+			var pixel = ctx.getImageData(0, 0, 1, 1);
+			var data = pixel.data;
+			var rgba = 'rgba(' + data[0] + ', ' + data[1] +	', ' + data[2] + ', ' + (data[3] / 255) + ')';
+			document.body.style.background = rgba;
+		};
+		imgCanvas.src = backgroundUrl;
+
+
+
 		//cover
-		var coverA = Tab.$.track.querySelector('.track-cover');
+		var coverA = Tab.$.track.querySelector('.track-cover a');
 		coverA.href = Tab.__link(dzMedia.link);
 		coverA.querySelector('img').src = backgroundUrl;
-		
+
 		//h2
 		var h2A = Tab.$.track.querySelector('.track-title a');
 		h2A.href = Tab.__link(dzMedia.link);
 		h2A.appendChild(document.createTextNode(dzMedia.title));
-		
+
 		//h3
 		var h3A = Tab.$.track.querySelector('.track-artist a');
 		h3A.href = Tab.__link(dzMedia.artist.link);
