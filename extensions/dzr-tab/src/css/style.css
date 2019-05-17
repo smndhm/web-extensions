@@ -81,6 +81,7 @@ body {
 
 #track .track-artist a,
 #track .track-title a {
+	color: #000000;
 	text-decoration: none;
 }
 
