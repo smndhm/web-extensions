@@ -27,7 +27,7 @@ body {
 
 body {
 	position: relative;
-	padding: 50px;
+	padding: 100px 50px;
 	box-sizing: border-box;
 
 	display: flex;
@@ -56,11 +56,32 @@ body {
 	justify-content: center;
 }
 
-#track .track-cover img {
+#track .track-cover a {
 	height: 100%;
-	width: -moz-available;
-	width: -webkit-fill-available;
-	width: fill-available;
+}
+
+#track .track-cover a img {
+	width: auto;
+	height: 100%;
+	border-radius: 4px;
+	box-shadow: 0 0 10px rgba(0, 0, 0);
+}
+
+#track .track-title {
+	font-size: 3em;
+	font-weight: 700;
+	margin: .5em 0;
+}
+
+#track .track-artist {
+	font-size: 2em;
+	font-weight: 400;
+	margin: 0;
+}
+
+#track .track-artist a,
+#track .track-title a {
+	text-decoration: none;
 }
 
 /*
