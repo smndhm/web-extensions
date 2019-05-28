@@ -16,7 +16,7 @@
 
 	<!-- Deezer Track -->
 	<div id="track">
-		<div class="track-cover"><a><img /></a></div>
+		<div class="track-cover"><a><img width="500" height="500" /></a></div>
 		<h2 class="track-title"><a></a></h2>
 		<h3 class="track-artist"><a></a></h3>
 	</div>
@@ -25,12 +25,15 @@
 	<!-- Deezer Logo -->
 	<div id="logo">
 		<a href="https://www.deezer.com/">
+			<!-- build:svg -->
 			<img src="css/img/deezer.svg">
+			<!-- endbuild -->
 		</a>
 	</div>
 	<!--/Deezer Logo -->
 
-	<!-- build:css -->
+	<!-- build:js -->
+	<script src="../node_modules/node-vibrant/dist/vibrant.min.js"></script>
 	<script src="js/utils.js"></script>
 	<script src="js/tab.js"></script>
 	<script src="js/script.js"></script>
