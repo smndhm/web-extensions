@@ -1,0 +1,110 @@
+/*
+ * Font
+ */
+
+@font-face {
+	font-family: Deezer;
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url(fonts/deezer-regular.woff2) format("woff2"), url(fonts/deezer-regular.woff) format("woff");
+}
+
+@font-face {
+	font-family: Deezer;
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+	src: url(fonts/deezer-bold.woff2) format("woff2"), url(fonts/deezer-bold.woff) format("woff");
+}
+
+html,
+body {
+	height: 100%;
+	margin: 0;
+}
+
+body {
+	display: flex;
+	position: relative;
+	justify-content: center;
+	box-sizing: border-box;
+	padding: 100px 50px;
+	text-align: center;
+	font-family: Deezer, Arial, sans-serif;
+	font-size: 62.5%;
+	-webkit-font-smoothing: antialiased;
+}
+
+/*
+ * Track
+ */
+
+#track {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	width: 100%;
+}
+
+#track .track-cover {
+	display: flex;
+	justify-content: center;
+}
+
+#track .track-cover a {
+	height: 100%;
+}
+
+#track .track-cover a img {
+	width: auto;
+	height: 100%;
+	border-radius: 4px;
+	box-shadow: 0 0 10px rgba(0, 0, 0);
+}
+
+#track .track-title {
+	margin: .5em 0;
+	font-size: 3em;
+	font-weight: 700;
+}
+
+#track .track-artist {
+	margin: 0;
+	font-size: 2em;
+	font-weight: 400;
+}
+
+#track .track-artist a,
+#track .track-title a {
+	text-decoration: none;
+	color: #000;
+}
+
+.white #track .track-artist a,
+.white #track .track-title a {
+	color: #fff;
+}
+
+/*
+ * Logo
+ */
+
+#logo {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	box-sizing: border-box;
+	width: 100%;
+	height: 50px;
+	padding: 10px 0;
+}
+
+#logo svg {
+	position: relative;
+	height: 30px;
+}
+
+.white #logo svg .deezer {
+	fill: #ffffff;
+}
