@@ -7,9 +7,9 @@ var uglify = require('gulp-uglify');
 var htmlmin = require('gulp-htmlmin');
 var htmlreplace = require('gulp-html-replace');
 var jsonminify = require('gulp-jsonminify');
-var	imagemin = require('gulp-imagemin');
-var	del = require('del');
-var	zip = require('gulp-zip');
+var imagemin = require('gulp-imagemin');
+var del = require('del');
+var zip = require('gulp-zip');
 
 const CONF = {
 	paths: {
@@ -26,11 +26,12 @@ const CONF = {
 	js: {
 		files: [
 			// 'js/*.js,
+			'../node_modules/node-vibrant/dist/vibrant.min.js',
 			'js/utils.js',
 			'js/tab.js',
 			'js/script.js',
 		],
-		file: 'js/script.min.css',
+		file: 'js/script.min.js',
 	},
 	html: {
 		files: [
@@ -46,7 +47,8 @@ const CONF = {
 		files: [
 			'**/*.svg',
 			'**/*.png',
-		]
+		],
+		logo: 'css/img/deezer.svg'
 	},
 	move: {
 		files: [
@@ -95,7 +97,11 @@ gulp.task('minify-html', function () {
 		}))
 		.pipe(htmlreplace({
 			'css': CONF.css.file,
-			'js': CONF.js.file
+			'js': CONF.js.file,
+			'svg': {
+				src: gulp.src(CONF.paths.src + CONF.img.logo),
+				tpl: '%s'
+			}
 		}))
 		.pipe(htmlmin({
 			collapseWhitespace: true,
@@ -118,8 +124,8 @@ gulp.task('minify-json', function () {
 gulp.task('minify-img', function () {
 
 	return gulp.src(CONF.img.files.map(function (file) {
-		return CONF.paths.src + file
-	}))
+			return CONF.paths.src + file
+		}))
 		.pipe(imagemin({
 			verbose: true
 		}))
@@ -127,14 +133,14 @@ gulp.task('minify-img', function () {
 
 });
 
-gulp.task('minify-all', gulp.parallel('minify-css', 'minify-js', 'minify-html', 'minify-json', 'minify-img'));
+gulp.task('minify-all', gulp.series(gulp.parallel('minify-css', 'minify-js', 'minify-json', 'minify-img'), 'minify-html'));
 
 gulp.task('move', function () {
 
 	return gulp.src(CONF.move.files.map(function (file) {
-		return CONF.paths.src + file
-	}))
-	.pipe(gulp.dest(CONF.paths.build));
+			return CONF.paths.src + file
+		}))
+		.pipe(gulp.dest(CONF.paths.build));
 
 });
 
@@ -146,7 +152,7 @@ gulp.task('clean', function () {
 
 gulp.task('zip', function () {
 
-	return gulp.src(CONF.paths.build + '*')
+	return gulp.src(CONF.paths.build + '**/**')
 		.pipe(zip(CONF.zip.file))
 		.pipe(gulp.dest(CONF.paths.build));
 

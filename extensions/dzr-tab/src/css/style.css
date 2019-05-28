@@ -81,6 +81,11 @@ body {
 	color: #000;
 }
 
+.white #track .track-artist a,
+.white #track .track-title a {
+	color: #fff;
+}
+
 /*
  * Logo
  */
@@ -95,7 +100,11 @@ body {
 	padding: 10px 0;
 }
 
-#logo img {
+#logo svg {
 	position: relative;
 	height: 30px;
+}
+
+.white #logo svg .deezer {
+	fill: #ffffff;
 }

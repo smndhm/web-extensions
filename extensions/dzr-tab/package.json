@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Discover a Deezer Track every time you open a new tab.",
   "main": "gulpfile.js",
-  "dependencies": {},
+  "dependencies": {
+    "node-vibrant": "^3.2.0-alpha"
+  },
   "devDependencies": {
     "del": "^4.1.1",
     "gulp": "^4.0.2",

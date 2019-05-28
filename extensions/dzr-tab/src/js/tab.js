@@ -97,24 +97,16 @@ var Tab = {
 		Utils.analytics('media', dzMedia.type, dzMedia.id + '');
 
 		//background url
-		var backgroundUrl = dzMedia.album.cover_big || 'https://api.deezer.com/album/' + dzMedia.album.id + '/image?size=500'
+		var backgroundUrl = dzMedia.album.cover_big || 'https://api.deezer.com/album/' + dzMedia.album.id + '/image?size=500';
 
-		//background color
-		var imgCanvas = new Image();
-		imgCanvas.crossOrigin = 'Anonymous';
-		imgCanvas.onload = function () {
-			var canvas = document.createElement('canvas');
-			var ctx = canvas.getContext('2d');
-			ctx.imageSmoothingEnabled = false;
-			ctx.drawImage(imgCanvas, 0, 0, 1, 1);
-			var pixel = ctx.getImageData(0, 0, 1, 1);
-			var data = pixel.data;
-			var rgba = 'rgba(' + data[0] + ', ' + data[1] +	', ' + data[2] + ', ' + (data[3] / 255) + ')';
-			document.body.style.background = rgba;
-		};
-		imgCanvas.src = backgroundUrl;
-
-
+		Vibrant.from(backgroundUrl).getPalette(function (err, palette) {
+			var rgba1 = 'rgba(' + palette.Vibrant._rgb[0] + ', ' + palette.Vibrant._rgb[1] + ', ' + palette.Vibrant._rgb[2] + ', 1)';
+			var rgba2 = 'rgba(' + palette.Muted._rgb[0] + ', ' + palette.Muted._rgb[1] + ', ' + palette.Muted._rgb[2] + ', 1)';
+			document.body.style.backgroundImage = 'linear-gradient(to right top, ' + rgba1 + ', ' + rgba2 + ')';
+			var o = Math.round(((parseInt(palette.Vibrant._rgb[0]) * 299) + (parseInt(palette.Vibrant._rgb[1]) * 587) + (parseInt(palette.Vibrant._rgb[2]) * 114)) / 1000);
+			var fore = (o > 125) ? 'black' : 'white';
+			document.body.classList.add(fore);
+		});
 
 		//cover
 		var coverA = Tab.$.track.querySelector('.track-cover a');
