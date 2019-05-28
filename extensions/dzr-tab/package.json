@@ -1,0 +1,40 @@
+{
+  "name": "dzr-tab",
+  "version": "1.0.0",
+  "description": "Discover a Deezer Track every time you open a new tab.",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "node-vibrant": "^3.2.0-alpha"
+  },
+  "devDependencies": {
+    "del": "^4.1.1",
+    "gulp": "^4.0.2",
+    "gulp-clean-css": "^4.2.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-html-replace": "^1.6.2",
+    "gulp-htmlmin": "^5.0.1",
+    "gulp-imagemin": "^5.0.3",
+    "gulp-jsonminify": "^1.1.0",
+    "gulp-uglify": "^3.0.2",
+    "gulp-zip": "^4.2.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smndhm/dzr-tab.git"
+  },
+  "keywords": [
+    "dzr",
+    "deezer",
+    "tab",
+    "browser"
+  ],
+  "author": "@smndhm",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/smndhm/dzr-tab/issues"
+  },
+  "homepage": "https://github.com/smndhm/dzr-tab#readme"
+}
