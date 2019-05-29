@@ -100,12 +100,13 @@ var Tab = {
 		var backgroundUrl = dzMedia.album.cover_big || 'https://api.deezer.com/album/' + dzMedia.album.id + '/image?size=500';
 
 		Vibrant.from(backgroundUrl).getPalette(function (err, palette) {
-			var rgba1 = 'rgba(' + palette.Vibrant._rgb[0] + ', ' + palette.Vibrant._rgb[1] + ', ' + palette.Vibrant._rgb[2] + ', 1)';
-			var rgba2 = 'rgba(' + palette.Muted._rgb[0] + ', ' + palette.Muted._rgb[1] + ', ' + palette.Muted._rgb[2] + ', 1)';
-			document.body.style.backgroundImage = 'linear-gradient(to right top, ' + rgba1 + ', ' + rgba2 + ')';
+			var rgbaFrom = 'rgba(' + palette.Vibrant._rgb[0] + ', ' + palette.Vibrant._rgb[1] + ', '  + palette.Vibrant._rgb[2] + ', 1)';
+			var rgbaTo = 'rgba(' + palette.Muted._rgb[0] + ', ' + palette.Muted._rgb[1] + ', ' + palette.Muted._rgb[2] + ', 1)';
+			document.body.style.backgroundImage = 'linear-gradient(to right top, ' + rgbaFrom + ', ' + rgbaTo + ')';
 			var o = Math.round(((parseInt(palette.Vibrant._rgb[0]) * 299) + (parseInt(palette.Vibrant._rgb[1]) * 587) + (parseInt(palette.Vibrant._rgb[2]) * 114)) / 1000);
-			var fore = (o > 125) ? 'black' : 'white';
-			document.body.classList.add(fore);
+			if (o <= 125) {
+				document.body.classList.add('white');
+			}
 		});
 
 		//cover
