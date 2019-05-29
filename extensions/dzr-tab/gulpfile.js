@@ -10,11 +10,13 @@ var jsonminify = require('gulp-jsonminify');
 var imagemin = require('gulp-imagemin');
 var del = require('del');
 var zip = require('gulp-zip');
+var jeditor = require("gulp-json-editor");
 
 const CONF = {
 	paths: {
 		src: 'src/',
-		build: 'build/'
+		build: 'build/',
+		tmp: '.tmp/'
 	},
 	css: {
 		files: [
@@ -41,7 +43,8 @@ const CONF = {
 	json: {
 		files: [
 			'manifest.json',
-		]
+		],
+		manifest: 'manifest.json'
 	},
 	img: {
 		files: [
@@ -57,7 +60,8 @@ const CONF = {
 		]
 	},
 	zip: {
-		file: 'dzr-tab.zip'
+		file: 'dzr-tab.zip',
+		firefox : 'dzr-tab-ff.zip'
 	}
 };
 
@@ -75,7 +79,7 @@ gulp.task('minify-css', function () {
 			}
 		}))
 		.pipe(concat(CONF.css.file))
-		.pipe(gulp.dest(CONF.paths.build));
+		.pipe(gulp.dest(CONF.paths.tmp));
 
 });
 
@@ -86,7 +90,7 @@ gulp.task('minify-js', function () {
 		}))
 		.pipe(uglify())
 		.pipe(concat(CONF.js.file))
-		.pipe(gulp.dest(CONF.paths.build));
+		.pipe(gulp.dest(CONF.paths.tmp));
 
 });
 
@@ -107,7 +111,7 @@ gulp.task('minify-html', function () {
 			collapseWhitespace: true,
 			removeComments: true
 		}))
-		.pipe(gulp.dest(CONF.paths.build));
+		.pipe(gulp.dest(CONF.paths.tmp));
 
 });
 
@@ -117,7 +121,7 @@ gulp.task('minify-json', function () {
 			return CONF.paths.src + file
 		}))
 		.pipe(jsonminify())
-		.pipe(gulp.dest(CONF.paths.build));
+		.pipe(gulp.dest(CONF.paths.tmp));
 
 });
 
@@ -129,7 +133,7 @@ gulp.task('minify-img', function () {
 		.pipe(imagemin({
 			verbose: true
 		}))
-		.pipe(gulp.dest(CONF.paths.build));
+		.pipe(gulp.dest(CONF.paths.tmp));
 
 });
 
@@ -140,22 +144,40 @@ gulp.task('move', function () {
 	return gulp.src(CONF.move.files.map(function (file) {
 			return CONF.paths.src + file
 		}))
-		.pipe(gulp.dest(CONF.paths.build));
+		.pipe(gulp.dest(CONF.paths.tmp));
 
 });
 
 gulp.task('clean', function () {
 
-	return del(CONF.paths.build);
+	return del([CONF.paths.tmp, CONF.paths.build]);
 
 });
 
 gulp.task('zip', function () {
 
-	return gulp.src(CONF.paths.build + '**/**')
+	return gulp.src(CONF.paths.tmp + '**/**')
 		.pipe(zip(CONF.zip.file))
 		.pipe(gulp.dest(CONF.paths.build));
 
 });
 
-gulp.task('default', gulp.series('clean', gulp.parallel('move', 'minify-all'), 'zip'));
+gulp.task('build', gulp.series('clean', gulp.parallel('move', 'minify-all'), 'zip'));
+
+gulp.task('build_firefox', function () {
+
+	gulp.src(CONF.paths.tmp + CONF.json.manifest)
+		.pipe(jeditor(function (json) {
+			delete json.version_name;
+			return json;
+		}))
+		.pipe(jsonminify())
+		.pipe(gulp.dest(CONF.paths.tmp));
+
+		return gulp.src(CONF.paths.tmp + '**/**')
+		.pipe(zip(CONF.zip.firefox))
+		.pipe(gulp.dest(CONF.paths.build));
+
+});
+
+gulp.task('default', gulp.series('build', 'build_firefox'));
