@@ -24,9 +24,6 @@ var Tab = {
 			var timestamp = date.getTime();
 			var refresh_data = !storage_last_call || !localStorage.dzData || (timestamp - storage_last_call) > Conf.store.time;
 
-			Utils.analytics('settings', 'api_call', Conf.calls[storage_api_call].title);
-			Utils.analytics('refresh_data', refresh_data ? 'true' : 'false');
-
 			if (!storage_uuid) {
 
 				var UUID = (Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
@@ -93,8 +90,6 @@ var Tab = {
 
 		var dzData = JSON.parse(localStorage.dzData);
 		var dzMedia = Utils.random(dzData);
-
-		Utils.analytics('media', dzMedia.type, dzMedia.id + '');
 
 		//background url
 		var backgroundUrl = dzMedia.album.cover_big || 'https://api.deezer.com/album/' + dzMedia.album.id + '/image?size=500';
