@@ -35,6 +35,18 @@ pnpm compile
 
 The version of each extension comes from its `package.json`.
 
+## Store screenshots
+
+The [Store screenshots](.github/workflows/screenshots.yml) workflow (**Actions** tab) loads dzr-tab in Chromium with real Deezer tracks and uploads 1280×800 screenshots, the size the Chrome Web Store and addons.mozilla.org accept, as the `dzr-tab-screenshots` artifact. Upload them to the store listings by hand: the store APIs only handle packages.
+
+Locally:
+
+```sh
+pnpm --filter dzr-tab exec playwright install chromium
+pnpm --filter dzr-tab build
+pnpm --filter dzr-tab screenshots   # -> extensions/dzr-tab/.output/screenshots
+```
+
 ## Publishing
 
 The [Publish extension](.github/workflows/publish.yml) workflow is started by hand from the **Actions** tab. Pick the extension and the stores. **Dry run** is on by default: it builds the zips and checks the store credentials without uploading anything.
