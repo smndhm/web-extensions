@@ -9,7 +9,7 @@ export default defineContentScript({
     } else {
       window.location.href = `deezer://${window.location.pathname.substring(4)}`;
       // Close window (Firefox only)
-      if (/\bfirefox\b/.test(navigator.userAgent)) {
+      if (/\bfirefox\b/i.test(navigator.userAgent)) {
         window.close();
       }
     }
