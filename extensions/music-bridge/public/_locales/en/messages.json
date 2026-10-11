@@ -11,9 +11,9 @@
     "message": "Music Bridge - Options",
     "description": "Options page title."
   },
-  "optionsSteamingPlatformLabel": {
+  "optionsStreamingPlatformLabel": {
     "message": "Select your streaming platform:",
-    "description": "Options page label for steaming services list."
+    "description": "Options page label for the streaming platforms list."
   },
   "optionsOpenAppLabel": {
     "message": "Open in desktop app.",
@@ -28,7 +28,11 @@
     "description": "Save options button confirmation"
   },
   "optionsCredits": {
-    "message": "Made with the <a aria-label=\"Open the Odelsi website in a new window.\" href=\"https://odesli.co/\" target=\"_blank\">Odesli</a> API.",
-    "description": "Options page credits."
+    "message": "Made with the %LINK% API.",
+    "description": "Options page credits. %LINK% is replaced by a link to Odesli."
+  },
+  "optionsNewTab": {
+    "message": "(opens in a new tab)",
+    "description": "Read by screen readers after a link that opens in a new tab."
   }
 }

@@ -7,12 +7,11 @@ With Music Bridge, you just have to click on this link to listen directly to the
 
 Available for:
 
-- [Chrome](https://chrome.google.com/webstore/detail/music-bridge/mbebbcaajfmockkcflajghbambbimpck)
-- [Firefox](https://addons.mozilla.org/fr/firefox/addon/music-bridge/)
+- [Chrome](https://chromewebstore.google.com/detail/music-bridge/mbebbcaajfmockkcflajghbambbimpck)
+- [Firefox](https://addons.mozilla.org/firefox/addon/music-bridge/)
 - [Edge](https://microsoftedge.microsoft.com/addons/detail/music-bridge/kfbedaeciahfjnknbjkcnjknkbdlcnld)
-<!-- - [Opera](coming) -->
 
-Made with the [Odesli](https://odesli.co/) API.
+Made with the [Odesli](https://odesli.co/) API, through the [music-bridge-redirect](https://github.com/smndhm/music-bridge-redirect) service.
 
 ## Supported platforms
 
@@ -21,32 +20,30 @@ Made with the [Odesli](https://odesli.co/) API.
 - Deezer
 - Napster
 - Pandora
-- Soundcloud
+- SoundCloud (only redirection to)
 - Spotify
 - Tidal
-- Youtube (only redirection to)
-- Youtube Music
+- YouTube (only redirection to)
+- YouTube Music
 
-## Build localy
+## How it works
 
-Project scripts are using [`pnpm`](https://pnpm.io/installation).
+The content script runs on the track and album pages of the supported platforms. With the platform chosen in the options:
 
-### Install
+- on another platform's page, it sends the link to the redirect service, which answers with the same music on the chosen platform (in its desktop app with **Open in desktop app**);
+- on the chosen platform's page, it does nothing, or opens the desktop app with **Open in desktop app**. Deezer and Spotify app links are built without the service.
 
-```sh
-pnpm i
-```
+There are no desktop apps on ChromeOS: the option is hidden there.
 
-#### Build for Chrome
+## Development
 
-```sh
-pnpm build
-```
-
-#### Build for Firefox
+From the repository root (see its [README](../../README.md)):
 
 ```sh
-pnpm build:firefox
+pnpm install
+pnpm --filter music-bridge dev           # Chrome
+pnpm --filter music-bridge dev:firefox   # Firefox
+pnpm --filter music-bridge test          # unit tests
 ```
 
-🎵🌉
+Store texts are in [COMMUNICATION.md](COMMUNICATION.md) and [wordings.md](wordings.md).
