@@ -35,6 +35,13 @@ pnpm compile
 
 The version of each extension comes from its `package.json`.
 
+## Continuous integration
+
+The [CI](.github/workflows/ci.yml) workflow runs on every pull request and on pushes to `main`:
+
+- **Type check and build**: `pnpm compile`, then the Chrome and Firefox builds of every extension.
+- **Accessibility (dzr-tab)**: loads the new tab page in Chromium with mocked Deezer responses and four covers (dark, light, grey, half white / half black). It fails on any axe-core violation (WCAG 2.2 A/AA and best practices), on text below a 4.5:1 contrast ratio against either end of the gradient, or on a wrong keyboard order. Locally: `pnpm --filter dzr-tab build && pnpm --filter dzr-tab a11y`.
+
 ## Store screenshots
 
 The [Store screenshots](.github/workflows/screenshots.yml) workflow (**Actions** tab) loads dzr-tab in Chromium with real Deezer tracks and uploads 1280×800 screenshots, the size the Chrome Web Store and addons.mozilla.org accept, as the `dzr-tab-screenshots` artifact. Upload them to the store listings by hand: the store APIs only handle packages.

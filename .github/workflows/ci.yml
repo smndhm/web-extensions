@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Type check and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check
+        run: pnpm compile
+
+      - name: Build for Chrome
+        run: pnpm build
+
+      - name: Build for Firefox
+        run: pnpm build:firefox
+
+  a11y:
+    name: Accessibility (dzr-tab)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: extensions/dzr-tab
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps --no-shell chromium
+
+      - name: Build for Chrome
+        run: pnpm build
+
+      - name: Check accessibility
+        run: pnpm a11y
