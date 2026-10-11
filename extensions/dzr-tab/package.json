@@ -12,6 +12,7 @@
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
     "compile": "tsc --noEmit",
+    "screenshots": "node scripts/screenshots.ts",
     "postinstall": "wxt prepare"
   },
   "keywords": [
@@ -23,6 +24,7 @@
   "author": "@smndhm",
   "license": "ISC",
   "devDependencies": {
+    "playwright": "1.64.0",
     "typescript": "^7.0.2",
     "wxt": "^0.21.4"
   },
