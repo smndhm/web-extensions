@@ -1,0 +1,56 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  changesets:
+    name: Version or release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Push the changeset-release/main branch, the tags and the GitHub releases
+      pull-requests: write # Open the "Version Packages" pull request
+    outputs:
+      published: ${{ steps.changesets.outputs.published }}
+      published-packages: ${{ steps.changesets.outputs.published-packages }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # changeset publish compares against the existing tags
+
+      - uses: ./.github/actions/setup
+
+      # With pending changesets: open or update the "Version Packages" pull request.
+      # Without: tag each extension whose version has no tag yet and create its GitHub release.
+      - name: Version Packages pull request or release
+        id: changesets
+        uses: changesets/action@v2.1.2
+        with:
+          publish-script: pnpm changeset:publish
+
+  submit:
+    name: Submit ${{ matrix.package.name }}@${{ matrix.package.version }}
+    needs: changesets
+    if: needs.changesets.outputs.published == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(needs.changesets.outputs.published-packages) }}
+    permissions:
+      contents: write # Attach the zips to the GitHub release
+    uses: ./.github/workflows/publish.yml
+    with:
+      extension: ${{ matrix.package.name }}
+      # Safe by default: only a dry run until the SUBMIT_ON_RELEASE repository variable is "true"
+      dry-run: ${{ vars.SUBMIT_ON_RELEASE != 'true' }}
+      release-tag: ${{ matrix.package.name }}@${{ matrix.package.version }}
+    secrets: inherit
