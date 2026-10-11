@@ -1,0 +1,36 @@
+{
+  "name": "dzr-tab",
+  "version": "2.1.0",
+  "description": "Discover a Deezer Track every time you open a new tab.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox",
+    "build": "wxt build",
+    "build:firefox": "wxt build -b firefox",
+    "zip": "wxt zip",
+    "zip:firefox": "wxt zip -b firefox",
+    "compile": "tsc --noEmit",
+    "a11y": "node scripts/a11y.ts",
+    "screenshots": "node scripts/screenshots.ts",
+    "postinstall": "wxt prepare"
+  },
+  "keywords": [
+    "dzr",
+    "deezer",
+    "tab",
+    "browser"
+  ],
+  "author": "@smndhm",
+  "license": "ISC",
+  "devDependencies": {
+    "axe-core": "^4.14.0",
+    "playwright": "1.64.0",
+    "typescript": "^7.0.2",
+    "wxt": "^0.21.4"
+  },
+  "dependencies": {
+    "node-vibrant": "^4.0.4"
+  }
+}
