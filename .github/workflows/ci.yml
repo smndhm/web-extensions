@@ -25,6 +25,9 @@ jobs:
       - name: Type check
         run: pnpm compile
 
+      - name: Unit tests
+        run: pnpm test
+
       - name: Build for Chrome
         run: pnpm build
 

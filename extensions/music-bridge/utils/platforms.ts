@@ -1,14 +1,27 @@
-interface Platform {
+export const PLATFORM_IDS = [
+  'amazonMusic',
+  'appleMusic',
+  'deezer',
+  'napster',
+  'pandora',
+  'soundcloud',
+  'spotify',
+  'tidal',
+  'youtube',
+  'youtubeMusic',
+] as const;
+
+/** Platform IDs, as the Odesli API names them */
+export type PlatformId = (typeof PLATFORM_IDS)[number];
+
+export interface Platform {
   name: string;
   url: string;
+  /** Odesli knows a desktop app link for this platform */
   hasNativeAppLink?: boolean;
 }
 
-interface Platforms {
-  [key: string]: Platform;
-}
-
-export const platforms: Platforms = {
+export const platforms: Record<PlatformId, Platform> = {
   amazonMusic: {
     name: 'Amazon Music',
     url: 'https://music.amazon.com',
@@ -45,31 +58,16 @@ export const platforms: Platforms = {
     url: 'https://listen.tidal.com',
   },
   youtube: {
-    name: 'Youtube',
+    name: 'YouTube',
     url: 'https://www.youtube.com',
   },
   youtubeMusic: {
-    name: 'Youtube Music',
+    name: 'YouTube Music',
     url: 'https://music.youtube.com',
   },
 };
 
-// https://www.notion.so/Redirect-URLs-9e906d3277d945e29ce422e461fb3c06
-// yandex
-// spinrilla
-// audius
-// itunes
-// googleStore
-// amazonStore
+export const DEFAULT_PLATFORM: PlatformId = 'spotify';
 
-// https://www.notion.so/API-d0ebe08a5e304a55928405eb682f6741
-// itunes
-// google
-// googleStore
-// amazonStore
-// yandex
-// spinrilla
-// audius
-// audiomack
-// anghami
-// boomplay
+export const isPlatformId = (value: unknown): value is PlatformId =>
+  typeof value === 'string' && (PLATFORM_IDS as readonly string[]).includes(value);

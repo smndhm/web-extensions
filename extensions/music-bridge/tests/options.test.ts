@@ -1,91 +1,121 @@
-import { describe, it, vi, afterEach, beforeEach, expect } from 'vitest';
-import { platforms } from './platforms';
-import { readFileSync } from 'fs';
-import { JSDOM } from 'jsdom';
-import { join } from 'path';
-
-const htmlFilePath = join(__dirname, './options.html');
-const html = readFileSync(htmlFilePath, 'utf-8');
-
-// Mock local storage
-let platformMock: string;
-let openInAppMock: boolean;
-let browserStorageLocalSet = vi.fn();
-
-vi.mock('webextension-polyfill', () => ({
-  default: {
-    storage: {
-      local: {
-        get: vi.fn(() =>
-          Promise.resolve({
-            platform: platformMock,
-            openInApp: openInAppMock,
-          }),
-        ),
-        set: browserStorageLocalSet,
-      },
-    },
-    i18n: {
-      getMessage: vi.fn((key) => key),
-    },
-  },
-}));
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { browser } from 'wxt/browser';
+import { fakeBrowser } from 'wxt/testing/fake-browser';
+import { initOptionsPage } from '@/utils/options-page';
+import { PLATFORM_IDS } from '@/utils/platforms';
 
 /**
  * @vitest-environment jsdom
  */
 
-describe('options', () => {
-  beforeEach(() => {
+const HTML = readFileSync(resolve(import.meta.dirname, '../entrypoints/options/index.html'), 'utf8');
+const WINDOWS = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0';
+const CHROMEOS = 'Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+
+const MESSAGES: Record<string, string> = {
+  '@@ui_locale': 'fr_FR',
+  optionsTitle: 'Music Bridge - Options',
+  optionsStreamingPlatformLabel: 'Select your streaming platform:',
+  optionsOpenAppLabel: 'Open in desktop app.',
+  optionsSaveButton: 'Save',
+  optionsSaveConfirmation: 'Preferences saved.',
+  optionsCredits: 'Made with the %LINK% API.',
+  optionsNewTab: '(opens in a new tab)',
+};
+
+const $ = <T extends Element>(selector: string) => document.querySelector<T>(selector)!;
+const select = () => $<HTMLSelectElement>('#streaming-platforms');
+const checkbox = () => $<HTMLInputElement>('#open-app');
+const openAppOption = () => $<HTMLElement>('#open-app-option');
+const submit = () => $<HTMLFormElement>('form').dispatchEvent(new Event('submit', { cancelable: true }));
+
+async function open(userAgent = WINDOWS) {
+  document.documentElement.innerHTML = new DOMParser().parseFromString(HTML, 'text/html').documentElement.innerHTML;
+  await initOptionsPage(document, userAgent);
+}
+
+beforeEach(() => {
+  fakeBrowser.reset();
+  vi.spyOn(browser.i18n, 'getMessage').mockImplementation((key: string) => MESSAGES[key] ?? key);
+});
+
+describe('options page', () => {
+  it('is translated', async () => {
+    await open();
+    expect(document.documentElement.lang).toBe('fr-FR');
+    expect(document.title).toBe('Music Bridge - Options');
+    expect($('h1').textContent).toBe('Music Bridge - Options');
+    expect($('label[for="streaming-platforms"]').textContent).toBe('Select your streaming platform:');
+    expect($('label[for="open-app"]').textContent).toBe('Open in desktop app.');
+    expect($('button').textContent).toBe('Save');
+  });
+
+  it('credits Odesli with a link that tells it opens a new tab', async () => {
+    await open();
+    expect($('footer').textContent).toBe('Made with the Odesli (opens in a new tab) API.');
+    const link = $<HTMLAnchorElement>('footer a');
+    expect(link.href).toBe('https://odesli.co/');
+    expect(link.target).toBe('_blank');
+    expect(link.rel).toBe('noopener');
+  });
+
+  it('lists every platform and selects Spotify by default', async () => {
+    await open();
+    expect([...select().options].map((option) => option.value)).toEqual([...PLATFORM_IDS]);
+    expect(select().value).toBe('spotify');
+    expect(checkbox().checked).toBe(false);
+  });
+
+  it('shows the saved settings', async () => {
+    await browser.storage.local.set({ platform: 'deezer', openInApp: true });
+    await open();
+    expect(select().value).toBe('deezer');
+    expect(checkbox().checked).toBe(true);
+    expect(openAppOption().hidden).toBe(false);
+  });
+
+  it('falls back to Spotify when the saved platform is unknown', async () => {
+    await browser.storage.local.set({ platform: 'myspace' });
+    await open();
+    expect(select().value).toBe('spotify');
+  });
+
+  it('only offers the app for platforms with app links', async () => {
+    await browser.storage.local.set({ platform: 'deezer', openInApp: true });
+    await open();
+    select().value = 'tidal';
+    select().dispatchEvent(new Event('change'));
+    expect(openAppOption().hidden).toBe(true);
+    expect(checkbox().checked).toBe(false);
+
+    select().value = 'appleMusic';
+    select().dispatchEvent(new Event('change'));
+    expect(openAppOption().hidden).toBe(false);
+    expect(checkbox().checked).toBe(false);
+  });
+
+  it('never offers the app on ChromeOS', async () => {
+    await browser.storage.local.set({ platform: 'deezer', openInApp: true });
+    await open(CHROMEOS);
+    expect(openAppOption().hidden).toBe(true);
+    expect(checkbox().checked).toBe(false);
+  });
+
+  it('saves the settings and announces it for two seconds', async () => {
     vi.useFakeTimers();
-    vi.resetModules();
-    const { window: jsdomWindow } = new JSDOM(html);
-    window = jsdomWindow;
-    document = window.document;
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
-  it.each(Object.entries(platforms))(
-    'Platform (%s)',
-    // Run the code
-    async (platform) => {
-      platformMock = platform;
-      await import('./options');
-      expect(document.documentElement.outerHTML).toMatchSnapshot();
-    },
-  );
-
-  it('Should change platform and unselect openDesktopApp option and save', async () => {
-    await import('./options');
-
-    const checkbox: HTMLInputElement = document.getElementById(
-      'open-app',
-    ) as HTMLInputElement;
-    checkbox.checked = true;
-
-    const select: HTMLInputElement = document.getElementById(
-      'streaming-platforms',
-    ) as HTMLInputElement;
-    select.value = Object.keys(platforms)[0];
-    select.dispatchEvent(new Event('change'));
-
-    expect(checkbox.checked).toEqual(false);
-
-    const form: HTMLFormElement = document.querySelector('form')!;
-    const alert: HTMLDivElement = document.querySelector('[role="alert"]')!;
-
-    form.dispatchEvent(new Event('submit'));
-
-    expect(browserStorageLocalSet).toHaveBeenCalledWith({
-      platform: select.value,
-      openInApp: checkbox.checked,
-    });
-
-    await vi.runAllTimersAsync();
-
-    expect(alert.hidden).toEqual(true);
+    await open();
+    select().value = 'deezer';
+    select().dispatchEvent(new Event('change'));
+    checkbox().checked = true;
+    submit();
+    await vi.waitFor(async () =>
+      expect(await browser.storage.local.get(['platform', 'openInApp'])).toEqual({ platform: 'deezer', openInApp: true }),
+    );
+    await vi.waitFor(() => expect($('[role="status"]').textContent).toBe('Preferences saved.'));
+    await vi.advanceTimersByTimeAsync(2000);
+    expect($('[role="status"]').textContent).toBe('');
+    vi.useRealTimers();
   });
 });

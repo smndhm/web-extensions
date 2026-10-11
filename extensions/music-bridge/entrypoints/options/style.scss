@@ -38,26 +38,39 @@ main {
   padding: 2rem;
   margin: auto;
 
+  p {
+    margin: 0 0 1rem;
+  }
+
   label {
-    display: inline-block;
-    margin-bottom: 1rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
 
-    select {
-      width: 100%;
-      max-width: 100%;
-      margin-top: 0.5rem;
-      padding: 1rem 1.5rem;
+  select {
+    width: 100%;
+    max-width: 100%;
+    padding: 1rem 1.5rem;
 
-      background-color: var(--background);
-      border-radius: var(--border-radius);
+    background-color: var(--background);
+    border-radius: var(--border-radius);
 
-      font-size: 2rem;
-      color: var(--color);
+    font-size: 2rem;
+    color: var(--color);
 
-      &:hover,
-      &:focus {
-        box-shadow: 0 0 0 0.2rem rgba(var(--color-rgb), 0.5);
-      }
+    &:hover,
+    &:focus-visible {
+      box-shadow: 0 0 0 0.2rem rgba(var(--color-rgb), 0.5);
+    }
+  }
+
+  #open-app-option {
+    &[hidden] {
+      display: none;
+    }
+
+    label {
+      display: inline;
     }
 
     input[type='checkbox'] {
@@ -72,7 +85,8 @@ main {
     align-items: center;
     gap: 1rem;
 
-    [role='alert'] {
+    [role='status'] {
+      margin: 0;
       font-size: smaller;
     }
 
@@ -86,11 +100,20 @@ main {
       color: inherit;
 
       &:hover,
-      &:focus {
+      &:focus-visible {
         box-shadow: 0 0 0 0.2rem rgba(var(--color-rgb), 0.5);
       }
     }
   }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 footer {
@@ -103,7 +126,7 @@ footer {
     font-weight: 500;
 
     &:hover,
-    &:focus {
+    &:focus-visible {
       text-decoration: none;
     }
   }
