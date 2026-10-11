@@ -45,8 +45,7 @@ async function firefoxZip(extension: keyof typeof EXTENSIONS) {
 }
 
 const options = new firefox.Options()
-  // -remote-allow-system-access lets the tests open a new tab through the browser UI
-  .addArguments('-headless', '-remote-allow-system-access')
+  .addArguments('-headless')
   .windowSize({ width: 1280, height: 800 })
   .setPreference(
     'extensions.webextensions.uuids',
@@ -56,7 +55,13 @@ const options = new firefox.Options()
   .setPreference('dom.allow_scripts_to_close_windows', true);
 options.setPageLoadStrategy('eager');
 
-const driver = await new webdriver.Builder().forBrowser('firefox').setFirefoxOptions(options).build();
+// --allow-system-access lets the tests open a new tab through the browser UI (chrome context)
+const service = new firefox.ServiceBuilder().addArguments('--allow-system-access');
+const driver = await new webdriver.Builder()
+  .forBrowser('firefox')
+  .setFirefoxOptions(options)
+  .setFirefoxService(service)
+  .build();
 const errors: string[] = [];
 await mkdir(OUTPUT_DIR, { recursive: true });
 
