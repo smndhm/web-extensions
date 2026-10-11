@@ -45,7 +45,8 @@ async function firefoxZip(extension: keyof typeof EXTENSIONS) {
 }
 
 const options = new firefox.Options()
-  .addArguments('-headless')
+  // -remote-allow-system-access lets the tests open a new tab through the browser UI
+  .addArguments('-headless', '-remote-allow-system-access')
   .windowSize({ width: 1280, height: 800 })
   .setPreference(
     'extensions.webextensions.uuids',
@@ -71,7 +72,18 @@ try {
 
   // dzr-tab
   try {
-    await driver.get(`moz-extension://${UUIDS['dzr-tab']}/newtab.html`);
+    // WebDriver cannot navigate to moz-extension:// pages: open a new tab like a user would, which
+    // also checks that the extension overrides the new tab page
+    const before = await driver.getAllWindowHandles();
+    await driver.setContext(firefox.Context.CHROME);
+    await driver.executeScript('(window.BrowserCommands?.openTab ?? window.BrowserOpenTab)()');
+    await driver.setContext(firefox.Context.CONTENT);
+    await driver.wait(async () => (await driver.getAllWindowHandles()).length > before.length, 10_000, 'no new tab opened');
+    await driver.switchTo().window((await driver.getAllWindowHandles()).find((handle) => !before.includes(handle))!);
+    const newTabUrl = `moz-extension://${UUIDS['dzr-tab']}/newtab.html`;
+    await driver.wait(async () => (await driver.getCurrentUrl()) === newTabUrl, 10_000).catch(async () => {
+      throw new Error(`the new tab is ${await driver.getCurrentUrl()}, expected ${newTabUrl}`);
+    });
     await driver.wait(
       () =>
         driver.executeScript(
@@ -107,6 +119,7 @@ try {
 
   // dzr-link: open the track from a script so the tab may be closed by the content script
   try {
+    await driver.switchTo().window(main);
     const before = await driver.getAllWindowHandles();
     await driver.executeScript(() => window.open('https://www.deezer.com/fr/track/3135556', '_blank'));
     await driver.wait(async () => (await driver.getAllWindowHandles()).length > before.length, 10_000, 'the Deezer tab did not open');
