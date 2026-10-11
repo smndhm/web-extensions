@@ -75,6 +75,16 @@ describe('getRedirectUrl', () => {
     });
   });
 
+  it.each(['https://tidal.com/track/1', 'https://listen.tidal.com/track/1'])('stays on Tidal pages (%s) when Tidal is chosen', (href) => {
+    expect(getRedirectUrl(href, { platform: 'tidal', openInApp: false }, WINDOWS)).toBeUndefined();
+  });
+
+  it('does not take another host with the same prefix for the platform', () => {
+    expect(
+      serviceParams(getRedirectUrl('https://tidal.com.example/track/1', { platform: 'tidal', openInApp: false }, WINDOWS)),
+    ).toEqual({ url: 'https://tidal.com.example/track/1', platform: 'tidal' });
+  });
+
   it.each(PLATFORM_IDS.map((id) => [id, platforms[id]] as [PlatformId, (typeof platforms)[PlatformId]]))(
     'stays on %s pages when %s is the chosen platform',
     (platform, { url }) => {

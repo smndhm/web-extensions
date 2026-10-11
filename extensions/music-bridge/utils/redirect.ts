@@ -1,5 +1,5 @@
 import { getDeezerDesktopUri, getSpotifyDesktopUri, isChromeOs } from './links';
-import { platforms } from './platforms';
+import { isOnPlatform, platforms } from './platforms';
 import type { Settings } from './settings';
 
 /** The music-bridge-redirect service: looks the music up with Odesli and redirects to it */
@@ -10,10 +10,9 @@ export const REDIRECT_SERVICE_URL = 'https://music-bridge.bricodage.fr/';
  * (already on the chosen platform's website, or no app link to build).
  */
 export function getRedirectUrl(href: string, { platform, openInApp }: Settings, userAgent: string): string | undefined {
-  const { url: platformUrl, hasNativeAppLink } = platforms[platform];
   // There are no desktop apps on ChromeOS
-  const inApp = openInApp && hasNativeAppLink === true && !isChromeOs(userAgent);
-  const onPlatform = href.startsWith(platformUrl);
+  const inApp = openInApp && platforms[platform].hasNativeAppLink === true && !isChromeOs(userAgent);
+  const onPlatform = isOnPlatform(href, platforms[platform]);
 
   if (onPlatform) {
     if (!inApp) return undefined;
