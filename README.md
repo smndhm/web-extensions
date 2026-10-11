@@ -7,6 +7,11 @@ Monorepo of my browser extensions (WebExtensions), built with [WXT](https://wxt.
 | [dzr-link](extensions/dzr-link) | Get redirected to the Deezer desktop app when you open a Deezer link in the browser. |
 | [dzr-tab](extensions/dzr-tab) | Discover a Deezer track every time you open a new tab. |
 
+| Extension | Chrome Web Store ID | Firefox add-on ID |
+| --- | --- | --- |
+| dzr-link | [`depodknemkobjklhmpemeagnehojilng`](https://chromewebstore.google.com/detail/depodknemkobjklhmpemeagnehojilng) | `{a1abd3a6-a241-401e-bac4-f7338abac0ad}` |
+| dzr-tab | [`meiclleccmfmheoplgelombebilpndea`](https://chromewebstore.google.com/detail/meiclleccmfmheoplgelombebilpndea) | `{52114cbe-92a2-4828-8b44-109c35fbc0e7}` |
+
 Each extension lives in its own folder under `extensions/`, with its full Git history imported from its original repository.
 
 ## Development

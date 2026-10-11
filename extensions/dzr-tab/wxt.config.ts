@@ -7,7 +7,7 @@ export default defineConfig({
     sourcesRoot: '../..',
     excludeSources: ['extensions/!(dzr-tab)/**', '**/.output/**', '**/.wxt/**', '**/medias/**'],
   },
-  manifest: {
+  manifest: ({ browser }) => ({
     name: 'Deezer Tab',
     short_name: 'Deezer Tab',
     description: 'Discover a Deezer Track every time you open a new tab.',
@@ -18,5 +18,15 @@ export default defineConfig({
     },
     permissions: ['storage'],
     host_permissions: ['https://api.deezer.com/*'],
-  },
+    ...(browser === 'firefox' && {
+      browser_specific_settings: {
+        gecko: {
+          // Add-on ID on addons.mozilla.org
+          id: '{52114cbe-92a2-4828-8b44-109c35fbc0e7}',
+          // The extension sends no data to its developer
+          data_collection_permissions: { required: ['none'] },
+        },
+      },
+    }),
+  }),
 });
