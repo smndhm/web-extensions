@@ -4,7 +4,7 @@
 
 import { Vibrant } from 'node-vibrant/browser';
 import { Conf } from './conf';
-import { Utils } from './utils';
+import { BLACK, Utils, WHITE, type Rgb } from './utils';
 
 export const Tab = {
   $: {
@@ -82,15 +82,14 @@ export const Tab = {
       .getPalette()
       .then(function (palette) {
         if (!palette.Vibrant || !palette.Muted) return;
-        const [vr, vg, vb] = palette.Vibrant.rgb;
-        const [mr, mg, mb] = palette.Muted.rgb;
-        const rgbaFrom = 'rgba(' + vr + ', ' + vg + ', ' + vb + ', 1)';
-        const rgbaTo = 'rgba(' + mr + ', ' + mg + ', ' + mb + ', 1)';
-        document.body.style.backgroundImage = 'linear-gradient(to right top, ' + rgbaFrom + ', ' + rgbaTo + ')';
-        const o = Math.round((vr * 299 + vg * 587 + vb * 114) / 1000);
-        if (o <= 125) {
-          document.body.classList.add('white');
-        }
+        // Text is drawn over the whole gradient: pick the text color that contrasts best with both ends,
+        // then shade the ends until that contrast reaches WCAG AA (4.5:1)
+        const ends = [palette.Vibrant.rgb, palette.Muted.rgb] as Rgb[];
+        const white = Utils.minContrast(WHITE, ends) >= Utils.minContrast(BLACK, ends);
+        const [from, to] = Utils.ensureContrast(ends, white ? WHITE : BLACK, 4.5);
+        document.body.style.backgroundImage =
+          'linear-gradient(to right top, ' + Utils.rgb(from!) + ', ' + Utils.rgb(to!) + ')';
+        document.body.classList.toggle('white', white);
       });
 
     //cover
