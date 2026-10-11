@@ -125,6 +125,6 @@ a:focus-visible {
 	height: 40px;
 }
 
-.white #logo svg .deezer {
-	fill: #ffffff;
+.white #logo {
+	--deezer-wordmark: #fff;
 }
