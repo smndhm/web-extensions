@@ -23,6 +23,9 @@ importers:
         specifier: ^4.0.4
         version: 4.0.4
     devDependencies:
+      axe-core:
+        specifier: ^4.14.0
+        version: 4.14.0
       playwright:
         specifier: 1.64.0
         version: 1.64.0
@@ -439,6 +442,10 @@ packages:
 
   any-base@1.1.0:
     resolution: {integrity: sha512-uMgjozySS8adZZYePpaWs8cxB9/kdzmpX6SgJZ+wbz1K5eYk5QMYDVJaZKhxyIHUdnnJkfR7SVgStgH7LkGUyg==}
+
+  axe-core@4.14.0:
+    resolution: {integrity: sha512-9WTZxEjsZ7b13TH8JPmbV2z8CHbl80/2hm3XPEG4JgNdQLK81IBRXmSxHfMAOkSqQeRxT/0dwNDz2GOm3zzpcQ==}
+    engines: {node: '>=4'}
 
   base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
@@ -1475,6 +1482,8 @@ snapshots:
       color-convert: 2.0.1
 
   any-base@1.1.0: {}
+
+  axe-core@4.14.0: {}
 
   base64-js@1.5.1: {}
 
