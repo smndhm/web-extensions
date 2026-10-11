@@ -1,5 +1,10 @@
 node_modules
 
+# WXT
+.output
+.wxt
+stats.html
+
 # OS generated files
 .DS_Store
 Thumbs.db
