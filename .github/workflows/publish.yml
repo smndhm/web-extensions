@@ -1,0 +1,100 @@
+name: Publish extension
+
+on:
+  workflow_dispatch:
+    inputs:
+      extension:
+        description: Extension to publish
+        required: true
+        type: choice
+        options:
+          - dzr-link
+          - dzr-tab
+      stores:
+        description: Stores to submit to
+        required: true
+        type: choice
+        default: chrome+firefox
+        options:
+          - chrome+firefox
+          - chrome
+          - firefox
+      dry-run:
+        description: Dry run (check the credentials, upload nothing)
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-${{ inputs.extension }}
+
+jobs:
+  publish:
+    name: Publish ${{ inputs.extension }} (${{ inputs.stores }}${{ inputs.dry-run && ', dry run' || '' }})
+    runs-on: ubuntu-latest
+    # One GitHub environment per extension holds its store IDs (CHROME_EXTENSION_ID, FIREFOX_EXTENSION_ID)
+    environment: ${{ inputs.extension }}
+    defaults:
+      run:
+        working-directory: extensions/${{ inputs.extension }}
+    env:
+      STORES: ${{ inputs.stores }}
+      DRY_RUN: ${{ inputs.dry-run }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check
+        run: pnpm compile
+
+      - name: Zip for Chrome
+        if: contains(inputs.stores, 'chrome')
+        run: pnpm zip
+
+      - name: Zip for Firefox
+        if: contains(inputs.stores, 'firefox')
+        run: pnpm zip:firefox
+
+      - name: Upload zips
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.extension }}-zips
+          path: extensions/${{ inputs.extension }}/.output/*.zip
+          if-no-files-found: error
+          # WXT writes the zips to .output/, a hidden directory
+          include-hidden-files: true
+
+      - name: Submit to the stores
+        env:
+          CHROME_API_VERSION: v2
+          CHROME_EXTENSION_ID: ${{ vars.CHROME_EXTENSION_ID }}
+          CHROME_PUBLISHER_ID: ${{ secrets.CHROME_PUBLISHER_ID }}
+          CHROME_SERVICE_ACCOUNT_CLIENT_EMAIL: ${{ secrets.CHROME_SERVICE_ACCOUNT_CLIENT_EMAIL }}
+          CHROME_SERVICE_ACCOUNT_PRIVATE_KEY: ${{ secrets.CHROME_SERVICE_ACCOUNT_PRIVATE_KEY }}
+          FIREFOX_EXTENSION_ID: ${{ vars.FIREFOX_EXTENSION_ID }}
+          FIREFOX_JWT_ISSUER: ${{ secrets.FIREFOX_JWT_ISSUER }}
+          FIREFOX_JWT_SECRET: ${{ secrets.FIREFOX_JWT_SECRET }}
+        run: |
+          args=()
+          if [[ "$STORES" == *chrome* ]]; then
+            args+=(--chrome-zip .output/*-chrome.zip)
+          fi
+          if [[ "$STORES" == *firefox* ]]; then
+            args+=(--firefox-zip .output/*-firefox.zip --firefox-sources-zip .output/*-sources.zip)
+          fi
+          if [[ "$DRY_RUN" == "true" ]]; then
+            args+=(--dry-run)
+          fi
+          pnpm exec wxt submit "${args[@]}"

@@ -1,0 +1,53 @@
+name: Store screenshots
+
+on:
+  workflow_dispatch:
+    inputs:
+      count:
+        description: Number of screenshots
+        required: true
+        type: number
+        default: 5
+
+permissions:
+  contents: read
+
+jobs:
+  screenshots:
+    name: dzr-tab screenshots
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: extensions/dzr-tab
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps --no-shell chromium
+
+      - name: Build for Chrome
+        run: pnpm build
+
+      - name: Take screenshots with real Deezer tracks
+        env:
+          COUNT: ${{ inputs.count }}
+        run: pnpm screenshots "$COUNT"
+
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v7
+        with:
+          name: dzr-tab-screenshots
+          path: extensions/dzr-tab/.output/screenshots/*.png
+          if-no-files-found: error
+          # WXT writes to .output/, a hidden directory
+          include-hidden-files: true
