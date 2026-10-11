@@ -1,6 +1,12 @@
 import { defineConfig } from 'wxt';
 
 export default defineConfig({
+  zip: {
+    // Firefox reviewers rebuild the extension from the sources zip: ship the whole workspace
+    // (root package.json, lockfile) but only this extension
+    sourcesRoot: '../..',
+    excludeSources: ['extensions/!(dzr-link)/**', '**/.output/**', '**/.wxt/**', '**/medias/**'],
+  },
   manifest: {
     name: 'Open Deezer in desktop app',
     description:
