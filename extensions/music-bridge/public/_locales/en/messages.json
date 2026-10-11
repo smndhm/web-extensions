@@ -1,0 +1,34 @@
+{
+  "name": {
+    "message": "Music Bridge",
+    "description": "Extension name."
+  },
+  "description": {
+    "message": "With Music Bridge open any music link on your favorite platform with one click!",
+    "description": "Extension description."
+  },
+  "optionsTitle": {
+    "message": "Music Bridge - Options",
+    "description": "Options page title."
+  },
+  "optionsSteamingPlatformLabel": {
+    "message": "Select your streaming platform:",
+    "description": "Options page label for steaming services list."
+  },
+  "optionsOpenAppLabel": {
+    "message": "Open in desktop app.",
+    "description": "Options page label to open links in desktop app."
+  },
+  "optionsSaveButton": {
+    "message": "Save",
+    "description": "Save options button"
+  },
+  "optionsSaveConfirmation": {
+    "message": "Preferences saved.",
+    "description": "Save options button confirmation"
+  },
+  "optionsCredits": {
+    "message": "Made with the <a aria-label=\"Open the Odelsi website in a new window.\" href=\"https://odesli.co/\" target=\"_blank\">Odesli</a> API.",
+    "description": "Options page credits."
+  }
+}
