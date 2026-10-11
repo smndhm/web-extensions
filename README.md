@@ -33,7 +33,7 @@ pnpm zip:firefox
 pnpm compile
 ```
 
-The version of each extension comes from its `package.json`.
+The version of each extension comes from its `package.json`. Do not change it by hand: [Changesets](#releasing) does.
 
 ## Continuous integration
 
@@ -55,9 +55,21 @@ pnpm --filter dzr-tab build
 pnpm --filter dzr-tab screenshots   # -> extensions/dzr-tab/.output/screenshots
 ```
 
+## Releasing
+
+Versions and changelogs are managed with [Changesets](https://github.com/changesets/changesets).
+
+1. **In each pull request** that changes an extension, run `pnpm changeset`: pick the extension(s), the bump (patch, minor, major) and describe the change. Commit the generated `.changeset/*.md` file.
+2. **When it is merged into `main`**, the [Release](.github/workflows/release.yml) workflow opens or updates a **Version Packages** pull request. It bumps the versions in `package.json` and writes each extension's `CHANGELOG.md`.
+3. **When the Version Packages pull request is merged**, the Release workflow tags each released extension (`dzr-tab@2.2.0`), creates its GitHub release with the changelog, attaches the Chrome, Firefox and sources zips, and runs the store submission:
+   - a **dry run** by default;
+   - a real submission to the Chrome Web Store and addons.mozilla.org once the `SUBMIT_ON_RELEASE` repository variable (*Settings → Secrets and variables → Actions → Variables*) is `true`. Add **required reviewers** to the `dzr-link` and `dzr-tab` environments to approve each submission.
+
+Dependency updates come from [Renovate](renovate.json): minor and patch updates and lock file maintenance are merged automatically. The [Renovate → Changesets](.github/workflows/changesets-renovate.yml) workflow adds a changeset to each Renovate branch that updates an extension's dependencies, then runs the CI checks on that commit and reports them as commit statuses, since a commit pushed by a workflow does not trigger the CI.
+
 ## Publishing
 
-The [Publish extension](.github/workflows/publish.yml) workflow is started by hand from the **Actions** tab. Pick the extension and the stores. **Dry run** is on by default: it builds the zips and checks the store credentials without uploading anything.
+The [Publish extension](.github/workflows/publish.yml) workflow submits an extension to the stores. The Release workflow calls it; it can also be started by hand from the **Actions** tab, for example to submit again after a store rejected a version. Pick the extension and the stores. **Dry run** is on by default: it builds the zips and checks the store credentials without uploading anything.
 
 The workflow runs `wxt submit` with this configuration:
 
