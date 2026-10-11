@@ -41,6 +41,7 @@ The [CI](.github/workflows/ci.yml) workflow runs on every pull request and on pu
 
 - **Type check and build**: `pnpm compile`, then the Chrome and Firefox builds of every extension.
 - **Accessibility (dzr-tab)**: loads the new tab page in Chromium with mocked Deezer responses and four covers (dark, light, grey, half white / half black). It fails on any axe-core violation (WCAG 2.2 A/AA and best practices), on text below a 4.5:1 contrast ratio against either end of the gradient, or on a wrong keyboard order. Locally: `pnpm --filter dzr-tab build && pnpm --filter dzr-tab a11y`.
+- **Firefox smoke tests**: installs both Firefox builds as temporary add-ons in a real Firefox (Selenium and geckodriver). It checks that dzr-tab shows a real Deezer track with its gradient and logo and passes axe-core, and that dzr-link redirects a Deezer track page to `deezer://` or closes the tab. Screenshots are uploaded as the `firefox-screenshots` artifact. Locally, with Firefox installed: `pnpm zip:firefox && pnpm test:firefox`.
 
 ## Store screenshots
 
