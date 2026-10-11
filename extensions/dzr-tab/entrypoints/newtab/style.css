@@ -87,6 +87,25 @@ body {
 	color: #fff;
 }
 
+#track .track-artist a:hover,
+#track .track-title a:hover {
+	text-decoration: underline;
+}
+
+/*
+ * Focus
+ */
+
+a:focus-visible {
+	outline: 3px solid #000;
+	outline-offset: 4px;
+	border-radius: 2px;
+}
+
+.white a:focus-visible {
+	outline-color: #fff;
+}
+
 /*
  * Logo
  */
