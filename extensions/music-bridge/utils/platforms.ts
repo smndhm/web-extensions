@@ -17,6 +17,8 @@ export type PlatformId = (typeof PLATFORM_IDS)[number];
 export interface Platform {
   name: string;
   url: string;
+  /** Other origins of the platform's website */
+  aliases?: string[];
   /** Odesli knows a desktop app link for this platform */
   hasNativeAppLink?: boolean;
 }
@@ -55,7 +57,9 @@ export const platforms: Record<PlatformId, Platform> = {
   },
   tidal: {
     name: 'Tidal',
-    url: 'https://listen.tidal.com',
+    // listen.tidal.com, which Odesli still links to, redirects to tidal.com
+    url: 'https://tidal.com',
+    aliases: ['https://listen.tidal.com'],
   },
   youtube: {
     name: 'YouTube',
@@ -68,6 +72,10 @@ export const platforms: Record<PlatformId, Platform> = {
 };
 
 export const DEFAULT_PLATFORM: PlatformId = 'spotify';
+
+/** The page `href` is on the platform's website */
+export const isOnPlatform = (href: string, { url, aliases = [] }: Platform): boolean =>
+  [url, ...aliases].some((origin) => href === origin || href.startsWith(`${origin}/`));
 
 export const isPlatformId = (value: unknown): value is PlatformId =>
   typeof value === 'string' && (PLATFORM_IDS as readonly string[]).includes(value);

@@ -156,7 +156,7 @@ try {
     await driver.sleep(2000);
     await driver.switchTo().window(main);
     const before = await driver.getAllWindowHandles();
-    await driver.executeScript(() => window.open('https://listen.tidal.com/track/1', '_blank'));
+    await driver.executeScript(() => window.open('https://tidal.com/track/1', '_blank'));
     await driver.wait(async () => (await driver.getAllWindowHandles()).length > before.length, 10_000, 'the Tidal tab did not open');
     await driver.switchTo().window((await driver.getAllWindowHandles()).find((handle) => !before.includes(handle))!);
 
