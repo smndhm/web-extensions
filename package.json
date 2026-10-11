@@ -9,9 +9,15 @@
     "zip": "pnpm -r zip",
     "zip:firefox": "pnpm -r zip:firefox",
     "compile": "pnpm -r compile",
-    "test:firefox": "node scripts/firefox.ts"
+    "test:firefox": "node scripts/firefox.ts",
+    "changeset": "changeset",
+    "changeset:version": "changeset version",
+    "changeset:publish": "changeset publish",
+    "changeset:renovate": "changesets-renovate"
   },
   "devDependencies": {
+    "@changesets/cli": "3.0.3",
+    "@scaleway/changesets-renovate": "4.0.5",
     "selenium-webdriver": "^4.51.0"
   }
 }
