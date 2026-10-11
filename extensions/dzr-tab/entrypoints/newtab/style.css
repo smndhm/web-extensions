@@ -103,10 +103,9 @@ body {
 
 #logo svg {
 	position: relative;
-	height: 30px;
+	height: 40px;
 }
 
-.white #logo svg .logo,
 .white #logo svg .deezer {
 	fill: #ffffff;
 }
