@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { PLATFORM_IDS, platforms, type PlatformId } from '@/utils/platforms';
-import { getRedirectUrl, REDIRECT_SERVICE_URL } from '@/utils/redirect';
+import { getRedirectUrl, REDIRECT_SERVICE_URL, shouldCloseTab } from '@/utils/redirect';
 
 const WINDOWS = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0';
 const CHROMEOS = 'Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
@@ -98,4 +98,26 @@ describe('getRedirectUrl', () => {
       expect(getRedirectUrl(`${url}/some/music`, { platform, openInApp: false }, WINDOWS)).toBeUndefined();
     },
   );
+});
+
+describe('shouldCloseTab', () => {
+  const SERVICE_TO_APP = `${REDIRECT_SERVICE_URL}?url=x&platform=deezer&typeURI=nativeAppUriDesktop`;
+  const SERVICE_TO_WEB = `${REDIRECT_SERVICE_URL}?url=x&platform=deezer`;
+
+  it('closes a tab opened for the link once the app opens', () => {
+    expect(shouldCloseTab('deezer://track/3135556', { closeTab: true }, 1)).toBe(true);
+    expect(shouldCloseTab(SERVICE_TO_APP, { closeTab: true }, 1)).toBe(true);
+  });
+
+  it('keeps the tab when the user did not ask for it', () => {
+    expect(shouldCloseTab('deezer://track/3135556', { closeTab: false }, 1)).toBe(false);
+  });
+
+  it('keeps the tab when the link opens on the website', () => {
+    expect(shouldCloseTab(SERVICE_TO_WEB, { closeTab: true }, 1)).toBe(false);
+  });
+
+  it('keeps a tab with pages to go back to', () => {
+    expect(shouldCloseTab('deezer://track/3135556', { closeTab: true }, 2)).toBe(false);
+  });
 });

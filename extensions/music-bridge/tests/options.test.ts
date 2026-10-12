@@ -19,6 +19,8 @@ const MESSAGES: Record<string, string> = {
   optionsTitle: 'Music Bridge - Options',
   optionsStreamingPlatformLabel: 'Select your streaming platform:',
   optionsOpenAppLabel: 'Open in desktop app.',
+  optionsCloseTabLabel: 'Close the tab once the app opens.',
+  optionsCloseTabHelp: 'Tick “Always allow” in the browser prompt the first time.',
   optionsSaveButton: 'Save',
   optionsSaveConfirmation: 'Preferences saved.',
   optionsCredits: 'Made with the %LINK% API.',
@@ -29,6 +31,12 @@ const $ = <T extends Element>(selector: string) => document.querySelector<T>(sel
 const select = () => $<HTMLSelectElement>('#streaming-platforms');
 const checkbox = () => $<HTMLInputElement>('#open-app');
 const openAppOption = () => $<HTMLElement>('#open-app-option');
+const closeTab = () => $<HTMLInputElement>('#close-tab');
+const closeTabOption = () => $<HTMLElement>('#close-tab-option');
+const check = (input: HTMLInputElement, checked: boolean) => {
+  input.checked = checked;
+  input.dispatchEvent(new Event('change'));
+};
 const submit = () => $<HTMLFormElement>('form').dispatchEvent(new Event('submit', { cancelable: true }));
 
 async function open(userAgent = WINDOWS) {
@@ -117,5 +125,40 @@ describe('options page', () => {
     await vi.advanceTimersByTimeAsync(2000);
     expect($('[role="status"]').textContent).toBe('');
     vi.useRealTimers();
+  });
+
+  describe('close tab option', () => {
+    it('is only offered when links open in the app, with its help', async () => {
+      await browser.storage.local.set({ platform: 'deezer' });
+      await open();
+      expect(closeTabOption().hidden).toBe(true);
+      check(checkbox(), true);
+      expect(closeTabOption().hidden).toBe(false);
+      expect($('#close-tab-help').textContent).toBe('Tick “Always allow” in the browser prompt the first time.');
+      expect(closeTab().getAttribute('aria-describedby')).toBe('close-tab-help');
+    });
+
+    it('shows the saved setting', async () => {
+      await browser.storage.local.set({ platform: 'deezer', openInApp: true, closeTab: true });
+      await open();
+      expect(closeTabOption().hidden).toBe(false);
+      expect(closeTab().checked).toBe(true);
+    });
+
+    it('is cleared with the app option', async () => {
+      await browser.storage.local.set({ platform: 'deezer', openInApp: true, closeTab: true });
+      await open();
+      check(checkbox(), false);
+      expect(closeTabOption().hidden).toBe(true);
+      expect(closeTab().checked).toBe(false);
+    });
+
+    it('is saved', async () => {
+      await browser.storage.local.set({ platform: 'deezer', openInApp: true });
+      await open();
+      check(closeTab(), true);
+      submit();
+      await vi.waitFor(async () => expect((await browser.storage.local.get('closeTab')).closeTab).toBe(true));
+    });
   });
 });

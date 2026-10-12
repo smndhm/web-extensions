@@ -24,6 +24,8 @@ export default defineConfig({
           // The link of the music page is sent to the redirect service
           data_collection_permissions: { required: ['browsingActivity'] },
         },
+        // Also on Firefox for Android, from the first version that reads data_collection_permissions
+        gecko_android: { strict_min_version: '142.0' },
       },
     }),
   }),
