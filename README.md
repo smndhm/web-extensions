@@ -52,7 +52,7 @@ The [CI](.github/workflows/ci.yml) workflow runs on every pull request and on pu
 
 ## Icons and store images
 
-Every extension has the same images, rendered from one source icon by `pnpm store-assets` (in Chromium, with Playwright):
+Every extension has the same images, rendered from one source icon by `pnpm store-assets` (in Chromium, with Playwright, in Bricolage Grotesque, the title font of simon.duhem.fr):
 
 - `public/icons/{16,32,48,128}.png`: the manifest icons;
 - `medias/logo.png` (300×300), `medias/promo-small.png` (440×280) and `medias/promo-large.png` (1400×560): the logo and the promotional tiles of the store listings, with the extension's English name and description.

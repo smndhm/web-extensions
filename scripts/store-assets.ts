@@ -26,21 +26,13 @@ const SOURCES: Record<string, { source: string; size: number }> = {
   'music-bridge': { source: 'extensions/music-bridge/public/icons/128.png', size: 128 },
 };
 const ICON_SIZES = [16, 32, 48, 128];
-const FONTS = 'extensions/dzr-tab/entrypoints/newtab/fonts';
+// Bricolage Grotesque (SIL Open Font License), the title font of simon.duhem.fr
+const FONT = 'node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2';
 
 const dataUrl = async (file: string, type: string) => `data:${type};base64,${(await readFile(resolve(ROOT, file))).toString('base64')}`;
 const escape = (text: string) => text.replace(/[&<>"]/g, c => `&#${c.charCodeAt(0)};`);
 
-const fontFaces = (
-  await Promise.all(
-    (
-      [
-        ['regular', 400],
-        ['bold', 700],
-      ] as const
-    ).map(async ([name, weight]) => `@font-face { font-family: Deezer; font-weight: ${weight}; src: url(${await dataUrl(`${FONTS}/deezer-${name}.woff2`, 'font/woff2')}); }`),
-  )
-).join('\n');
+const fontFace = `@font-face { font-family: 'Bricolage Grotesque'; font-weight: 200 800; src: url(${await dataUrl(FONT, 'font/woff2')}); }`;
 
 /** Just the icon, on a transparent background */
 const iconOnly = (icon: string, size: number) => `<style>html, body { margin: 0; } img { display: block; width: ${size}px; height: ${size}px; }</style><img src="${icon}">`;
@@ -49,15 +41,15 @@ const iconOnly = (icon: string, size: number) => `<style>html, body { margin: 0;
 function tile(icon: string, name: string, description: string, { iconSize, nameSize, textSize, gap }: { iconSize: number; nameSize: number; textSize: number; gap: number }) {
   return `
     <style>
-      ${fontFaces}
+      ${fontFace}
       html, body { margin: 0; height: 100%; }
       body {
         display: flex; align-items: center; justify-content: center; gap: ${gap}px; padding: 0 ${gap}px; box-sizing: border-box;
-        background: radial-gradient(circle at 20% 30%, #2a2140, #121216 70%); color: #fff; font-family: Deezer, sans-serif;
+        background: radial-gradient(circle at 20% 30%, #2a2140, #121216 70%); color: #fff; font-family: 'Bricolage Grotesque', sans-serif;
       }
       img { width: ${iconSize}px; height: ${iconSize}px; flex: none; }
-      h1 { margin: 0 0 ${nameSize * 0.25}px; font-size: ${nameSize}px; line-height: 1.05; font-weight: 700; }
-      p { margin: 0; font-size: ${textSize}px; line-height: 1.3; color: #d6d4dc; }
+      h1 { margin: 0 0 ${nameSize * 0.25}px; font-size: ${nameSize}px; line-height: 1.05; font-weight: 800; }
+      p { margin: 0; font-size: ${textSize}px; line-height: 1.3; font-weight: 400; color: #d6d4dc; }
     </style>
     <img src="${icon}"><div><h1>${escape(name)}</h1><p>${escape(description)}</p></div>`;
 }
