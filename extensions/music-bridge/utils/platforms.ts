@@ -40,7 +40,9 @@ export const platforms: Record<PlatformId, Platform> = {
   },
   napster: {
     name: 'Napster',
-    url: 'https://web.napster.com',
+    // Odesli now links to play.napster.com
+    url: 'https://play.napster.com',
+    aliases: ['https://web.napster.com'],
   },
   pandora: {
     name: 'Pandora',
