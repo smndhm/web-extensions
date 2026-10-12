@@ -1,4 +1,4 @@
-import { firefoxSettings, sourcesZip } from '@web-extensions/shared/wxt';
+import { firefoxSettings, icons, sourcesZip } from '@web-extensions/shared/wxt';
 import { defineConfig } from 'wxt';
 
 export default defineConfig({
@@ -7,10 +7,7 @@ export default defineConfig({
     name: '__MSG_name__',
     description: '__MSG_description__',
     default_locale: 'en',
-    icons: {
-      48: 'icons/48.png',
-      128: 'icons/128.png',
-    },
+    icons,
     permissions: ['storage'],
     ...firefoxSettings(browser, {
       id: '{987b3f6c-05ca-4dc6-a140-38ce920051c7}',

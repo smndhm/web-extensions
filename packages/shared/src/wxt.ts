@@ -12,6 +12,9 @@ export const sourcesZip = (extension: string) => ({
   excludeSources: [`extensions/!(${extension})/**`, '**/.output/**', '**/.wxt/**', '**/medias/**'],
 });
 
+/** Manifest icons, rendered by scripts/icons.ts in every extension's public/icons */
+export const icons = { 16: 'icons/16.png', 32: 'icons/32.png', 48: 'icons/48.png', 128: 'icons/128.png' };
+
 interface Gecko {
   /** Add-on ID on addons.mozilla.org */
   id: string;
