@@ -8,9 +8,10 @@ export default defineConfig({
     excludeSources: ['extensions/!(dzr-tab)/**', '**/.output/**', '**/.wxt/**', '**/medias/**'],
   },
   manifest: ({ browser }) => ({
-    name: 'Deezer Tab',
-    short_name: 'Deezer Tab',
-    description: 'Discover a Deezer Track every time you open a new tab.',
+    name: '__MSG_name__',
+    short_name: '__MSG_name__',
+    description: '__MSG_description__',
+    default_locale: 'en',
     icons: {
       16: 'img/icon16.png',
       48: 'img/icon48.png',
