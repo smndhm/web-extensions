@@ -16,15 +16,15 @@ const CHROMEOS = 'Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (K
 
 const MESSAGES: Record<string, string> = {
   '@@ui_locale': 'fr_FR',
-  optionsTitle: 'Music Bridge - Options',
-  optionsStreamingPlatformLabel: 'Select your streaming platform:',
-  optionsOpenAppLabel: 'Open in desktop app.',
-  optionsCloseTabLabel: 'Close the tab once the app opens.',
-  optionsCloseTabHelp: 'Tick “Always allow” in the browser prompt the first time.',
-  optionsSaveButton: 'Save',
-  optionsSaveConfirmation: 'Preferences saved.',
-  optionsCredits: 'Made with the %LINK% API.',
-  optionsNewTab: '(opens in a new tab)',
+  'optionsTitle': 'Music Bridge - Options',
+  'optionsStreamingPlatformLabel': 'Select your streaming platform:',
+  'optionsOpenAppLabel': 'Open in desktop app.',
+  'optionsCloseTabLabel': 'Close the tab once the app opens.',
+  'optionsCloseTabHelp': 'Tick “Always allow” in the browser prompt the first time.',
+  'optionsSaveButton': 'Save',
+  'optionsSaveConfirmation': 'Preferences saved.',
+  'optionsCredits': 'Made with the %LINK% API.',
+  'optionsNewTab': '(opens in a new tab)',
 };
 
 const $ = <T extends Element>(selector: string) => document.querySelector<T>(selector)!;
@@ -71,7 +71,7 @@ describe('options page', () => {
 
   it('lists every platform and selects Spotify by default', async () => {
     await open();
-    expect([...select().options].map((option) => option.value)).toEqual([...PLATFORM_IDS]);
+    expect([...select().options].map(option => option.value)).toEqual([...PLATFORM_IDS]);
     expect(select().value).toBe('spotify');
     expect(checkbox().checked).toBe(false);
   });
@@ -118,9 +118,7 @@ describe('options page', () => {
     select().dispatchEvent(new Event('change'));
     checkbox().checked = true;
     submit();
-    await vi.waitFor(async () =>
-      expect(await browser.storage.local.get(['platform', 'openInApp'])).toEqual({ platform: 'deezer', openInApp: true }),
-    );
+    await vi.waitFor(async () => expect(await browser.storage.local.get(['platform', 'openInApp'])).toEqual({ platform: 'deezer', openInApp: true }));
     await vi.waitFor(() => expect($('[role="status"]').textContent).toBe('Preferences saved.'));
     await vi.advanceTimersByTimeAsync(2000);
     expect($('[role="status"]').textContent).toBe('');

@@ -49,12 +49,7 @@ for (let attempt = 1; titles.size < COUNT && attempt <= MAX_ATTEMPTS; attempt++)
     .waitForFunction(
       () => {
         const cover = document.querySelector<HTMLImageElement>('.track-cover img');
-        return (
-          document.body.style.backgroundImage !== '' &&
-          cover !== null &&
-          cover.complete &&
-          cover.naturalWidth > 0
-        );
+        return document.body.style.backgroundImage !== '' && cover !== null && cover.complete && cover.naturalWidth > 0;
       },
       undefined,
       { timeout: 15_000 },

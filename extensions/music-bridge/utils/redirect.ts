@@ -12,11 +12,7 @@ export const REDIRECT_SERVICE_URL = 'https://music-bridge-redirect.smndhm.worker
  * Where to send the user from the music page `href`, or `undefined` to stay on it
  * (already on the chosen platform's website, or no app link to build).
  */
-export function getRedirectUrl(
-  href: string,
-  { platform, openInApp }: Pick<Settings, 'platform' | 'openInApp'>,
-  userAgent: string,
-): string | undefined {
+export function getRedirectUrl(href: string, { platform, openInApp }: Pick<Settings, 'platform' | 'openInApp'>, userAgent: string): string | undefined {
   // There are no desktop apps on ChromeOS
   const inApp = openInApp && platforms[platform].hasNativeAppLink === true && !isChromeOS(userAgent);
   const onPlatform = isOnPlatform(href, platforms[platform]);
@@ -36,8 +32,7 @@ export function getRedirectUrl(
 }
 
 /** Whether `redirect` opens the platform's app: an app link, or the service asked for one */
-const opensApp = (redirect: string) =>
-  !/^https?:/.test(redirect) || new URL(redirect).searchParams.get('typeURI') === 'nativeAppUriDesktop';
+const opensApp = (redirect: string) => !/^https?:/.test(redirect) || new URL(redirect).searchParams.get('typeURI') === 'nativeAppUriDesktop';
 
 /**
  * Whether to close the tab after redirecting to `redirect`: when the user asked for it, the app opens,

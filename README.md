@@ -2,16 +2,16 @@
 
 Monorepo of my browser extensions (WebExtensions), built with [WXT](https://wxt.dev) and pnpm workspaces.
 
-| Extension | Description |
-| --- | --- |
-| [dzr-link](extensions/dzr-link) | Get redirected to the Deezer desktop app when you open a Deezer link in the browser. |
-| [dzr-tab](extensions/dzr-tab) | Discover a Deezer track every time you open a new tab. |
-| [music-bridge](extensions/music-bridge) | Open any music link on your favorite streaming platform with one click. |
+| Extension                               | Description                                                                          |
+| --------------------------------------- | ------------------------------------------------------------------------------------ |
+| [dzr-link](extensions/dzr-link)         | Get redirected to the Deezer desktop app when you open a Deezer link in the browser. |
+| [dzr-tab](extensions/dzr-tab)           | Discover a Deezer track every time you open a new tab.                               |
+| [music-bridge](extensions/music-bridge) | Open any music link on your favorite streaming platform with one click.              |
 
-| Extension | Chrome Web Store ID | Firefox add-on ID |
-| --- | --- | --- |
-| dzr-link | [`depodknemkobjklhmpemeagnehojilng`](https://chromewebstore.google.com/detail/depodknemkobjklhmpemeagnehojilng) | `{a1abd3a6-a241-401e-bac4-f7338abac0ad}` |
-| dzr-tab | [`meiclleccmfmheoplgelombebilpndea`](https://chromewebstore.google.com/detail/meiclleccmfmheoplgelombebilpndea) | `{52114cbe-92a2-4828-8b44-109c35fbc0e7}` |
+| Extension    | Chrome Web Store ID                                                                                             | Firefox add-on ID                                                        |
+| ------------ | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| dzr-link     | [`depodknemkobjklhmpemeagnehojilng`](https://chromewebstore.google.com/detail/depodknemkobjklhmpemeagnehojilng) | `{a1abd3a6-a241-401e-bac4-f7338abac0ad}`                                 |
+| dzr-tab      | [`meiclleccmfmheoplgelombebilpndea`](https://chromewebstore.google.com/detail/meiclleccmfmheoplgelombebilpndea) | `{52114cbe-92a2-4828-8b44-109c35fbc0e7}`                                 |
 | music-bridge | [`mbebbcaajfmockkcflajghbambbimpck`](https://chromewebstore.google.com/detail/mbebbcaajfmockkcflajghbambbimpck) | [`music-bridge`](https://addons.mozilla.org/firefox/addon/music-bridge/) |
 
 Each extension lives in its own folder under `extensions/`, with its full Git history imported from its original repository.
@@ -73,7 +73,7 @@ Versions and changelogs are managed with [Changesets](https://github.com/changes
 2. **When it is merged into `main`**, the [Release](.github/workflows/release.yml) workflow opens or updates a **Version Packages** pull request. It bumps the versions in `package.json` and writes each extension's `CHANGELOG.md`.
 3. **When the Version Packages pull request is merged**, the Release workflow tags each released extension (`dzr-tab@2.2.0`), creates its GitHub release with the changelog, attaches the Chrome, Firefox and sources zips, and runs the store submission:
    - a **dry run** by default;
-   - a real submission to the Chrome Web Store, addons.mozilla.org and Microsoft Edge Add-ons once the `SUBMIT_ON_RELEASE` repository variable (*Settings → Secrets and variables → Actions → Variables*) is `true`. Add **required reviewers** to the `dzr-link` and `dzr-tab` environments to approve each submission.
+   - a real submission to the Chrome Web Store, addons.mozilla.org and Microsoft Edge Add-ons once the `SUBMIT_ON_RELEASE` repository variable (_Settings → Secrets and variables → Actions → Variables_) is `true`. Add **required reviewers** to the `dzr-link` and `dzr-tab` environments to approve each submission.
 
 Dependency updates come from [Renovate](renovate.json): minor and patch updates and lock file maintenance are merged automatically. The [Renovate → Changesets](.github/workflows/changesets-renovate.yml) workflow adds a changeset to each Renovate branch that updates an extension's dependencies, then runs the CI checks on that commit and reports them as commit statuses, since a commit pushed by a workflow does not trigger the CI.
 
@@ -83,11 +83,11 @@ The [Publish extension](.github/workflows/publish.yml) workflow submits an exten
 
 The workflow runs `wxt submit` with this configuration:
 
-- **Environments** (*Settings → Environments*): one per extension, named like it (`dzr-link`, `dzr-tab`, `music-bridge`). Each one holds the store IDs as variables:
+- **Environments** (_Settings → Environments_): one per extension, named like it (`dzr-link`, `dzr-tab`, `music-bridge`). Each one holds the store IDs as variables:
   - `CHROME_EXTENSION_ID`
   - `FIREFOX_EXTENSION_ID`: the numeric add-on ID on addons.mozilla.org
   - `EDGE_PRODUCT_ID`: the product ID in Partner Center. Without it, the extension is not submitted to Edge.
-- **Repository secrets** (*Settings → Secrets and variables → Actions*), shared by every extension:
+- **Repository secrets** (_Settings → Secrets and variables → Actions_), shared by every extension:
   - `CHROME_PUBLISHER_ID`, `CHROME_SERVICE_ACCOUNT_CLIENT_EMAIL`, `CHROME_SERVICE_ACCOUNT_PRIVATE_KEY`: [Chrome Web Store API](https://developer.chrome.com/docs/webstore/using-api) service account
   - `FIREFOX_JWT_ISSUER`, `FIREFOX_JWT_SECRET`: [addons.mozilla.org API key](https://addons.mozilla.org/developers/addon/api/key/)
   - `EDGE_CLIENT_ID`, `EDGE_API_KEY`: [Microsoft Edge Add-ons API](https://learn.microsoft.com/microsoft-edge/extensions/publish/api/using-addons-api) credentials, from Partner Center

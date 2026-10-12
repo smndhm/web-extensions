@@ -18,11 +18,7 @@ const items = {
 };
 
 export async function getSettings(): Promise<Settings> {
-  const [platform, openInApp, closeTab] = await Promise.all([
-    items.platform.getValue(),
-    items.openInApp.getValue(),
-    items.closeTab.getValue(),
-  ]);
+  const [platform, openInApp, closeTab] = await Promise.all([items.platform.getValue(), items.openInApp.getValue(), items.closeTab.getValue()]);
   return {
     platform: isPlatformId(platform) ? platform : DEFAULT_PLATFORM,
     openInApp: openInApp === true,
@@ -31,9 +27,5 @@ export async function getSettings(): Promise<Settings> {
 }
 
 export async function saveSettings({ platform, openInApp, closeTab }: Settings): Promise<void> {
-  await Promise.all([
-    items.platform.setValue(platform),
-    items.openInApp.setValue(openInApp),
-    items.closeTab.setValue(closeTab),
-  ]);
+  await Promise.all([items.platform.setValue(platform), items.openInApp.setValue(openInApp), items.closeTab.setValue(closeTab)]);
 }
