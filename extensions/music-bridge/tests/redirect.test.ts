@@ -79,6 +79,13 @@ describe('getRedirectUrl', () => {
     expect(getRedirectUrl(href, { platform: 'tidal', openInApp: false }, WINDOWS)).toBeUndefined();
   });
 
+  it.each(['https://play.napster.com/track/tra.1', 'https://web.napster.com/track/tra.1'])(
+    'stays on Napster pages (%s) when Napster is chosen',
+    (href) => {
+      expect(getRedirectUrl(href, { platform: 'napster', openInApp: false }, WINDOWS)).toBeUndefined();
+    },
+  );
+
   it('does not take another host with the same prefix for the platform', () => {
     expect(
       serviceParams(getRedirectUrl('https://tidal.com.example/track/1', { platform: 'tidal', openInApp: false }, WINDOWS)),

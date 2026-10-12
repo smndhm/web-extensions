@@ -20,6 +20,8 @@ export default defineContentScript({
     'https://www.pandora.com/TR:*',
     'https://www.pandora.com/AL:*',
     'https://music.amazon.com/albums/*',
+    'https://play.napster.com/track/*',
+    'https://play.napster.com/album/*',
     'https://web.napster.com/track/*',
     'https://web.napster.com/album/*',
   ],
