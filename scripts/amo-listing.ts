@@ -5,7 +5,8 @@
  * - description: store/description-<locale>.md;
  * - categories: AMO_CATEGORIES below;
  * - with --images, also the icon (public/icons/128.png) and the screenshots (store/screenshot-*.png,
- *   the English ones when they differ by language): they replace the listing's previews.
+ *   the English ones when they differ by language): they replace the listing's previews, with their captions
+ *   from store/captions.json ({ "<file>": { "<locale>": "<caption>" } }).
  *
  * Usage: node scripts/amo-listing.ts <extension> [--images] [--dry-run]
  * Needs FIREFOX_EXTENSION_ID (the add-on ID), FIREFOX_JWT_ISSUER and FIREFOX_JWT_SECRET (the AMO API
@@ -60,10 +61,23 @@ const allScreenshots = (await readdir(resolve(dir, 'store'))).filter(file => /^s
 // Previews are the same for every language: keep the default locale's when they differ by language
 const localized = allScreenshots.filter(file => file.includes(`-${DEFAULT_LOCALE}-`));
 const screenshots = (localized.length ? localized : allScreenshots).map(file => resolve(dir, 'store', file));
+const captionsFile = resolve(dir, 'store/captions.json');
+const captions = (existsSync(captionsFile) ? JSON.parse(await readFile(captionsFile, 'utf8')) : {}) as Record<string, Record<string, string>>;
+/** A screenshot's caption in each locale, with AMO locale codes */
+const captionOf = (file: string): Record<string, string> | undefined => {
+  const caption = captions[basename(file)];
+  return caption && Object.fromEntries(Object.entries(caption).map(([locale, text]) => [amoLocale(locale), text]));
+};
+// store/captions.json also gives the order of the previews
+const order = Object.keys(captions);
+const rank = (file: string) => (order.includes(basename(file)) ? order.indexOf(basename(file)) : order.length);
+screenshots.sort((a, b) => rank(a) - rank(b));
+for (const file of screenshots) if (!captionOf(file)) console.warn(`${extension}: no caption for ${basename(file)} in store/captions.json`);
 
 if (dryRun) {
   console.log(JSON.stringify(listing, null, 2));
-  if (images) console.log(`Icon: ${icon}\nPreviews (replacing the current ones):\n${screenshots.map(file => `- ${file}`).join('\n') || '- none'}`);
+  if (images)
+    console.log(`Icon: ${icon}\nPreviews (replacing the current ones):\n${screenshots.map(file => `- ${file} ${JSON.stringify(captionOf(file) ?? {})}`).join('\n') || '- none'}`);
   process.exit(0);
 }
 
@@ -122,7 +136,10 @@ if (images) {
   const { previews } = await amo<{ previews: { id: number }[] }>('GET', addonUrl);
   // Upload the new previews before deleting the old ones, so the listing never has none
   for (const [position, file] of screenshots.entries()) {
-    await amo('POST', `${addonUrl}previews/`, await imageForm('image', file, { position: String(position) }));
+    const preview = await amo<{ id: number }>('POST', `${addonUrl}previews/`, await imageForm('image', file, { position: String(position) }));
+    // The caption can't be sent with the image (multipart form): set it afterwards
+    const caption = captionOf(file);
+    if (caption) await amo('PATCH', `${addonUrl}previews/${preview.id}/`, { caption });
     console.log(`${extension}: preview ${basename(file)} uploaded`);
   }
   for (const preview of previews) await amo('DELETE', `${addonUrl}previews/${preview.id}/`);

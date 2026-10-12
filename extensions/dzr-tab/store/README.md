@@ -38,10 +38,13 @@ The long description, sent as is to addons.mozilla.org by `pnpm amo-listing` (so
 
 | Image                         | English                                                                              | Français                                                                                         |
 | ----------------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
+| Store icon (128×128)          | [`../public/icons/128.png`](../public/icons/128.png)                                 | [`../public/icons/128.png`](../public/icons/128.png)                                             |
 | Logo (300×300)                | [`logo-300x300.png`](logo-300x300.png)                                               | [`logo-300x300.png`](logo-300x300.png)                                                           |
 | Small promo tile (440×280)    | [`promo-440x280-en.png`](promo-440x280-en.png)                                       | [`promo-440x280-fr.png`](promo-440x280-fr.png)                                                   |
 | Marquee promo tile (1400×560) | [`promo-1400x560-en.png`](promo-1400x560-en.png)                                     | [`promo-1400x560-fr.png`](promo-1400x560-fr.png)                                                 |
 | Screenshots (1280×800)        | `screenshot-1280x800-*.png`, same for every language (the page only shows the track) | `screenshot-1280x800-*.png`, identiques pour toutes les langues (la page n'affiche que le titre) |
+
+The Chrome Web Store takes up to 5 screenshots (leave out the 6th), Microsoft Edge Add-ons up to 6.
 
 ## Notes for reviewers
 

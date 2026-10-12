@@ -54,21 +54,21 @@ The [CI](.github/workflows/ci.yml) workflow runs on every pull request and on pu
 
 Every extension has the same images, rendered from one source icon by `pnpm store-assets` (in Chromium, with Playwright, in Bricolage Grotesque, the title font of simon.duhem.fr):
 
-- `public/icons/{16,32,48,128}.png`: the manifest icons;
+- `public/icons/{16,32,48,128}.png`: the manifest icons. The 128 px one, also the store icon, has 96 px of artwork and 16 px of transparent padding, as the Chrome Web Store asks;
 - `store/logo-300x300.png`, and `store/promo-440x280-<locale>.png` and `store/promo-1400x560-<locale>.png` for each locale of `public/_locales`: the store listing images, named after their type and size, with the extension's name and description in that language.
 
-The Deezer extensions use the Deezer heart, [`packages/shared/assets/deezer-heart.svg`](packages/shared/assets/deezer-heart.svg). Music Bridge has no vector icon yet: its images come from its 128 px icon, so its 300 px logo and large tile are blurry.
+The Deezer extensions use the Deezer heart, [`packages/shared/assets/deezer-heart.svg`](packages/shared/assets/deezer-heart.svg). Music Bridge has no vector icon yet: its images come from its original 128 px icon, [`extensions/music-bridge/assets/icon.png`](extensions/music-bridge/assets/icon.png), so its 300 px logo and large tile are blurry.
 
 ### Store formats
 
-Each extension's `store/` folder holds its images and a `store/README.md` with everything the listings ask for, in every language of the extension: texts, category, search terms, notes for reviewers, permission justifications, privacy answers and images. The stores ask for these images:
+Each extension's `store/` folder holds its images and a `store/README.md` with everything the listings ask for, in every language of the extension: texts, category, search terms, notes for reviewers, permission justifications, privacy answers and images. The stores ask for these images, all PNG; the Chrome Web Store wants screenshots and tiles without alpha (24-bit), as `pnpm store-assets` and the screenshots workflow render them:
 
-|                    |  Chrome Web Store  | addons.mozilla.org | Microsoft Edge Add-ons | File                                |
-| ------------------ | :----------------: | :----------------: | :--------------------: | ----------------------------------- |
-| Icon / logo        |      128×128       |      128×128       |        300×300         | `logo-300x300.png`, `icons/128.png` |
-| Screenshots        | 1280×800 (up to 5) |      1280×800      |   1280×800 (up to 6)   | `screenshot-1280x800-*.png`         |
-| Small promo tile   |      440×280       |         –          |        440×280         | `promo-440x280-<locale>.png`        |
-| Marquee promo tile |      1400×560      |         –          |        1400×560        | `promo-1400x560-<locale>.png`       |
+|                    |     Chrome Web Store      | addons.mozilla.org | Microsoft Edge Add-ons | File                                |
+| ------------------ | :-----------------------: | :----------------: | :--------------------: | ----------------------------------- |
+| Icon / logo        | 128×128 (96 + 16 padding) |      128×128       |        300×300         | `logo-300x300.png`, `icons/128.png` |
+| Screenshots        |    1280×800 (up to 5)     |      1280×800      |   1280×800 (up to 6)   | `screenshot-1280x800-*.png`         |
+| Small promo tile   |          440×280          |         –          |        440×280         | `promo-440x280-<locale>.png`        |
+| Marquee promo tile |         1400×560          |         –          |        1400×560        | `promo-1400x560-<locale>.png`       |
 
 ## Store screenshots
 
@@ -93,7 +93,7 @@ Each extension's listing comes from the repository: its name and summary from `p
 
 - **addons.mozilla.org** is updated by `pnpm amo-listing <extension> [--images] [--dry-run]`, with the AMO API and the Firefox credentials of [Publishing](#publishing):
   - the [Publish extension](.github/workflows/publish.yml) workflow updates the name, summary, description (in every language) and categories after each Firefox submission;
-  - the [AMO listing](.github/workflows/amo-listing.yml) workflow (**Actions** tab) updates them on demand, and with **images** also replaces the icon and the screenshots (the English ones when they differ by language, since AMO shows the same ones in every language).
+  - the [AMO listing](.github/workflows/amo-listing.yml) workflow (**Actions** tab) updates them on demand, and with **images** also replaces the icon and the screenshots (the English ones when they differ by language, since AMO shows the same ones in every language), with their captions in every language from `store/captions.json`, which also sets their order.
 - **Chrome Web Store** and **Microsoft Edge Add-ons** have no listing API: copy the texts of `store/README.md` and upload the images by hand, in their dashboards.
 
 Versions and changelogs are managed with [Changesets](https://github.com/changesets/changesets).
