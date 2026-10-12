@@ -25,4 +25,4 @@ pnpm --filter dzr-link dev:firefox   # Firefox
 
 The app links are built by [`@web-extensions/shared/deezer`](../../packages/shared/src/deezer.ts), tested there.
 
-Store listing texts, search terms, notes for reviewers and images: [STORE.md](STORE.md).
+Store listing texts, search terms, notes for reviewers and images: [store/README.md](store/README.md).

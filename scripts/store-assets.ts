@@ -1,16 +1,16 @@
 /**
  * Renders each extension's images from one source icon, the same way for all extensions:
  * - public/icons/{16,32,48,128}.png, the manifest icons;
- * - medias/logo-300x300.png, medias/promo-440x280.png and medias/promo-1400x560.png (promotional
- *   tiles), named after their type and size, for the store listings: the icon, the name and the description of the extension
- *   (public/_locales/en/messages.json) on a dark background.
+ * - store/medias/logo-300x300.png, and store/medias/promo-440x280-<locale>.png and store/medias/promo-1400x560-<locale>.png
+ *   (promotional tiles) for each locale, named after their type and size, for the store listings: the icon, the name and
+ *   the description of the extension (public/_locales/<locale>/messages.json) on a dark background.
  * A PNG source only gives the icons it is at least as large as.
  *
  * Usage: pnpm store-assets
  * CHROMIUM_PATH can point to a Chromium binary other than the one Playwright installs.
  */
 
-import { mkdir, readFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { extname, resolve } from 'node:path';
 
@@ -72,18 +72,23 @@ try {
   for (const [extension, { source, size }] of Object.entries(SOURCES)) {
     const dir = resolve(ROOT, 'extensions', extension);
     const icon = await dataUrl(source, extname(source) === '.svg' ? 'image/svg+xml' : 'image/png');
-    const messages = JSON.parse(await readFile(resolve(dir, 'public/_locales/en/messages.json'), 'utf8')) as Record<string, { message: string }>;
-    const [name, description] = [messages.name!.message, messages.description!.message];
     await mkdir(resolve(dir, 'public/icons'), { recursive: true });
-    await mkdir(resolve(dir, 'medias'), { recursive: true });
+    await mkdir(resolve(dir, 'store/medias'), { recursive: true });
 
     for (const iconSize of ICON_SIZES.filter(candidate => candidate <= size)) {
       const file = resolve(dir, `public/icons/${iconSize}.png`);
       if (resolve(ROOT, source) !== file) await shoot(iconOnly(icon, iconSize), iconSize, iconSize, file, true);
     }
-    await shoot(iconOnly(icon, 300), 300, 300, resolve(dir, 'medias/logo-300x300.png'), true);
-    await shoot(tile(icon, name, description, { iconSize: 104, nameSize: 30, textSize: 15, gap: 24 }), 440, 280, resolve(dir, 'medias/promo-440x280.png'));
-    await shoot(tile(icon, name, description, { iconSize: 300, nameSize: 84, textSize: 36, gap: 80 }), 1400, 560, resolve(dir, 'medias/promo-1400x560.png'));
+    await shoot(iconOnly(icon, 300), 300, 300, resolve(dir, 'store/medias/logo-300x300.png'), true);
+    // One set of promo tiles per locale, for the store listing in that language
+    for (const locale of await readdir(resolve(dir, 'public/_locales'))) {
+      const messages = JSON.parse(await readFile(resolve(dir, `public/_locales/${locale}/messages.json`), 'utf8')) as Record<string, { message: string }>;
+      const [name, description] = [messages.name!.message, messages.description!.message];
+      const small = { iconSize: 104, nameSize: 30, textSize: 15, gap: 24 };
+      const marquee = { iconSize: 300, nameSize: 84, textSize: 36, gap: 80 };
+      await shoot(tile(icon, name, description, small), 440, 280, resolve(dir, `store/medias/promo-440x280-${locale}.png`));
+      await shoot(tile(icon, name, description, marquee), 1400, 560, resolve(dir, `store/medias/promo-1400x560-${locale}.png`));
+    }
   }
 } finally {
   await browser.close();

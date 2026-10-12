@@ -9,7 +9,7 @@
  */
 export const sourcesZip = (extension: string) => ({
   sourcesRoot: '../..',
-  excludeSources: [`extensions/!(${extension})/**`, '**/.output/**', '**/.wxt/**', '**/medias/**'],
+  excludeSources: [`extensions/!(${extension})/**`, '**/.output/**', '**/.wxt/**', 'extensions/*/store/**'],
 });
 
 /** Manifest icons, rendered by scripts/icons.ts in every extension's public/icons */
