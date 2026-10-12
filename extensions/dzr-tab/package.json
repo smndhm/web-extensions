@@ -25,6 +25,7 @@
   "author": "@smndhm",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^22.20.5",
     "axe-core": "^4.14.0",
     "playwright": "1.64.0",
     "typescript": "^7.0.2",
