@@ -4,7 +4,7 @@
     "description": "Extension name."
   },
   "description": {
-    "message": "Ouvrez les liens Deezer directement dans l'application Deezer plutôt que dans le navigateur.",
+    "message": "Ouvrez les liens Deezer dans l'application de bureau plutôt que dans le navigateur.",
     "description": "Extension description."
   }
 }
