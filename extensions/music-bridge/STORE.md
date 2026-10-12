@@ -84,6 +84,12 @@ Plateformes prises en charge :
 
 > No account or credentials needed. Pick a streaming platform in the extension options (Deezer, for example). Then open a music link from another platform, for example https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC: the extension redirects to the same track on the chosen platform, through the music-bridge-redirect service (Odesli API). "Open in desktop app" needs that platform's desktop app installed.
 
+## Permissions (Chrome Web Store privacy practices)
+
+- **storage**: Saves the user's settings: the chosen streaming platform, and whether to open links in its desktop app and close the tab afterwards. The settings stay in the browser.
+- **Host permission** (content script on the track and album pages of Spotify, Deezer, Apple Music, YouTube Music, Tidal, Pandora, Amazon Music and Napster): The content script runs on the track and album pages of the supported streaming platforms only. It reads the page address and redirects to the same music on the platform the user chose, through the extension's redirect service. It does not read page content.
+- **Remote code**: No. The redirect service answers with an HTTP redirect, never code run by the extension.
+
 ## Privacy
 
 The link of the music page is sent to the redirect service (https://music-bridge-redirect.smndhm.workers.dev/), which looks it up with the Odesli API. Nothing else is collected; the settings stay in the browser. Firefox: `data_collection_permissions: browsingActivity`.
