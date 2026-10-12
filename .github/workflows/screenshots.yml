@@ -11,13 +11,22 @@ on:
           - dzr-tab
           - music-bridge
       count:
-        description: Number of screenshots (dzr-tab, one per Deezer track)
+        description: 'dzr-tab: number of screenshots, from the top of the Deezer chart'
         required: true
         type: number
         default: 5
+      tracks:
+        description: 'dzr-tab: Deezer track IDs instead of the chart, comma separated (deezer.com/track/<ID>)'
+        required: false
+        type: string
+      commit:
+        description: Replace the extension's medias/ with the screenshots and commit them to the branch (not main)
+        required: true
+        type: boolean
+        default: false
 
 permissions:
-  contents: read
+  contents: write # Commit the screenshots when asked
 
 jobs:
   screenshots:
@@ -42,6 +51,7 @@ jobs:
       - name: Take screenshots
         env:
           COUNT: ${{ inputs.count }}
+          TRACKS: ${{ inputs.tracks }}
         run: pnpm screenshots "$COUNT"
 
       - name: Upload screenshots
@@ -52,3 +62,14 @@ jobs:
           if-no-files-found: error
           # WXT writes to .output/, a hidden directory
           include-hidden-files: true
+
+      - name: Commit the screenshots
+        if: inputs.commit && github.ref_name != github.event.repository.default_branch
+        env:
+          EXTENSION: ${{ inputs.extension }}
+        run: |
+          rm -rf medias && mkdir medias && cp .output/screenshots/*.png medias/
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add medias
+          git commit -m "docs($EXTENSION): new store screenshots" && git push || echo "No change"

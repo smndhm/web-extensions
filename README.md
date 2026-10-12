@@ -54,10 +54,10 @@ The [CI](.github/workflows/ci.yml) workflow runs on every pull request and on pu
 
 The [Store screenshots](.github/workflows/screenshots.yml) workflow (**Actions** tab) loads an extension in Chromium and uploads 1280×800 screenshots, the size the Chrome Web Store, addons.mozilla.org and Microsoft Edge Add-ons accept, as the `<extension>-screenshots` artifact:
 
-- **dzr-tab**: the new tab page with real Deezer tracks;
+- **dzr-tab**: the new tab page with real Deezer tracks, the top of the Deezer chart or the track IDs given in **tracks**;
 - **music-bridge**: the options page in English and French, light and dark.
 
-Upload them to the store listings by hand: the store APIs only handle packages.
+With **commit**, run on a branch other than `main`, the screenshots also replace the extension's `medias/` folder (the README images) in a commit on that branch. Upload them to the store listings by hand: the store APIs only handle packages.
 
 Locally (`dzr-tab` or `music-bridge`):
 
