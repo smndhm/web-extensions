@@ -55,13 +55,13 @@ The [CI](.github/workflows/ci.yml) workflow runs on every pull request and on pu
 Every extension has the same images, rendered from one source icon by `pnpm store-assets` (in Chromium, with Playwright, in Bricolage Grotesque, the title font of simon.duhem.fr):
 
 - `public/icons/{16,32,48,128}.png`: the manifest icons;
-- `store/medias/logo-300x300.png`, and `store/medias/promo-440x280-<locale>.png` and `store/medias/promo-1400x560-<locale>.png` for each locale of `public/_locales`: the store listing images, named after their type and size, with the extension's name and description in that language.
+- `store/logo-300x300.png`, and `store/promo-440x280-<locale>.png` and `store/promo-1400x560-<locale>.png` for each locale of `public/_locales`: the store listing images, named after their type and size, with the extension's name and description in that language.
 
 The Deezer extensions use the Deezer heart, [`packages/shared/assets/deezer-heart.svg`](packages/shared/assets/deezer-heart.svg). Music Bridge has no vector icon yet: its images come from its 128 px icon, so its 300 px logo and large tile are blurry.
 
 ### Store formats
 
-Each extension's `store/` folder holds its images in `store/medias/` and, in `store/README.md`, everything the listings ask for, in every language of the extension: texts, category, search terms, notes for reviewers, permission justifications, privacy answers and images. The stores ask for these images:
+Each extension's `store/` folder holds its images and a `store/README.md` with everything the listings ask for, in every language of the extension: texts, category, search terms, notes for reviewers, permission justifications, privacy answers and images. The stores ask for these images:
 
 |                    |  Chrome Web Store  | addons.mozilla.org | Microsoft Edge Add-ons | File                                |
 | ------------------ | :----------------: | :----------------: | :--------------------: | ----------------------------------- |
@@ -77,7 +77,7 @@ The [Store screenshots](.github/workflows/screenshots.yml) workflow (**Actions**
 - **dzr-tab**: the new tab page with real Deezer tracks, the top of the Deezer chart or the track IDs given in **tracks**;
 - **music-bridge**: the options page in English and French, light and dark.
 
-With **commit**, run on a branch other than `main`, the screenshots also replace the extension's `store/medias/screenshot-1280x800-*.png` in a commit on that branch. Upload them to the store listings by hand: the store APIs only handle packages.
+With **commit**, run on a branch other than `main`, the screenshots also replace the extension's `store/screenshot-1280x800-*.png` in a commit on that branch. Upload them to the store listings by hand: the store APIs only handle packages.
 
 Locally (`dzr-tab` or `music-bridge`):
 
