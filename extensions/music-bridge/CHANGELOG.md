@@ -1,5 +1,27 @@
 # music-bridge
 
+## 1.7.0
+
+### Minor Changes
+
+- 35b9821: Available on Firefox for Android (142 and later).
+- bf3df69: New option to close the tab once the app opens, for tabs opened for the link only.
+- 48b1d3a: Drop Napster, and rewrite the description in English and French.
+
+### Patch Changes
+
+- ff1643a: Icons in 16, 32, 48 and 128 px, the same set for every extension.
+- f6593d2: Open Deezer links with a regional language in the URL (`deezer.com/pt-br/track/…`) directly in the Deezer app.
+- 9b48950: Updated dependency `@types/node` to `24.19.2`.
+  Updated dependency `jsdom` to `30.1.2`.
+  Updated dependency `normalize.css` to `8.0.1`.
+  Updated dependency `sass` to `1.105.1`.
+  Updated dependency `typescript` to `7.0.2`.
+  Updated dependency `wxt` to `0.21.4`.
+  Updated dependency `axe-core` to `4.14.0`.
+  Updated dependency `selenium-webdriver` to `4.51.0`.
+- 0db74ae: Updated dependency `@types/node` to `^24.0.0`.
+
 ## 1.6.0
 
 ### Minor Changes
