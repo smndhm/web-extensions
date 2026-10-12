@@ -62,6 +62,12 @@ NÃ©cessite l'application Deezer pour ordinateur. Non disponible sur ChromeOS, oÃ
 
 > No account or credentials needed. The Deezer desktop app must be installed (free, https://www.deezer.com/download) to see the redirect. Open a Deezer link in the browser, for example https://www.deezer.com/track/3135556: the extension opens it in the Deezer desktop app (deezer:// link). Without the desktop app, the browser shows its "open external application" prompt.
 
+## Permissions (Chrome Web Store privacy practices)
+
+- **storage**: not requested.
+- **Host permission** (content script on `https://www.deezer.com/*`): The content script runs on deezer.com pages only, to open the same page in the Deezer desktop app (deezer:// link). It reads only the page address, and sends nothing anywhere.
+- **Remote code**: No.
+
 ## Privacy
 
 No data collection: the extension only rewrites the address of deezer.com pages. Firefox: `data_collection_permissions: none`.

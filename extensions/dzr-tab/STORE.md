@@ -62,6 +62,12 @@ Disponible en anglais et en français.
 
 > No account or credentials needed. Open a new tab: the page shows a track from Deezer's public API (api.deezer.com, no key required) with its cover, title and artist, on a background made from the cover's colors. Clicking the cover, title or artist opens it on deezer.com.
 
+## Permissions (Chrome Web Store privacy practices)
+
+- **storage**: Caches the tracks loaded from the public Deezer API for one hour, so the new tab page opens instantly and still shows tracks when Deezer cannot be reached. Nothing else is stored, and nothing leaves the browser.
+- **Host permission** (`https://api.deezer.com/*`): The new tab page loads tracks (title, artist, cover) from Deezer's public API, api.deezer.com. No other site is accessed.
+- **Remote code**: No. All JavaScript ships in the package; the Deezer API only returns JSON data.
+
 ## Privacy
 
 No data collection: the extension calls the public Deezer API and stores the tracks in the browser only. Firefox: `data_collection_permissions: none`.
