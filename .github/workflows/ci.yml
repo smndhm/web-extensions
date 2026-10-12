@@ -22,6 +22,9 @@ jobs:
 
       - uses: ./.github/actions/setup
 
+      - name: Lint and format check
+        run: pnpm lint
+
       - name: Type check
         run: pnpm compile
 
@@ -33,6 +36,10 @@ jobs:
 
       - name: Build for Firefox
         run: pnpm build:firefox
+
+      # Mozilla's linter, the one addons.mozilla.org runs on each submission
+      - name: Lint the Firefox builds
+        run: pnpm lint:firefox
 
   a11y:
     name: Accessibility (dzr-tab)

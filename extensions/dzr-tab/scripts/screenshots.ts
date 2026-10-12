@@ -1,24 +1,39 @@
 /**
  * Takes store screenshots of the new tab page with real Deezer tracks.
  *
- * Loads the Chrome build (.output/chrome-mv3) in Chromium, opens the new tab page once per
- * screenshot and saves 1280×800 PNGs, the size both the Chrome Web Store and
- * addons.mozilla.org accept, to .output/screenshots/.
+ * The tracks are the Deezer track IDs in TRACKS (comma separated), or else the top of the Deezer
+ * chart. Each one is put alone in the extension's track cache before opening the new tab page, so
+ * the page shows it. Loads the Chrome build (.output/chrome-mv3) in Chromium and saves 1280×800
+ * PNGs, the size the stores accept, to .output/screenshots/.
  *
  * Usage: pnpm build && pnpm screenshots [count]
+ *        TRACKS=3135556,916424 pnpm screenshots
  * CHROMIUM_PATH can point to a Chromium binary other than the one Playwright installs.
  */
 
 import { mkdir, rm } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { chromium } from 'playwright';
+import type { DeezerTrack } from '../utils/deezer';
 
 const EXTENSION_DIR = resolve(import.meta.dirname, '../.output/chrome-mv3');
 const OUTPUT_DIR = resolve(import.meta.dirname, '../.output/screenshots');
 const VIEWPORT = { width: 1280, height: 800 };
-const COUNT = Number(process.argv[2] ?? 5);
-// Some covers yield no usable palette, or repeat a track already captured: allow a few retries
-const MAX_ATTEMPTS = COUNT * 4;
+const COUNT = Number(process.argv[2] || 5);
+const TRACK_IDS = (process.env.TRACKS ?? '').split(/[\s,]+/).filter(Boolean);
+
+async function deezer<T>(path: string): Promise<T> {
+  const response = await fetch(`https://api.deezer.com/${path}`);
+  const body = (await response.json()) as T & { error?: { message: string } };
+  if (!response.ok || body.error) throw new Error(`Deezer API: ${body.error?.message ?? response.status} for ${path}`);
+  return body;
+}
+
+// Without track IDs, take more chart tracks than needed: some covers yield no usable palette
+const tracks = TRACK_IDS.length
+  ? await Promise.all(TRACK_IDS.map(id => deezer<DeezerTrack>(`track/${id}`)))
+  : (await deezer<{ data: DeezerTrack[] }>(`chart/0/tracks?limit=${COUNT * 2}`)).data;
+const wanted = TRACK_IDS.length || COUNT;
 
 await rm(OUTPUT_DIR, { recursive: true, force: true });
 await mkdir(OUTPUT_DIR, { recursive: true });
@@ -38,44 +53,41 @@ if (!newTabUrl.startsWith('chrome-extension://')) {
   throw new Error(`The extension did not override the new tab page (got ${newTabUrl}). Did you run pnpm build?`);
 }
 
-const titles = new Set<string>();
-
-for (let attempt = 1; titles.size < COUNT && attempt <= MAX_ATTEMPTS; attempt++) {
-  // The first load fetches tracks from the Deezer API and caches them for an hour; each reload
-  // then picks a random cached track
+let taken = 0;
+for (const track of tracks) {
+  if (taken === wanted) break;
+  // The cache of utils/deezer.ts (local:tracks), fresh: the page shows this track without calling the API
+  await page.evaluate(
+    // @ts-expect-error chrome is the extension API on the extension page
+    cached => chrome.storage.local.set({ tracks: { tracks: [cached], fetchedAt: Date.now() } }),
+    { type: 'track', title: track.title, link: track.link, artist: track.artist, album: track.album },
+  );
   await page.goto(newTabUrl);
 
   const ready = await page
     .waitForFunction(
       () => {
         const cover = document.querySelector<HTMLImageElement>('.track-cover img');
-        return (
-          document.body.style.backgroundImage !== '' &&
-          cover !== null &&
-          cover.complete &&
-          cover.naturalWidth > 0
-        );
+        return document.body.style.backgroundImage !== '' && cover !== null && cover.complete && cover.naturalWidth > 0;
       },
       undefined,
       { timeout: 15_000 },
     )
     .then(() => true)
     .catch(() => false);
-  if (!ready) continue;
+  if (!ready) {
+    console.warn(`Skipped ${track.title} – ${track.artist.name}: no cover or no palette`);
+    continue;
+  }
 
   await page.evaluate(() => document.fonts.ready);
-  const title = (await page.locator('.track-title').textContent())?.trim() ?? '';
-  const artist = (await page.locator('.track-artist').textContent())?.trim() ?? '';
-  if (!title || titles.has(title)) continue;
-  titles.add(title);
-
-  const file = resolve(OUTPUT_DIR, `screenshot-${titles.size}.png`);
+  const file = resolve(OUTPUT_DIR, `screenshot-1280x800-${++taken}.png`);
   await page.screenshot({ path: file });
-  console.log(`${file}: ${title} – ${artist}`);
+  console.log(`${file}: ${track.title} – ${track.artist.name}`);
 }
 
 await context.close();
 
-if (titles.size < COUNT) {
-  throw new Error(`Only ${titles.size} of ${COUNT} screenshots could be taken.`);
+if (taken < wanted) {
+  throw new Error(`Only ${taken} of ${wanted} screenshots could be taken.`);
 }

@@ -1,15 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fakeBrowser } from 'wxt/testing/fake-browser';
-import {
-  CACHE_TTL,
-  coverUrl,
-  deezerLink,
-  loadTracks,
-  removeLegacyData,
-  tracksCache,
-  type DeezerTrack,
-} from '@/utils/deezer';
+import { CACHE_TTL, coverUrl, deezerLink, loadTracks, removeLegacyData, tracksCache, type DeezerTrack } from '@/utils/deezer';
 
 const NOW = 1_800_000_000_000;
 
@@ -22,7 +14,7 @@ const track = (id: number, extra: Partial<DeezerTrack> = {}): DeezerTrack => ({
   ...extra,
 });
 
-const PLAYLISTS = { data: [1, 2, 3, 4, 5, 6].map((id) => ({ type: 'playlist', id })) };
+const PLAYLISTS = { data: [1, 2, 3, 4, 5, 6].map(id => ({ type: 'playlist', id })) };
 const TRACKS = { data: [track(1), track(2)] };
 
 let api: Record<string, unknown>;
