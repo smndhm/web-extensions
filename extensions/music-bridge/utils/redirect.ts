@@ -2,8 +2,11 @@ import { getDeezerDesktopUri, getSpotifyDesktopUri, isChromeOs } from './links';
 import { isOnPlatform, platforms } from './platforms';
 import type { Settings } from './settings';
 
-/** The music-bridge-redirect service: looks the music up with Odesli and redirects to it */
-export const REDIRECT_SERVICE_URL = 'https://music-bridge.bricodage.fr/';
+/**
+ * The music-bridge-redirect service (a Cloudflare Worker): looks the music up with Odesli and
+ * redirects to it. Up to 1.5.x, the extension called https://music-bridge.bricodage.fr/.
+ */
+export const REDIRECT_SERVICE_URL = 'https://music-bridge-redirect.smndhm.workers.dev/';
 
 /**
  * Where to send the user from the music page `href`, or `undefined` to stay on it

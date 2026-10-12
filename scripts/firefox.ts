@@ -149,14 +149,15 @@ try {
     await driver.switchTo().window(main);
   }
 
-  // music-bridge: the default platform is Spotify, so a Tidal page goes to the redirect service
+  // music-bridge: the default platform is Spotify, so a Tidal page goes to the redirect service, which
+  // redirects to the track on Spotify (Never Gonna Give You Up)
   try {
     await driver.installAddon(await firefoxZip('music-bridge'), true);
     // It opens its options on install: let that tab open before counting tabs
     await driver.sleep(2000);
     await driver.switchTo().window(main);
     const before = await driver.getAllWindowHandles();
-    await driver.executeScript(() => window.open('https://tidal.com/track/1', '_blank'));
+    await driver.executeScript(() => window.open('https://tidal.com/track/491206012', '_blank'));
     await driver.wait(async () => (await driver.getAllWindowHandles()).length > before.length, 10_000, 'the Tidal tab did not open');
     await driver.switchTo().window((await driver.getAllWindowHandles()).find((handle) => !before.includes(handle))!);
 
@@ -165,7 +166,7 @@ try {
       async () => {
         // The service may already have redirected to Spotify, or be down (error page with its URL)
         const url = decodeURIComponent(await driver.getCurrentUrl());
-        if (url.includes('music-bridge.bricodage.fr/?url=')) return (outcome = `sent to the service (${url})`);
+        if (url.includes('music-bridge-redirect.smndhm.workers.dev/?url=')) return (outcome = `sent to the service (${url})`);
         if (url.startsWith('https://open.spotify.com/')) return (outcome = `redirected to Spotify (${url})`);
         return false;
       },
