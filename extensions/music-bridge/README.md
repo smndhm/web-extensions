@@ -8,7 +8,7 @@ With Music Bridge, you just have to click on this link to listen directly to the
 Available for:
 
 - [Chrome](https://chromewebstore.google.com/detail/music-bridge/mbebbcaajfmockkcflajghbambbimpck)
-- [Firefox](https://addons.mozilla.org/firefox/addon/music-bridge/)
+- [Firefox](https://addons.mozilla.org/firefox/addon/music-bridge/), also on Android
 - [Edge](https://microsoftedge.microsoft.com/addons/detail/music-bridge/kfbedaeciahfjnknbjkcnjknkbdlcnld)
 
 Made with the [Odesli](https://odesli.co/) API, through the [music-bridge-redirect](https://github.com/smndhm/music-bridge-redirect) service.
@@ -33,7 +33,9 @@ The content script runs on the track and album pages of the supported platforms.
 - on another platform's page, it sends the link to the redirect service, which answers with the same music on the chosen platform (in its desktop app with **Open in desktop app**);
 - on the chosen platform's page, it does nothing, or opens the desktop app with **Open in desktop app**. Deezer and Spotify app links are built without the service.
 
-There are no desktop apps on ChromeOS: the option is hidden there.
+With **Close the tab once the app opens**, a tab opened for the link is closed 5 seconds after opening the app. Tick "Always allow" in the browser prompt the first time, or the tab closes before you answer it.
+
+There are no desktop apps on ChromeOS: the app options are hidden there.
 
 ## Development
 
@@ -44,6 +46,7 @@ pnpm install
 pnpm --filter music-bridge dev           # Chrome
 pnpm --filter music-bridge dev:firefox   # Firefox
 pnpm --filter music-bridge test          # unit tests
+pnpm --filter music-bridge build && pnpm --filter music-bridge screenshots   # store screenshots
 ```
 
 Store texts are in [COMMUNICATION.md](COMMUNICATION.md) and [wordings.md](wordings.md).
