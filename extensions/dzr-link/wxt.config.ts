@@ -8,9 +8,9 @@ export default defineConfig({
     excludeSources: ['extensions/!(dzr-link)/**', '**/.output/**', '**/.wxt/**', '**/medias/**'],
   },
   manifest: ({ browser }) => ({
-    name: 'Open Deezer in desktop app',
-    description:
-      'Get redirected to the Deezer desktop app when you open a Deezer link in the browser.',
+    name: '__MSG_name__',
+    description: '__MSG_description__',
+    default_locale: 'en',
     icons: {
       16: 'icons/16.png',
       48: 'icons/48.png',
