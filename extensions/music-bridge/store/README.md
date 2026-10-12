@@ -12,7 +12,8 @@ Everything the store listings ask for, in one place, in every language of the ex
 
 ## Category
 
-Entertainment (Divertissement)
+- Chrome Web Store, Microsoft Edge Add-ons: Entertainment (Divertissement)
+- addons.mozilla.org: Photos, Music & Videos, set by `pnpm amo-listing`
 
 ## Search terms
 
@@ -28,35 +29,16 @@ The manifest takes them from [`public/_locales`](../public/_locales).
 
 ## Description
 
-### English
+The long description, sent as is to addons.mozilla.org by `pnpm amo-listing` (some Markdown: lists, bold, links), and to paste in the other stores:
 
-Found a song on a streaming platform you don't use? Music Bridge opens it on yours.
+- English: [`description-en.md`](description-en.md)
+- Français : [`description-fr.md`](description-fr.md)
 
-Pick your platform once in the extension options. From then on, every track or album link from another platform takes you straight to the same music on yours: no more copying the title and searching for it.
-
-- Links from Amazon Music, Apple Music, Deezer, Pandora, Spotify, Tidal and YouTube Music open on any of them, or on SoundCloud and YouTube.
-- Open the music in your platform's desktop app (Apple Music, Deezer, Spotify), and close the tab left behind if you like.
-- Available in English and French.
-
-Privacy: the address of the music page you open is sent to Music Bridge's redirect service, which finds the same music with the Odesli (song.link) API. Nothing else is collected, and your settings stay in your browser.
-
-**Chrome Web Store**: the listing may not name more than 5 other brands, so replace the first item of the list with:
+**Chrome Web Store**: the listing may not name more than 5 other brands, so replace the first item of its list with:
 
 > Works with the major music streaming platforms (Apple Music, Spotify, Deezer, YouTube Music, Amazon Music, etc.).
 
-### Français
-
-Vous tombez sur une chanson d'une plateforme de streaming que vous n'utilisez pas ? Music Bridge l'ouvre sur la vôtre.
-
-Choisissez votre plateforme une fois dans les options de l'extension. Ensuite, chaque lien de titre ou d'album d'une autre plateforme vous emmène directement vers la même musique sur la vôtre : plus besoin de copier le titre pour le chercher.
-
-- Les liens d'Amazon Music, Apple Music, Deezer, Pandora, Spotify, Tidal et YouTube Music s'ouvrent sur n'importe laquelle d'entre elles, ou sur SoundCloud et YouTube.
-- Ouvrez la musique dans l'application de bureau de votre plateforme (Apple Music, Deezer, Spotify), et fermez l'onglet resté ouvert si vous le souhaitez.
-- Disponible en anglais et en français.
-
-Confidentialité : l'adresse de la page du titre ou de l'album que vous ouvrez est envoyée au service de redirection de Music Bridge, qui trouve la même musique avec l'API Odesli (song.link). Rien d'autre n'est collecté, et vos réglages restent dans votre navigateur.
-
-**Chrome Web Store** : la fiche ne peut pas citer plus de 5 autres marques, remplacer le premier point de la liste par :
+**Chrome Web Store** : la fiche ne peut pas citer plus de 5 autres marques, remplacer le premier point de sa liste par :
 
 > Fonctionne avec les principales plateformes de streaming musical (Apple Music, Spotify, Deezer, YouTube Music, Amazon Music, etc.).
 

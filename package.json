@@ -15,6 +15,7 @@
     "lint:firefox": "for build in extensions/*/.output/firefox-mv2; do web-ext lint --source-dir \"$build\" --warnings-as-errors || exit 1; done",
     "test:firefox": "node scripts/firefox.ts",
     "store-assets": "node scripts/store-assets.ts",
+    "amo-listing": "node scripts/amo-listing.ts",
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:publish": "changeset publish",

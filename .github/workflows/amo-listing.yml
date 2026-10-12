@@ -1,0 +1,54 @@
+name: AMO listing
+
+on:
+  workflow_dispatch:
+    inputs:
+      extension:
+        description: Extension whose addons.mozilla.org listing to update
+        required: true
+        type: choice
+        options:
+          - dzr-link
+          - dzr-tab
+          - music-bridge
+      images:
+        description: Also replace the icon and the screenshots (store/screenshot-*.png)
+        required: true
+        type: boolean
+        default: true
+      dry-run:
+        description: Dry run (print what would be sent, send nothing)
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-${{ inputs.extension }}
+
+jobs:
+  listing:
+    name: ${{ inputs.extension }} listing${{ inputs.dry-run && ' (dry run)' || '' }}
+    runs-on: ubuntu-latest
+    # The extension's GitHub environment holds FIREFOX_EXTENSION_ID, as for the Publish workflow
+    environment: ${{ inputs.extension }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - uses: ./.github/actions/setup
+
+      - name: Update the listing
+        env:
+          EXTENSION: ${{ inputs.extension }}
+          IMAGES: ${{ inputs.images }}
+          DRY_RUN: ${{ inputs.dry-run }}
+          FIREFOX_EXTENSION_ID: ${{ vars.FIREFOX_EXTENSION_ID }}
+          FIREFOX_JWT_ISSUER: ${{ secrets.FIREFOX_JWT_ISSUER }}
+          FIREFOX_JWT_SECRET: ${{ secrets.FIREFOX_JWT_SECRET }}
+        run: |
+          args=("$EXTENSION")
+          if [[ "$IMAGES" == "true" ]]; then args+=(--images); fi
+          if [[ "$DRY_RUN" == "true" ]]; then args+=(--dry-run); fi
+          pnpm amo-listing "${args[@]}"
