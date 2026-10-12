@@ -44,7 +44,7 @@ jobs:
       - name: Type check and build
         id: build
         if: ${{ !cancelled() && steps.commit.outputs.pushed == 'true' }}
-        run: pnpm compile && pnpm build && pnpm build:firefox
+        run: pnpm compile && pnpm test && pnpm build && pnpm build:firefox
 
       - name: Install Chromium
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}

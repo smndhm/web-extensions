@@ -1,0 +1,43 @@
+import { describe, expect, it } from 'vitest';
+import { getDeezerDesktopUri, getSpotifyDesktopUri, isChromeOs } from '@/utils/links';
+
+describe('isChromeOs', () => {
+  it.each([
+    ['Mozilla/5.0 (X11; CrOS x86_64 10032.75.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.199 Safari/537.36', true],
+    ['Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36', false],
+    ['Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gecko/20100101 Firefox/58.0', false],
+  ])('%s → %s', (userAgent, expected) => {
+    expect(isChromeOs(userAgent)).toBe(expected);
+  });
+});
+
+describe('getDeezerDesktopUri', () => {
+  it.each([
+    ['https://www.deezer.com/track/123', 'deezer://track/123'],
+    ['https://www.deezer.com/fr/track/123', 'deezer://track/123'],
+    ['https://www.deezer.com/album/123', 'deezer://album/123'],
+    ['https://www.deezer.com/fr/album/123', 'deezer://album/123'],
+    ['https://www.deezer.com/fr/album/123?blu=blu', 'deezer://album/123'],
+    ['https://www.deezer.com/', undefined],
+    ['https://www.deezer.com/playlist/123', undefined],
+    ['https://www.deezer.com/blu/album/123', undefined],
+    ['https://www.blu.com/www.deezer.com/track/123', undefined],
+  ])('%s → %s', (url, expected) => {
+    expect(getDeezerDesktopUri(url)).toBe(expected);
+  });
+});
+
+describe('getSpotifyDesktopUri', () => {
+  it.each([
+    ['https://open.spotify.com/track/123', 'spotify:track:123'],
+    ['https://open.spotify.com/intl-fr/track/123', 'spotify:track:123'],
+    ['https://open.spotify.com/album/123', 'spotify:album:123'],
+    ['https://open.spotify.com/intl-de/album/123', 'spotify:album:123'],
+    ['https://open.spotify.com/album/123?blu=blu', 'spotify:album:123'],
+    ['https://open.spotify.com/', undefined],
+    ['https://open.spotify.com/playlist/123', undefined],
+    ['https://www.blu.com', undefined],
+  ])('%s → %s', (url, expected) => {
+    expect(getSpotifyDesktopUri(url)).toBe(expected);
+  });
+});

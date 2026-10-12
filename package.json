@@ -9,6 +9,7 @@
     "zip": "pnpm -r zip",
     "zip:firefox": "pnpm -r zip:firefox",
     "compile": "pnpm -r compile",
+    "test": "pnpm -r --if-present test",
     "test:firefox": "node scripts/firefox.ts",
     "changeset": "changeset",
     "changeset:version": "changeset version",

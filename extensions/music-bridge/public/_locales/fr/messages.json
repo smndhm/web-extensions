@@ -1,0 +1,38 @@
+{
+  "name": {
+    "message": "Music Bridge",
+    "description": "Extension name."
+  },
+  "description": {
+    "message": "Avec Music Bridge ouvrez n'importe quel lien de musique sur votre plateforme préférée en un clic !",
+    "description": "Extension description."
+  },
+  "optionsTitle": {
+    "message": "Music Bridge - Options",
+    "description": "Options page title."
+  },
+  "optionsStreamingPlatformLabel": {
+    "message": "Sélectionnez votre plateforme de streaming :",
+    "description": "Options page label for the streaming platforms list."
+  },
+  "optionsOpenAppLabel": {
+    "message": "Ouvrir les liens dans l'application.",
+    "description": "Options page label to open links in desktop app."
+  },
+  "optionsSaveButton": {
+    "message": "Enregistrer",
+    "description": "Save options button"
+  },
+  "optionsSaveConfirmation": {
+    "message": "Préférences enregistrées.",
+    "description": "Save options button confirmation"
+  },
+  "optionsCredits": {
+    "message": "Fait avec l'API d'%LINK%.",
+    "description": "Options page credits. %LINK% is replaced by a link to Odesli."
+  },
+  "optionsNewTab": {
+    "message": "(ouvre un nouvel onglet)",
+    "description": "Read by screen readers after a link that opens in a new tab."
+  }
+}
