@@ -1,0 +1,15 @@
+{
+  "name": "@web-extensions/shared",
+  "version": "0.0.0",
+  "description": "Code shared by the extensions, bundled into each of them (not published).",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./deezer": "./src/deezer.ts",
+    "./wxt": "./src/wxt.ts"
+  },
+  "scripts": {
+    "compile": "tsc --noEmit",
+    "test": "vitest run"
+  }
+}
