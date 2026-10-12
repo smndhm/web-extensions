@@ -1,6 +1,6 @@
 # Music Bridge: store listings
 
-Everything the store listings ask for, in one place, in every language of the extension (English and French). The images are in [`medias/`](medias), rendered by `pnpm store-assets` and the Store screenshots workflow (see the [root README](../../../README.md#icons-and-store-images)).
+Everything the store listings ask for, in one place, in every language of the extension (English and French). The images are next to this file, rendered by `pnpm store-assets` and the Store screenshots workflow (see the [root README](../../../README.md#icons-and-store-images)).
 
 ## Stores
 
@@ -62,12 +62,12 @@ Confidentialité : l'adresse de la page du titre ou de l'album que vous ouvrez e
 
 ## Images
 
-| Image                         | English                                                              | Français                                                                |
-| ----------------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| Logo (300×300)                | [`medias/logo-300x300.png`](medias/logo-300x300.png)                 | [`medias/logo-300x300.png`](medias/logo-300x300.png)                    |
-| Small promo tile (440×280)    | [`medias/promo-440x280-en.png`](medias/promo-440x280-en.png)         | [`medias/promo-440x280-fr.png`](medias/promo-440x280-fr.png)            |
-| Marquee promo tile (1400×560) | [`medias/promo-1400x560-en.png`](medias/promo-1400x560-en.png)       | [`medias/promo-1400x560-fr.png`](medias/promo-1400x560-fr.png)          |
-| Screenshots (1280×800)        | `medias/screenshot-1280x800-en-*.png` (options page, light and dark) | `medias/screenshot-1280x800-fr-*.png` (page d'options, clair et sombre) |
+| Image                         | English                                                       | Français                                                         |
+| ----------------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------- |
+| Logo (300×300)                | [`logo-300x300.png`](logo-300x300.png)                        | [`logo-300x300.png`](logo-300x300.png)                           |
+| Small promo tile (440×280)    | [`promo-440x280-en.png`](promo-440x280-en.png)                | [`promo-440x280-fr.png`](promo-440x280-fr.png)                   |
+| Marquee promo tile (1400×560) | [`promo-1400x560-en.png`](promo-1400x560-en.png)              | [`promo-1400x560-fr.png`](promo-1400x560-fr.png)                 |
+| Screenshots (1280×800)        | `screenshot-1280x800-en-*.png` (options page, light and dark) | `screenshot-1280x800-fr-*.png` (page d'options, clair et sombre) |
 
 ## Notes for reviewers
 

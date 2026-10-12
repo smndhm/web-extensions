@@ -1,6 +1,6 @@
 # Open Deezer in desktop app: store listings
 
-Everything the store listings ask for, in one place, in every language of the extension (English and French). The images are in [`medias/`](medias), rendered by `pnpm store-assets` (see the [root README](../../../README.md#icons-and-store-images)).
+Everything the store listings ask for, in one place, in every language of the extension (English and French). The images are next to this file, rendered by `pnpm store-assets` (see the [root README](../../../README.md#icons-and-store-images)).
 
 ## Stores
 
@@ -56,9 +56,9 @@ Nécessite l'application Deezer pour ordinateur. Non disponible sur ChromeOS, o�
 
 | Image                         | English                                                                       | Français                                                                                   |
 | ----------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| Logo (300×300)                | [`medias/logo-300x300.png`](medias/logo-300x300.png)                          | [`medias/logo-300x300.png`](medias/logo-300x300.png)                                       |
-| Small promo tile (440×280)    | [`medias/promo-440x280-en.png`](medias/promo-440x280-en.png)                  | [`medias/promo-440x280-fr.png`](medias/promo-440x280-fr.png)                               |
-| Marquee promo tile (1400×560) | [`medias/promo-1400x560-en.png`](medias/promo-1400x560-en.png)                | [`medias/promo-1400x560-fr.png`](medias/promo-1400x560-fr.png)                             |
+| Logo (300×300)                | [`logo-300x300.png`](logo-300x300.png)                                        | [`logo-300x300.png`](logo-300x300.png)                                                     |
+| Small promo tile (440×280)    | [`promo-440x280-en.png`](promo-440x280-en.png)                                | [`promo-440x280-fr.png`](promo-440x280-fr.png)                                             |
+| Marquee promo tile (1400×560) | [`promo-1400x560-en.png`](promo-1400x560-en.png)                              | [`promo-1400x560-fr.png`](promo-1400x560-fr.png)                                           |
 | Screenshots (1280×800)        | none: the extension has no page, use the marquee tile if a store requires one | aucune : l'extension n'a pas de page, utiliser la grande vignette si un store en exige une |
 
 ## Notes for reviewers

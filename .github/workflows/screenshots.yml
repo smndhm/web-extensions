@@ -20,7 +20,7 @@ on:
         required: false
         type: string
       commit:
-        description: Replace the extension's screenshots in store/medias/ and commit them to the branch (not main)
+        description: Replace the extension's screenshots in store/ and commit them to the branch (not main)
         required: true
         type: boolean
         default: false
@@ -69,8 +69,8 @@ jobs:
           EXTENSION: ${{ inputs.extension }}
         run: |
           # Only the screenshots: the logo and the promotional tiles come from pnpm store-assets
-          mkdir -p store/medias && rm -f store/medias/screenshot-*.png && cp .output/screenshots/*.png store/medias/
+          mkdir -p store && rm -f store/screenshot-*.png && cp .output/screenshots/*.png store/
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add store/medias
+          git add store
           git commit -m "docs($EXTENSION): new store screenshots" && git push || echo "No change"
