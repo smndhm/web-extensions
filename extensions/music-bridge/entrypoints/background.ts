@@ -1,3 +1,5 @@
+import { listenForCloseTab } from '@/utils/close-tab';
+
 export default defineBackground({
   persistent: false,
   main() {
@@ -5,5 +7,6 @@ export default defineBackground({
     browser.runtime.onInstalled.addListener(({ reason }) => {
       if (reason === 'install') void browser.runtime.openOptionsPage();
     });
+    listenForCloseTab();
   },
 });

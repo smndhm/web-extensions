@@ -6,13 +6,16 @@ export interface Settings {
   platform: PlatformId;
   /** Open links in the platform's desktop app rather than on its website */
   openInApp: boolean;
+  /** Close the tab once the app is opened */
+  closeTab: boolean;
 }
 
 export async function getSettings(): Promise<Settings> {
-  const { platform, openInApp } = await browser.storage.local.get(['platform', 'openInApp']);
+  const { platform, openInApp, closeTab } = await browser.storage.local.get(['platform', 'openInApp', 'closeTab']);
   return {
     platform: isPlatformId(platform) ? platform : DEFAULT_PLATFORM,
     openInApp: openInApp === true,
+    closeTab: openInApp === true && closeTab === true,
   };
 }
 

@@ -38,6 +38,8 @@ export async function initOptionsPage(doc: Document, userAgent: string): Promise
   const select = doc.querySelector<HTMLSelectElement>('#streaming-platforms')!;
   const checkbox = doc.querySelector<HTMLInputElement>('#open-app')!;
   const openAppOption = doc.querySelector<HTMLElement>('#open-app-option')!;
+  const closeTab = doc.querySelector<HTMLInputElement>('#close-tab')!;
+  const closeTabOption = doc.querySelector<HTMLElement>('#close-tab-option')!;
   const status = doc.querySelector<HTMLElement>('#save-status')!;
 
   const settings = await getSettings();
@@ -51,14 +53,19 @@ export async function initOptionsPage(doc: Document, userAgent: string): Promise
     }),
   );
   checkbox.checked = settings.openInApp;
+  closeTab.checked = settings.closeTab;
 
   // Opening in the app only makes sense for platforms with app links, and not on ChromeOS
   const updateOpenAppOption = () => {
     const available = isPlatformId(select.value) && platforms[select.value].hasNativeAppLink === true;
     openAppOption.hidden = !available || isChromeOs(userAgent);
     if (openAppOption.hidden) checkbox.checked = false;
+    // Closing the tab only applies when links open in the app
+    closeTabOption.hidden = !checkbox.checked;
+    if (closeTabOption.hidden) closeTab.checked = false;
   };
   updateOpenAppOption();
+  checkbox.addEventListener('change', updateOpenAppOption);
   select.addEventListener('change', () => {
     checkbox.checked = false;
     updateOpenAppOption();
@@ -68,7 +75,7 @@ export async function initOptionsPage(doc: Document, userAgent: string): Promise
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     if (!isPlatformId(select.value)) return;
-    await saveSettings({ platform: select.value, openInApp: checkbox.checked });
+    await saveSettings({ platform: select.value, openInApp: checkbox.checked, closeTab: closeTab.checked });
     // The status is a live region: screen readers announce the confirmation
     status.textContent = t('optionsSaveConfirmation');
     clearTimeout(clearStatus);
