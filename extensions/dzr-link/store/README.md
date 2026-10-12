@@ -24,8 +24,8 @@ Everything the store listings ask for, in one place, in every language of the ex
 
 The manifest takes them from [`public/_locales`](../public/_locales).
 
-- **EN**: Deezer Link. Get redirected to the Deezer desktop app when you open a Deezer link in the browser.
-- **FR**: Deezer Link. Ouvrez les liens Deezer directement dans l'application Deezer plutôt que dans le navigateur.
+- **EN**: Deezer Link. Open Deezer links in the desktop app instead of the browser.
+- **FR**: Deezer Link. Ouvrez les liens Deezer dans l'application de bureau plutôt que dans le navigateur.
 
 ## Description
 

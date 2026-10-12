@@ -2,7 +2,7 @@ Deezer Tab replaces your new tab page with a track from Deezer's top playlists. 
 
 - One click on the cover, the title or the artist opens it on Deezer.
 - The text always stays readable: its color and the background are chosen for a contrast that meets the WCAG accessibility guidelines.
-- Tracks are cached for an hour, so the page opens quickly and still works when Deezer cannot be reached.
+- Tracks are cached for an hour, so the page opens quickly, even when the API does not answer.
 - No account needed, no tracking: the extension sends no data to its developer.
 
 Available in English and French.
