@@ -13,12 +13,15 @@
     "zip:firefox": "wxt zip -b firefox",
     "compile": "tsc --noEmit",
     "test": "vitest run",
+    "screenshots": "node scripts/screenshots.ts",
     "postinstall": "wxt prepare"
   },
   "devDependencies": {
     "@types/node": "24.19.2",
+    "@web-extensions/shared": "workspace:*",
     "jsdom": "30.1.2",
     "normalize.css": "8.0.1",
+    "playwright": "1.64.0",
     "sass": "1.105.1",
     "typescript": "7.0.2",
     "vitest": "5.0.3",

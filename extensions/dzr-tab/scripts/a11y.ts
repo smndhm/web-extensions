@@ -32,7 +32,7 @@ const EXPECTED_TAB_ORDER = ['Test Song', 'Test Artist', 'Deezer'];
 
 // WCAG 2 contrast ratio, computed here rather than imported so the page's own math is checked
 function luminance(color: Rgb) {
-  const [r, g, b] = color.map((c) => {
+  const [r, g, b] = color.map(c => {
     c /= 255;
     return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
   }) as Rgb;
@@ -40,12 +40,12 @@ function luminance(color: Rgb) {
 }
 
 function contrast(a: Rgb, b: Rgb) {
-  const [light, dark] = [luminance(a), luminance(b)].sort((x, y) => y - x) as [number, number];
+  const [light, dark] = [luminance(a), luminance(b)].toSorted((x, y) => y - x) as [number, number];
   return (light + 0.05) / (dark + 0.05);
 }
 
 async function mockDeezer(context: BrowserContext, cover: string) {
-  await context.route('https://api.deezer.com/**', (route) =>
+  await context.route('https://api.deezer.com/**', route =>
     route.fulfill({
       contentType: 'application/json',
       headers: { 'access-control-allow-origin': '*' },
@@ -62,7 +62,7 @@ async function mockDeezer(context: BrowserContext, cover: string) {
       }),
     }),
   );
-  await context.route('https://cdn.test/**', (route) =>
+  await context.route('https://cdn.test/**', route =>
     route.fulfill({
       contentType: 'image/svg+xml',
       headers: { 'access-control-allow-origin': '*' },
@@ -81,7 +81,7 @@ async function check(name: string, cover: string): Promise<string[]> {
   try {
     await mockDeezer(context, cover);
     const page = await context.newPage();
-    page.on('pageerror', (error) => errors.push(`page error: ${error.message}`));
+    page.on('pageerror', error => errors.push(`page error: ${error.message}`));
     await page.goto('chrome://newtab/');
     if (!page.url().startsWith('chrome-extension://')) {
       return [`the extension did not override the new tab page (got ${page.url()}). Did you run pnpm build?`];
@@ -97,7 +97,7 @@ async function check(name: string, cover: string): Promise<string[]> {
       axe.run(document, { runOnly: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'] }),
     );
     for (const violation of violations as { id: string; help: string; nodes: { target: string[] }[] }[]) {
-      errors.push(`axe ${violation.id}: ${violation.help} (${violation.nodes.map((n) => n.target.join(' ')).join(', ')})`);
+      errors.push(`axe ${violation.id}: ${violation.help} (${violation.nodes.map(n => n.target.join(' ')).join(', ')})`);
     }
 
     // Contrast of the text against both ends of the gradient (axe cannot check text over gradients)
@@ -105,9 +105,13 @@ async function check(name: string, cover: string): Promise<string[]> {
       gradient: document.body.style.backgroundImage,
       text: getComputedStyle(document.querySelector('.track-title a')!).color,
     }));
-    const parse = (color: string) => color.match(/\d+(\.\d+)?/g)!.slice(0, 3).map(Number) as Rgb;
+    const parse = (color: string) =>
+      color
+        .match(/\d+(\.\d+)?/g)!
+        .slice(0, 3)
+        .map(Number) as Rgb;
     const textColor = parse(text);
-    const ends = gradient ? [...gradient.matchAll(/rgba?\([^)]+\)/g)].map((m) => parse(m[0])) : [[255, 255, 255] as Rgb];
+    const ends = gradient ? [...gradient.matchAll(/rgba?\([^)]+\)/g)].map(m => parse(m[0])) : [[255, 255, 255] as Rgb];
     for (const end of ends) {
       const ratio = contrast(textColor, end);
       if (ratio < 4.5) errors.push(`contrast ${ratio.toFixed(2)}:1 between text ${text} and background rgb(${end.join(', ')})`);
@@ -131,7 +135,7 @@ async function check(name: string, cover: string): Promise<string[]> {
     await context.close();
   }
   console.log(`${errors.length ? '✗' : '✓'} ${name} cover`);
-  return errors.map((error) => `${name} cover: ${error}`);
+  return errors.map(error => `${name} cover: ${error}`);
 }
 
 const errors: string[] = [];

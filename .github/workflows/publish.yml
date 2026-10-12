@@ -15,11 +15,13 @@ on:
         description: Stores to submit to
         required: true
         type: choice
-        default: chrome+firefox
+        default: chrome+firefox+edge
         options:
+          - chrome+firefox+edge
           - chrome+firefox
           - chrome
           - firefox
+          - edge
       dry-run:
         description: Dry run (check the credentials, upload nothing)
         required: true
@@ -34,7 +36,7 @@ on:
       stores:
         required: false
         type: string
-        default: chrome+firefox
+        default: chrome+firefox+edge
       dry-run:
         required: true
         type: boolean
@@ -53,7 +55,8 @@ jobs:
   publish:
     name: Publish ${{ inputs.extension }} (${{ inputs.stores }}${{ inputs.dry-run && ', dry run' || '' }})
     runs-on: ubuntu-latest
-    # One GitHub environment per extension holds its store IDs (CHROME_EXTENSION_ID, FIREFOX_EXTENSION_ID)
+    # One GitHub environment per extension holds its store IDs (CHROME_EXTENSION_ID, FIREFOX_EXTENSION_ID,
+    # EDGE_PRODUCT_ID). Without EDGE_PRODUCT_ID, the extension is not submitted to Edge.
     environment: ${{ inputs.extension }}
     permissions:
       contents: write # Attach the zips to the GitHub release
@@ -71,8 +74,9 @@ jobs:
       - name: Type check
         run: pnpm compile
 
-      - name: Zip for Chrome
-        if: contains(inputs.stores, 'chrome')
+      # Edge takes the Chrome zip
+      - name: Zip for Chrome and Edge
+        if: contains(inputs.stores, 'chrome') || contains(inputs.stores, 'edge')
         run: pnpm zip
 
       - name: Zip for Firefox
@@ -102,6 +106,9 @@ jobs:
           CHROME_PUBLISHER_ID: ${{ secrets.CHROME_PUBLISHER_ID }}
           CHROME_SERVICE_ACCOUNT_CLIENT_EMAIL: ${{ secrets.CHROME_SERVICE_ACCOUNT_CLIENT_EMAIL }}
           CHROME_SERVICE_ACCOUNT_PRIVATE_KEY: ${{ secrets.CHROME_SERVICE_ACCOUNT_PRIVATE_KEY }}
+          EDGE_PRODUCT_ID: ${{ vars.EDGE_PRODUCT_ID }}
+          EDGE_CLIENT_ID: ${{ secrets.EDGE_CLIENT_ID }}
+          EDGE_API_KEY: ${{ secrets.EDGE_API_KEY }}
           FIREFOX_EXTENSION_ID: ${{ vars.FIREFOX_EXTENSION_ID }}
           FIREFOX_JWT_ISSUER: ${{ secrets.FIREFOX_JWT_ISSUER }}
           FIREFOX_JWT_SECRET: ${{ secrets.FIREFOX_JWT_SECRET }}
@@ -113,7 +120,32 @@ jobs:
           if [[ "$STORES" == *firefox* ]]; then
             args+=(--firefox-zip .output/*-firefox.zip --firefox-sources-zip .output/*-sources.zip)
           fi
+          if [[ "$STORES" == *edge* ]]; then
+            if [[ -n "$EDGE_PRODUCT_ID" ]]; then
+              args+=(--edge-zip .output/*-chrome.zip)
+            else
+              echo "::notice::No EDGE_PRODUCT_ID in the ${{ inputs.extension }} environment: not submitted to Edge"
+            fi
+          fi
+          if [[ ${#args[@]} -eq 0 ]]; then
+            echo "Nothing to submit"
+            exit 0
+          fi
           if [[ "$DRY_RUN" == "true" ]]; then
             args+=(--dry-run)
           fi
           pnpm exec wxt submit "${args[@]}"
+
+      # The listing texts (name, summary, description, categories) follow the released version.
+      # The images change less often: the AMO listing workflow replaces them on demand.
+      - name: Update the addons.mozilla.org listing
+        if: contains(inputs.stores, 'firefox')
+        env:
+          EXTENSION: ${{ inputs.extension }}
+          FIREFOX_EXTENSION_ID: ${{ vars.FIREFOX_EXTENSION_ID }}
+          FIREFOX_JWT_ISSUER: ${{ secrets.FIREFOX_JWT_ISSUER }}
+          FIREFOX_JWT_SECRET: ${{ secrets.FIREFOX_JWT_SECRET }}
+        run: |
+          args=("$EXTENSION")
+          if [[ "$DRY_RUN" == "true" ]]; then args+=(--dry-run); fi
+          node ../../scripts/amo-listing.ts "${args[@]}"

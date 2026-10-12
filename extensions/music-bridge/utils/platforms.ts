@@ -1,15 +1,4 @@
-export const PLATFORM_IDS = [
-  'amazonMusic',
-  'appleMusic',
-  'deezer',
-  'napster',
-  'pandora',
-  'soundcloud',
-  'spotify',
-  'tidal',
-  'youtube',
-  'youtubeMusic',
-] as const;
+export const PLATFORM_IDS = ['amazonMusic', 'appleMusic', 'deezer', 'pandora', 'soundcloud', 'spotify', 'tidal', 'youtube', 'youtubeMusic'] as const;
 
 /** Platform IDs, as the Odesli API names them */
 export type PlatformId = (typeof PLATFORM_IDS)[number];
@@ -37,12 +26,6 @@ export const platforms: Record<PlatformId, Platform> = {
     name: 'Deezer',
     url: 'https://www.deezer.com',
     hasNativeAppLink: true,
-  },
-  napster: {
-    name: 'Napster',
-    // Odesli now links to play.napster.com
-    url: 'https://play.napster.com',
-    aliases: ['https://web.napster.com'],
   },
   pandora: {
     name: 'Pandora',
@@ -76,8 +59,6 @@ export const platforms: Record<PlatformId, Platform> = {
 export const DEFAULT_PLATFORM: PlatformId = 'spotify';
 
 /** The page `href` is on the platform's website */
-export const isOnPlatform = (href: string, { url, aliases = [] }: Platform): boolean =>
-  [url, ...aliases].some((origin) => href === origin || href.startsWith(`${origin}/`));
+export const isOnPlatform = (href: string, { url, aliases = [] }: Platform): boolean => [url, ...aliases].some(origin => href === origin || href.startsWith(`${origin}/`));
 
-export const isPlatformId = (value: unknown): value is PlatformId =>
-  typeof value === 'string' && (PLATFORM_IDS as readonly string[]).includes(value);
+export const isPlatformId = (value: unknown): value is PlatformId => typeof value === 'string' && (PLATFORM_IDS as readonly string[]).includes(value);
