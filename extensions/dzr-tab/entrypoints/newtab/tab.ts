@@ -16,7 +16,7 @@ function setLink(selector: string, href: string, text?: string) {
 
 // Vibrant's swatches, from the most to the least wanted for each end of the gradient
 const FROM_SWATCHES = ['Vibrant', 'DarkVibrant', 'LightVibrant', 'Muted', 'DarkMuted', 'LightMuted'] as const;
-const TO_SWATCHES = ['Muted', 'DarkMuted', 'LightMuted', 'DarkVibrant', 'LightVibrant', 'Vibrant'] as const;
+const TO_SWATCHES = ['DarkVibrant', 'LightVibrant', 'Muted', 'DarkMuted', 'LightMuted', 'Vibrant'] as const;
 
 /** Gradient between two colors of the cover, with text that keeps a 4.5:1 contrast on all of it */
 async function paintBackground(cover: string) {
