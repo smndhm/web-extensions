@@ -48,7 +48,12 @@ The [CI](.github/workflows/ci.yml) workflow runs on every pull request and on pu
 
 ## Store screenshots
 
-The [Store screenshots](.github/workflows/screenshots.yml) workflow (**Actions** tab) loads dzr-tab in Chromium with real Deezer tracks and uploads 1280×800 screenshots, the size the Chrome Web Store and addons.mozilla.org accept, as the `dzr-tab-screenshots` artifact. Upload them to the store listings by hand: the store APIs only handle packages.
+The [Store screenshots](.github/workflows/screenshots.yml) workflow (**Actions** tab) loads an extension in Chromium and uploads 1280×800 screenshots, the size the Chrome Web Store, addons.mozilla.org and Microsoft Edge Add-ons accept, as the `<extension>-screenshots` artifact:
+
+- **dzr-tab**: the new tab page with real Deezer tracks;
+- **music-bridge**: the options page in English and French, light and dark.
+
+Upload them to the store listings by hand: the store APIs only handle packages.
 
 Locally:
 
@@ -66,7 +71,7 @@ Versions and changelogs are managed with [Changesets](https://github.com/changes
 2. **When it is merged into `main`**, the [Release](.github/workflows/release.yml) workflow opens or updates a **Version Packages** pull request. It bumps the versions in `package.json` and writes each extension's `CHANGELOG.md`.
 3. **When the Version Packages pull request is merged**, the Release workflow tags each released extension (`dzr-tab@2.2.0`), creates its GitHub release with the changelog, attaches the Chrome, Firefox and sources zips, and runs the store submission:
    - a **dry run** by default;
-   - a real submission to the Chrome Web Store and addons.mozilla.org once the `SUBMIT_ON_RELEASE` repository variable (*Settings → Secrets and variables → Actions → Variables*) is `true`. Add **required reviewers** to the `dzr-link` and `dzr-tab` environments to approve each submission.
+   - a real submission to the Chrome Web Store, addons.mozilla.org and Microsoft Edge Add-ons once the `SUBMIT_ON_RELEASE` repository variable (*Settings → Secrets and variables → Actions → Variables*) is `true`. Add **required reviewers** to the `dzr-link` and `dzr-tab` environments to approve each submission.
 
 Dependency updates come from [Renovate](renovate.json): minor and patch updates and lock file maintenance are merged automatically. The [Renovate → Changesets](.github/workflows/changesets-renovate.yml) workflow adds a changeset to each Renovate branch that updates an extension's dependencies, then runs the CI checks on that commit and reports them as commit statuses, since a commit pushed by a workflow does not trigger the CI.
 
@@ -76,11 +81,15 @@ The [Publish extension](.github/workflows/publish.yml) workflow submits an exten
 
 The workflow runs `wxt submit` with this configuration:
 
-- **Environments** (*Settings → Environments*): one per extension, named `dzr-link` and `dzr-tab`. Each one holds the store IDs as variables:
+- **Environments** (*Settings → Environments*): one per extension, named like it (`dzr-link`, `dzr-tab`, `music-bridge`). Each one holds the store IDs as variables:
   - `CHROME_EXTENSION_ID`
-  - `FIREFOX_EXTENSION_ID`
+  - `FIREFOX_EXTENSION_ID`: the numeric add-on ID on addons.mozilla.org
+  - `EDGE_PRODUCT_ID`: the product ID in Partner Center. Without it, the extension is not submitted to Edge.
 - **Repository secrets** (*Settings → Secrets and variables → Actions*), shared by every extension:
   - `CHROME_PUBLISHER_ID`, `CHROME_SERVICE_ACCOUNT_CLIENT_EMAIL`, `CHROME_SERVICE_ACCOUNT_PRIVATE_KEY`: [Chrome Web Store API](https://developer.chrome.com/docs/webstore/using-api) service account
   - `FIREFOX_JWT_ISSUER`, `FIREFOX_JWT_SECRET`: [addons.mozilla.org API key](https://addons.mozilla.org/developers/addon/api/key/)
+  - `EDGE_CLIENT_ID`, `EDGE_API_KEY`: [Microsoft Edge Add-ons API](https://learn.microsoft.com/microsoft-edge/extensions/publish/api/using-addons-api) credentials, from Partner Center
+
+Edge gets the Chrome zip: the Manifest V3 build runs as is.
 
 The Firefox submission includes a sources zip (workspace root files and the extension only). AMO reviewers can rebuild the extension from it with `pnpm install --frozen-lockfile && pnpm --filter <extension> build:firefox`.
