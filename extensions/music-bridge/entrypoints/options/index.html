@@ -11,14 +11,14 @@
       <!-- The browser shows the options in its own settings page, under the extension name: keep the heading for assistive technologies only -->
       <h1 class="visually-hidden" data-i18n="optionsTitle"></h1>
       <form>
-        <p>
+        <div class="field">
           <label for="streaming-platforms" data-i18n="optionsStreamingPlatformLabel"></label>
           <select id="streaming-platforms" name="platform"></select>
-        </p>
-        <p id="open-app-option">
+        </div>
+        <div class="field" id="open-app-option">
           <input type="checkbox" id="open-app" name="openInApp" />
           <label for="open-app" data-i18n="optionsOpenAppLabel"></label>
-        </p>
+        </div>
         <div id="save-options">
           <p role="status" id="save-status"></p>
           <button type="submit" data-i18n="optionsSaveButton"></button>
