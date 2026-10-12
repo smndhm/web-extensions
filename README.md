@@ -59,6 +59,17 @@ Every extension has the same images, rendered from one source icon by `pnpm stor
 
 The Deezer extensions use the Deezer heart, [`packages/shared/assets/deezer-heart.svg`](packages/shared/assets/deezer-heart.svg). Music Bridge has no vector icon yet: its images come from its 128 px icon, so its 300 px logo and large tile are blurry.
 
+### Store formats
+
+Each extension's `STORE.md` gathers its listing texts (English and French), category, search terms, notes for reviewers, privacy answers and images. The stores ask for these images:
+
+|                    |  Chrome Web Store  | addons.mozilla.org | Microsoft Edge Add-ons | File                                |
+| ------------------ | :----------------: | :----------------: | :--------------------: | ----------------------------------- |
+| Icon / logo        |      128×128       |      128×128       |        300×300         | `logo-300x300.png`, `icons/128.png` |
+| Screenshots        | 1280×800 (up to 5) |      1280×800      |   1280×800 (up to 6)   | `screenshot-1280x800-*.png`         |
+| Small promo tile   |      440×280       |         –          |        440×280         | `promo-440x280.png`                 |
+| Marquee promo tile |      1400×560      |         –          |        1400×560        | `promo-1400x560.png`                |
+
 ## Store screenshots
 
 The [Store screenshots](.github/workflows/screenshots.yml) workflow (**Actions** tab) loads an extension in Chromium and uploads 1280×800 screenshots, the size the Chrome Web Store, addons.mozilla.org and Microsoft Edge Add-ons accept, as the `<extension>-screenshots` artifact:

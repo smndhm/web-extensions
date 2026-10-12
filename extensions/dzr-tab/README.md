@@ -26,3 +26,5 @@ pnpm --filter dzr-tab dev:firefox   # Firefox
 pnpm --filter dzr-tab test          # unit tests
 pnpm --filter dzr-tab build && pnpm --filter dzr-tab a11y   # accessibility checks
 ```
+
+Store listing texts, search terms, notes for reviewers and images: [STORE.md](STORE.md).

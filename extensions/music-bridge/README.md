@@ -49,4 +49,4 @@ pnpm --filter music-bridge test          # unit tests
 pnpm --filter music-bridge build && pnpm --filter music-bridge screenshots   # store screenshots
 ```
 
-Store texts are in [COMMUNICATION.md](COMMUNICATION.md) and [wordings.md](wordings.md).
+Store listing texts, search terms, notes for reviewers and images: [STORE.md](STORE.md).
