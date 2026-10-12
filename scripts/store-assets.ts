@@ -22,10 +22,13 @@ const DEEZER_HEART = 'packages/shared/assets/deezer-heart.svg';
 const SOURCES: Record<string, { source: string; size: number }> = {
   'dzr-link': { source: DEEZER_HEART, size: Infinity },
   'dzr-tab': { source: DEEZER_HEART, size: Infinity },
-  // No vector source for Music Bridge: its 128 px icon is the largest one
-  'music-bridge': { source: 'extensions/music-bridge/public/icons/128.png', size: 128 },
+  // No vector source for Music Bridge: its original 128 px icon is the largest one
+  'music-bridge': { source: 'extensions/music-bridge/assets/icon.png', size: 128 },
 };
 const ICON_SIZES = [16, 32, 48, 128];
+// Chrome Web Store image guidelines: the 128 px icon is 96 px of artwork with 16 px of transparent padding
+// per side. The smaller toolbar icons use their whole size.
+const iconPadding = (size: number) => (size === 128 ? 16 : 0);
 // Bricolage Grotesque (SIL Open Font License), the title font of simon.duhem.fr
 const FONT = 'node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2';
 
@@ -35,7 +38,8 @@ const escape = (text: string) => text.replace(/[&<>"]/g, c => `&#${c.charCodeAt(
 const fontFace = `@font-face { font-family: 'Bricolage Grotesque'; font-weight: 200 800; src: url(${await dataUrl(FONT, 'font/woff2')}); }`;
 
 /** Just the icon, on a transparent background */
-const iconOnly = (icon: string, size: number) => `<style>html, body { margin: 0; } img { display: block; width: ${size}px; height: ${size}px; }</style><img src="${icon}">`;
+const iconOnly = (icon: string, size: number, padding = 0) =>
+  `<style>html, body { margin: 0; } img { display: block; width: ${size - 2 * padding}px; height: ${size - 2 * padding}px; padding: ${padding}px; }</style><img src="${icon}">`;
 
 /** Store tile: the icon, then the name and the description */
 function tile(icon: string, name: string, description: string, { iconSize, nameSize, textSize, gap }: { iconSize: number; nameSize: number; textSize: number; gap: number }) {
@@ -76,8 +80,7 @@ try {
     await mkdir(resolve(dir, 'store'), { recursive: true });
 
     for (const iconSize of ICON_SIZES.filter(candidate => candidate <= size)) {
-      const file = resolve(dir, `public/icons/${iconSize}.png`);
-      if (resolve(ROOT, source) !== file) await shoot(iconOnly(icon, iconSize), iconSize, iconSize, file, true);
+      await shoot(iconOnly(icon, iconSize, iconPadding(iconSize)), iconSize, iconSize, resolve(dir, `public/icons/${iconSize}.png`), true);
     }
     await shoot(iconOnly(icon, 300), 300, 300, resolve(dir, 'store/logo-300x300.png'), true);
     // One set of promo tiles per locale, for the store listing in that language
