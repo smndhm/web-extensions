@@ -9,3 +9,4 @@ Rebuilt with WXT in the web-extensions monorepo: Manifest V3 on Chrome, Manifest
 - Ignore the "Open in desktop app" setting for platforms without app links.
 - Handle Tidal pages on tidal.com, where listen.tidal.com now redirects.
 - Handle Napster pages on play.napster.com, where Odesli now links.
+- Call the redirect service on Cloudflare Workers (music-bridge-redirect.smndhm.workers.dev) instead of music-bridge.bricodage.fr.
