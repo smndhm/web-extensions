@@ -115,6 +115,9 @@ a:focus-visible {
  */
 
 #logo {
+  /* The heart in the color of the wordmark and the text: the purple heart lacks contrast on many gradients */
+  --deezer-heart: var(--deezer-wordmark);
+  --deezer-wordmark: #000;
   position: fixed;
   bottom: 20px;
   right: 20px;
