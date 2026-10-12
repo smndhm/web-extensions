@@ -2,7 +2,7 @@
 
 **Discover a Deezer track every time you open a new tab.**
 
-![Deezer Tab Preview](medias/screenshot-1280x800-1.png)
+![Deezer Tab Preview](store/medias/screenshot-1280x800-1.png)
 
 Available for:
 
@@ -27,4 +27,4 @@ pnpm --filter dzr-tab test          # unit tests
 pnpm --filter dzr-tab build && pnpm --filter dzr-tab a11y   # accessibility checks
 ```
 
-Store listing texts, search terms, notes for reviewers and images: [STORE.md](STORE.md).
+Store listing texts, search terms, notes for reviewers and images: [store/README.md](store/README.md).

@@ -49,4 +49,4 @@ pnpm --filter music-bridge test          # unit tests
 pnpm --filter music-bridge build && pnpm --filter music-bridge screenshots   # store screenshots
 ```
 
-Store listing texts, search terms, notes for reviewers and images: [STORE.md](STORE.md).
+Store listing texts, search terms, notes for reviewers and images: [store/README.md](store/README.md).
