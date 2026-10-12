@@ -40,7 +40,7 @@ function luminance(color: Rgb) {
 }
 
 function contrast(a: Rgb, b: Rgb) {
-  const [light, dark] = [luminance(a), luminance(b)].sort((x, y) => y - x) as [number, number];
+  const [light, dark] = [luminance(a), luminance(b)].toSorted((x, y) => y - x) as [number, number];
   return (light + 0.05) / (dark + 0.05);
 }
 
