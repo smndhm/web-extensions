@@ -20,8 +20,7 @@ jobs:
       contents: write # Push the changeset-release/main branch, the tags and the GitHub releases
       pull-requests: write # Open the "Version Packages" pull request
     outputs:
-      published: ${{ steps.changesets.outputs.published }}
-      published-packages: ${{ steps.changesets.outputs.published-packages }}
+      extensions: ${{ steps.extensions.outputs.extensions }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -37,14 +36,26 @@ jobs:
         with:
           publish-script: pnpm changeset:publish
 
+      # changeset publish also tags the private packages/* (the shared code): only the extensions go
+      # to the stores
+      - name: Released extensions
+        id: extensions
+        if: steps.changesets.outputs.published == 'true'
+        env:
+          PUBLISHED_PACKAGES: ${{ steps.changesets.outputs.published-packages }}
+        run: |
+          names=$(ls extensions | jq -R . | jq -sc .)
+          extensions=$(jq -c --argjson names "$names" '[.[] | select(.name as $name | $names | index($name))]' <<< "$PUBLISHED_PACKAGES")
+          echo "extensions=$extensions" >> "$GITHUB_OUTPUT"
+
   submit:
     name: Submit ${{ matrix.package.name }}@${{ matrix.package.version }}
     needs: changesets
-    if: needs.changesets.outputs.published == 'true'
+    if: needs.changesets.outputs.extensions && needs.changesets.outputs.extensions != '[]'
     strategy:
       fail-fast: false
       matrix:
-        package: ${{ fromJSON(needs.changesets.outputs.published-packages) }}
+        package: ${{ fromJSON(needs.changesets.outputs.extensions) }}
     permissions:
       contents: write # Attach the zips to the GitHub release
     uses: ./.github/workflows/publish.yml

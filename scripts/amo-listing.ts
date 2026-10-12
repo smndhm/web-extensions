@@ -80,7 +80,9 @@ function token(): string {
   return `${unsigned}.${createHmac('sha256', secret!).update(unsigned).digest('base64url')}`;
 }
 
-async function amo<T>(method: string, url: string, body?: object | FormData): Promise<T> {
+const THROTTLE_RETRIES = 3;
+
+async function amo<T>(method: string, url: string, body?: object | FormData, retries = THROTTLE_RETRIES): Promise<T> {
   const json = body !== undefined && !(body instanceof FormData);
   const response = await fetch(url, {
     method,
@@ -88,6 +90,13 @@ async function amo<T>(method: string, url: string, body?: object | FormData): Pr
     body: json ? JSON.stringify(body) : body,
   });
   const text = await response.text();
+  // AMO throttles the API right after a version upload: wait as long as it says, then try again
+  if (response.status === 429 && retries > 0) {
+    const seconds = Number(response.headers.get('Retry-After') ?? /available in (\d+) seconds/.exec(text)?.[1] ?? 60);
+    console.log(`AMO API throttled: retrying in ${seconds + 1} s`);
+    await new Promise(done => setTimeout(done, (seconds + 1) * 1000));
+    return amo<T>(method, url, body, retries - 1);
+  }
   if (!response.ok) throw new Error(`AMO API: ${method} ${url}: ${response.status} ${text}`);
   return (text ? JSON.parse(text) : undefined) as T;
 }
