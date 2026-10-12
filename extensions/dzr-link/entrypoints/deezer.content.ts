@@ -5,7 +5,7 @@ export default defineContentScript({
   allFrames: true,
   main() {
     if (isChromeOS(navigator.userAgent)) {
-      console.warn('[Open Deezer in desktop app] This script is not compatible with Chrome OS.');
+      console.warn('[Deezer Link] This script is not compatible with Chrome OS.');
       return;
     }
     window.location.href = getDeezerAppUrl(window.location.href)!;
