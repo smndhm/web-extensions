@@ -1,0 +1,49 @@
+# Music Bridge
+
+**With Music Bridge open any music link on your favorite platform with one click!**
+
+When you want to listen to music from a streaming platform that is not the one you are using, you must open the link to retrieve the title information and then go find it on your music streaming platform. Many manipulations to listen to your song!
+With Music Bridge, you just have to click on this link to listen directly to the music on your platform!
+
+Available for:
+
+- [Chrome](https://chromewebstore.google.com/detail/music-bridge/mbebbcaajfmockkcflajghbambbimpck)
+- [Firefox](https://addons.mozilla.org/firefox/addon/music-bridge/)
+- [Edge](https://microsoftedge.microsoft.com/addons/detail/music-bridge/kfbedaeciahfjnknbjkcnjknkbdlcnld)
+
+Made with the [Odesli](https://odesli.co/) API, through the [music-bridge-redirect](https://github.com/smndhm/music-bridge-redirect) service.
+
+## Supported platforms
+
+- Amazon Music
+- Apple Music
+- Deezer
+- Napster
+- Pandora
+- SoundCloud (only redirection to)
+- Spotify
+- Tidal
+- YouTube (only redirection to)
+- YouTube Music
+
+## How it works
+
+The content script runs on the track and album pages of the supported platforms. With the platform chosen in the options:
+
+- on another platform's page, it sends the link to the redirect service, which answers with the same music on the chosen platform (in its desktop app with **Open in desktop app**);
+- on the chosen platform's page, it does nothing, or opens the desktop app with **Open in desktop app**. Deezer and Spotify app links are built without the service.
+
+There are no desktop apps on ChromeOS: the option is hidden there.
+
+## Development
+
+From the repository root (see its [README](../../README.md)):
+
+```sh
+pnpm install
+pnpm --filter music-bridge dev           # Chrome
+pnpm --filter music-bridge dev:firefox   # Firefox
+pnpm --filter music-bridge test          # unit tests
+```
+
+Store texts are in [COMMUNICATION.md](COMMUNICATION.md) and [wordings.md](wordings.md).

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="manifest.open_in_tab" content="false" />
+    <title>Music Bridge</title>
+  </head>
+  <body>
+    <main>
+      <!-- The browser shows the options in its own settings page, under the extension name: keep the heading for assistive technologies only -->
+      <h1 class="visually-hidden" data-i18n="optionsTitle"></h1>
+      <form>
+        <div class="field">
+          <label for="streaming-platforms" data-i18n="optionsStreamingPlatformLabel"></label>
+          <select id="streaming-platforms" name="platform"></select>
+        </div>
+        <div class="field" id="open-app-option">
+          <input type="checkbox" id="open-app" name="openInApp" />
+          <label for="open-app" data-i18n="optionsOpenAppLabel"></label>
+        </div>
+        <div id="save-options">
+          <p role="status" id="save-status"></p>
+          <button type="submit" data-i18n="optionsSaveButton"></button>
+        </div>
+      </form>
+    </main>
+    <footer></footer>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
