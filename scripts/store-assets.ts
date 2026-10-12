@@ -1,8 +1,8 @@
 /**
  * Renders each extension's images from one source icon, the same way for all extensions:
  * - public/icons/{16,32,48,128}.png, the manifest icons;
- * - medias/logo.png (300×300), medias/promo-small.png (440×280) and medias/promo-large.png
- *   (1400×560), for the store listings: the icon, the name and the description of the extension
+ * - medias/300x300.png (logo), medias/440x280.png and medias/1400x560.png (promotional tiles),
+ *   named after their size, for the store listings: the icon, the name and the description of the extension
  *   (public/_locales/en/messages.json) on a dark background.
  * A PNG source only gives the icons it is at least as large as.
  *
@@ -81,9 +81,9 @@ try {
       const file = resolve(dir, `public/icons/${iconSize}.png`);
       if (resolve(ROOT, source) !== file) await shoot(iconOnly(icon, iconSize), iconSize, iconSize, file, true);
     }
-    await shoot(iconOnly(icon, 300), 300, 300, resolve(dir, 'medias/logo.png'), true);
-    await shoot(tile(icon, name, description, { iconSize: 104, nameSize: 30, textSize: 15, gap: 24 }), 440, 280, resolve(dir, 'medias/promo-small.png'));
-    await shoot(tile(icon, name, description, { iconSize: 300, nameSize: 84, textSize: 36, gap: 80 }), 1400, 560, resolve(dir, 'medias/promo-large.png'));
+    await shoot(iconOnly(icon, 300), 300, 300, resolve(dir, 'medias/300x300.png'), true);
+    await shoot(tile(icon, name, description, { iconSize: 104, nameSize: 30, textSize: 15, gap: 24 }), 440, 280, resolve(dir, 'medias/440x280.png'));
+    await shoot(tile(icon, name, description, { iconSize: 300, nameSize: 84, textSize: 36, gap: 80 }), 1400, 560, resolve(dir, 'medias/1400x560.png'));
   }
 } finally {
   await browser.close();

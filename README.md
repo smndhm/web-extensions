@@ -55,7 +55,7 @@ The [CI](.github/workflows/ci.yml) workflow runs on every pull request and on pu
 Every extension has the same images, rendered from one source icon by `pnpm store-assets` (in Chromium, with Playwright, in Bricolage Grotesque, the title font of simon.duhem.fr):
 
 - `public/icons/{16,32,48,128}.png`: the manifest icons;
-- `medias/logo.png` (300×300), `medias/promo-small.png` (440×280) and `medias/promo-large.png` (1400×560): the logo and the promotional tiles of the store listings, with the extension's English name and description.
+- `medias/300x300.png` (logo), `medias/440x280.png` and `medias/1400x560.png` (promotional tiles): the store listing images, named after their size, with the extension's English name and description.
 
 The Deezer extensions use the Deezer heart, [`packages/shared/assets/deezer-heart.svg`](packages/shared/assets/deezer-heart.svg). Music Bridge has no vector icon yet: its images come from its 128 px icon, so its 300 px logo and large tile are blurry.
 
@@ -66,7 +66,7 @@ The [Store screenshots](.github/workflows/screenshots.yml) workflow (**Actions**
 - **dzr-tab**: the new tab page with real Deezer tracks, the top of the Deezer chart or the track IDs given in **tracks**;
 - **music-bridge**: the options page in English and French, light and dark.
 
-With **commit**, run on a branch other than `main`, the screenshots also replace the extension's `medias/` folder (the README images) in a commit on that branch. Upload them to the store listings by hand: the store APIs only handle packages.
+With **commit**, run on a branch other than `main`, the screenshots also replace the extension's `medias/1280x800-*.png` in a commit on that branch. Upload them to the store listings by hand: the store APIs only handle packages.
 
 Locally (`dzr-tab` or `music-bridge`):
 
