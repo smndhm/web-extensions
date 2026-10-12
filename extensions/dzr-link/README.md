@@ -1,4 +1,4 @@
-# Open Deezer in desktop app
+# Deezer Link
 
 **Get redirected to the Deezer desktop app when you open a Deezer link in the browser.**
 
