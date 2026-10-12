@@ -23,52 +23,40 @@ Entertainment (Divertissement)
 
 The manifest takes them from [`public/_locales`](../public/_locales).
 
-- **EN**: Music Bridge. With Music Bridge open any music link on your favorite platform with one click!
-- **FR**: Music Bridge. Avec Music Bridge ouvrez n'importe quel lien de musique sur votre plateforme préférée en un clic !
+- **EN**: Music Bridge. Open any music link on your favorite streaming platform, in one click.
+- **FR**: Music Bridge. Ouvrez n'importe quel lien de musique sur votre plateforme de streaming préférée, en un clic.
 
 ## Description
 
 ### English
 
-When you want to listen to music from a streaming platform that is not the one you are using, you must open the link to retrieve the title information and then go find it on your music streaming platform. Many manipulations to listen to your song!
-With Music Bridge, you just have to click on this link to listen directly to the music on your platform!
+Found a song on a streaming platform you don't use? Music Bridge opens it on yours.
 
-Supported platforms:
+Pick your platform once in the extension options. From then on, every track or album link from another platform takes you straight to the same music on yours: no more copying the title and searching for it.
 
-- Amazon Music
-- Apple Music
-- Deezer
-- Napster
-- Pandora
-- SoundCloud (only redirect to)
-- Spotify
-- Tidal
-- YouTube (only redirect to)
-- YouTube Music
+- Links from Amazon Music, Apple Music, Deezer, Pandora, Spotify, Tidal and YouTube Music open on any of them, or on SoundCloud and YouTube.
+- Open the music in your platform's desktop app (Apple Music, Deezer, Spotify), and close the tab left behind if you like.
+- Available in English and French.
 
-**Chrome Web Store**: the listing may not name more than 5 other brands, so replace the list with:
+Privacy: the address of the music page you open is sent to Music Bridge's redirect service, which finds the same music with the Odesli (song.link) API. Nothing else is collected, and your settings stay in your browser.
+
+**Chrome Web Store**: the listing may not name more than 5 other brands, so replace the first item of the list with:
 
 > Works with the major music streaming platforms (Apple Music, Spotify, Deezer, YouTube Music, Amazon Music, etc.).
 
 ### Français
 
-Lorsque vous souhaitez écouter une musique provenant d'une plateforme de streaming qui n'est pas celle que vous utilisez, vous devez ouvrir le lien pour récupérer les informations sur le titre puis aller le trouver sur votre plateforme de streaming musical. Beaucoup de manipulations pour écouter votre chanson !
-Avec Music Bridge, il vous suffit de cliquer sur ce lien pour écouter directement la musique sur votre plateforme !
+Vous tombez sur une chanson d'une plateforme de streaming que vous n'utilisez pas ? Music Bridge l'ouvre sur la vôtre.
 
-Plateformes prises en charge :
+Choisissez votre plateforme une fois dans les options de l'extension. Ensuite, chaque lien de titre ou d'album d'une autre plateforme vous emmène directement vers la même musique sur la vôtre : plus besoin de copier le titre pour le chercher.
 
-- Amazon Music
-- Apple Music
-- Deezer
-- Napster
-- Pandora
-- SoundCloud (uniquement redirection vers)
-- Spotify
-- Tidal
-- YouTube (uniquement redirection vers)
-- YouTube Music
+- Les liens d'Amazon Music, Apple Music, Deezer, Pandora, Spotify, Tidal et YouTube Music s'ouvrent sur n'importe laquelle d'entre elles, ou sur SoundCloud et YouTube.
+- Ouvrez la musique dans l'application de bureau de votre plateforme (Apple Music, Deezer, Spotify), et fermez l'onglet resté ouvert si vous le souhaitez.
+- Disponible en anglais et en français.
 
-**Chrome Web Store** : la fiche ne peut pas citer plus de 5 autres marques, remplacer la liste par :
+Confidentialité : l'adresse de la page de musique que vous ouvrez est envoyée au service de redirection de Music Bridge, qui trouve la même musique avec l'API Odesli (song.link). Rien d'autre n'est collecté, et vos réglages restent dans votre navigateur.
+
+**Chrome Web Store** : la fiche ne peut pas citer plus de 5 autres marques, remplacer le premier point de la liste par :
 
 > Fonctionne avec les principales plateformes de streaming musical (Apple Music, Spotify, Deezer, YouTube Music, Amazon Music, etc.).
 
@@ -96,13 +84,13 @@ Plateformes prises en charge :
 ### English
 
 - **storage**: Saves the user's settings: the chosen streaming platform, and whether to open links in its desktop app and close the tab afterwards. The settings stay in the browser.
-- **Host permission** (content script on the track and album pages of Spotify, Deezer, Apple Music, YouTube Music, Tidal, Pandora, Amazon Music and Napster): The content script runs on the track and album pages of the supported streaming platforms only. It reads the page address and redirects to the same music on the platform the user chose, through the extension's redirect service. It does not read page content.
+- **Host permission** (content script on the track and album pages of Spotify, Deezer, Apple Music, YouTube Music, Tidal, Pandora and Amazon Music): The content script runs on the track and album pages of the supported streaming platforms only. It reads the page address and redirects to the same music on the platform the user chose, through the extension's redirect service. It does not read page content.
 - **Remote code**: No. The redirect service answers with an HTTP redirect, never code run by the extension.
 
 ### Français
 
 - **storage** : enregistre les réglages de l'utilisateur : la plateforme de streaming choisie, et s'il faut ouvrir les liens dans son application de bureau puis fermer l'onglet. Les réglages restent dans le navigateur.
-- **Autorisation d'hôte** (script de contenu sur les pages de titres et d'albums de Spotify, Deezer, Apple Music, YouTube Music, Tidal, Pandora, Amazon Music et Napster) : le script de contenu ne s'exécute que sur les pages de titres et d'albums des plateformes prises en charge. Il lit l'adresse de la page et redirige vers la même musique sur la plateforme choisie par l'utilisateur, via le service de redirection de l'extension. Il ne lit pas le contenu de la page.
+- **Autorisation d'hôte** (script de contenu sur les pages de titres et d'albums de Spotify, Deezer, Apple Music, YouTube Music, Tidal, Pandora et Amazon Music) : le script de contenu ne s'exécute que sur les pages de titres et d'albums des plateformes prises en charge. Il lit l'adresse de la page et redirige vers la même musique sur la plateforme choisie par l'utilisateur, via le service de redirection de l'extension. Il ne lit pas le contenu de la page.
 - **Code distant** : non. Le service de redirection répond par une redirection HTTP, jamais par du code exécuté par l'extension.
 
 ## Privacy

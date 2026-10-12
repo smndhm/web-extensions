@@ -35,6 +35,7 @@ Clicked a Deezer link and landed in your browser? This extension opens it in the
 - Works with every deezer.com link: tracks, albums, playlists, artists, podcasts.
 - Links with or without a language in the address (deezer.com/fr/…, deezer.com/pt-br/…) are supported.
 - Nothing to set up: install it and open a Deezer link.
+- On Firefox, the tab left behind closes on its own.
 - No tracking: the extension sends no data to its developer.
 
 Requires the Deezer desktop app. Not available on ChromeOS, which has no Deezer desktop app.
@@ -46,6 +47,7 @@ Vous cliquez sur un lien Deezer et vous vous retrouvez dans le navigateur ? Cett
 - Fonctionne avec tous les liens deezer.com : titres, albums, playlists, artistes, podcasts.
 - Les liens avec ou sans langue dans l'adresse (deezer.com/fr/…, deezer.com/pt-br/…) sont pris en charge.
 - Rien à configurer : installez-la, puis ouvrez un lien Deezer.
+- Sur Firefox, l'onglet resté ouvert se ferme tout seul.
 - Aucun pistage : l'extension n'envoie aucune donnée à son développeur.
 
 Nécessite l'application Deezer pour ordinateur. Non disponible sur ChromeOS, où il n'y a pas d'application Deezer.
