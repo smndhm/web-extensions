@@ -4,25 +4,6 @@ export const WHITE: Rgb = [255, 255, 255];
 export const BLACK: Rgb = [0, 0, 0];
 
 export const Utils = {
-  getJson: function (url: string, callback: (response: any) => void) {
-    const request = new XMLHttpRequest();
-
-    request.onload = function () {
-      if (this.status >= 200 && this.status < 400) {
-        callback(JSON.parse(this.response));
-      }
-    };
-
-    request.open('GET', url, true);
-    request.overrideMimeType('application/json');
-    request.send();
-  },
-
-  random: function <T>(array: T[]): T | undefined {
-    if (Array.isArray(array))
-      return array[Math.floor(Math.random() * array.length)];
-  },
-
   rgb: function (color: Rgb) {
     return 'rgb(' + color.map(Math.round).join(', ') + ')';
   },
@@ -38,7 +19,7 @@ export const Utils = {
 
   // WCAG 2 contrast ratio: https://www.w3.org/TR/WCAG22/#dfn-contrast-ratio
   contrast: function (a: Rgb, b: Rgb) {
-    const [light, dark] = [Utils.luminance(a), Utils.luminance(b)].sort((x, y) => y - x) as [number, number];
+    const [light, dark] = [Utils.luminance(a), Utils.luminance(b)].toSorted((x, y) => y - x) as [number, number];
     return (light + 0.05) / (dark + 0.05);
   },
 

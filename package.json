@@ -10,6 +10,9 @@
     "zip:firefox": "pnpm -r zip:firefox",
     "compile": "pnpm -r compile",
     "test": "pnpm -r --if-present test",
+    "lint": "prettier . --check && oxlint",
+    "lint:fix": "prettier . --write && oxlint --fix",
+    "lint:firefox": "for build in extensions/*/.output/firefox-mv2; do web-ext lint --source-dir \"$build\" --warnings-as-errors || exit 1; done",
     "test:firefox": "node scripts/firefox.ts",
     "changeset": "changeset",
     "changeset:version": "changeset version",
@@ -19,8 +22,11 @@
   "devDependencies": {
     "@changesets/cli": "3.0.3",
     "@scaleway/changesets-renovate": "4.0.5",
+    "oxlint": "1.87.0",
+    "prettier": "3.9.10",
     "selenium-webdriver": "4.51.0",
     "typescript": "7.0.2",
-    "vitest": "5.0.3"
+    "vitest": "5.0.3",
+    "web-ext": "10.7.0"
   }
 }
