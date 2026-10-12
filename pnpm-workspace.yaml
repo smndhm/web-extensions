@@ -2,5 +2,8 @@ packages:
   - extensions/*
   - packages/*
 
-onlyBuiltDependencies:
-  - esbuild
+# Dependencies allowed to run their install scripts (pnpm fails on the ones not listed)
+allowBuilds:
+  esbuild: true
+  # Optional native file watcher: WXT works without it
+  '@parcel/watcher': false
