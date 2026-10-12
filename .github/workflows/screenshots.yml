@@ -3,22 +3,38 @@ name: Store screenshots
 on:
   workflow_dispatch:
     inputs:
+      extension:
+        description: Extension to take screenshots of
+        required: true
+        type: choice
+        options:
+          - dzr-tab
+          - music-bridge
       count:
-        description: Number of screenshots
+        description: 'dzr-tab: number of screenshots, from the top of the Deezer chart'
         required: true
         type: number
         default: 5
+      tracks:
+        description: 'dzr-tab: Deezer track IDs instead of the chart, comma separated (deezer.com/track/<ID>)'
+        required: false
+        type: string
+      commit:
+        description: Replace the extension's screenshots in store/ and commit them to the branch (not main)
+        required: true
+        type: boolean
+        default: false
 
 permissions:
-  contents: read
+  contents: write # Commit the screenshots when asked
 
 jobs:
   screenshots:
-    name: dzr-tab screenshots
+    name: ${{ inputs.extension }} screenshots
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: extensions/dzr-tab
+        working-directory: extensions/${{ inputs.extension }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
@@ -30,16 +46,31 @@ jobs:
       - name: Build for Chrome
         run: pnpm build
 
-      - name: Take screenshots with real Deezer tracks
+      # dzr-tab: the new tab page with real Deezer tracks; music-bridge: the options page in English and
+      # French, light and dark
+      - name: Take screenshots
         env:
           COUNT: ${{ inputs.count }}
+          TRACKS: ${{ inputs.tracks }}
         run: pnpm screenshots "$COUNT"
 
       - name: Upload screenshots
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
-          name: dzr-tab-screenshots
-          path: extensions/dzr-tab/.output/screenshots/*.png
+          name: ${{ inputs.extension }}-screenshots
+          path: extensions/${{ inputs.extension }}/.output/screenshots/*.png
           if-no-files-found: error
           # WXT writes to .output/, a hidden directory
           include-hidden-files: true
+
+      - name: Commit the screenshots
+        if: inputs.commit && github.ref_name != github.event.repository.default_branch
+        env:
+          EXTENSION: ${{ inputs.extension }}
+        run: |
+          # Only the screenshots: the logo and the promotional tiles come from pnpm store-assets
+          mkdir -p store && rm -f store/screenshot-*.png && cp .output/screenshots/*.png store/
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add store
+          git commit -m "docs($EXTENSION): new store screenshots" && git push || echo "No change"
