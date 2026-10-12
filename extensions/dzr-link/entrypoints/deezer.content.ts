@@ -1,17 +1,17 @@
+import { getAppUrl, isChromeOS } from '@/utils/app-link';
+
 export default defineContentScript({
   matches: ['https://www.deezer.com/*'],
   allFrames: true,
   main() {
-    if (/\bCrOS\b/.test(navigator.userAgent)) {
-      console.warn(
-        '[Open Deezer in desktop app] This script is not compatible with Chrome OS.',
-      );
-    } else {
-      window.location.href = `deezer://${window.location.pathname.substring(4)}`;
-      // Close window (Firefox only)
-      if (/\bfirefox\b/i.test(navigator.userAgent)) {
-        window.close();
-      }
+    if (isChromeOS(navigator.userAgent)) {
+      console.warn('[Open Deezer in desktop app] This script is not compatible with Chrome OS.');
+      return;
+    }
+    window.location.href = getAppUrl(window.location.href);
+    // Close the tab left behind (Firefox only)
+    if (/\bfirefox\b/i.test(navigator.userAgent)) {
+      window.close();
     }
   },
 });
