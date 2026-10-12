@@ -44,6 +44,8 @@ export function toOklch(color: Rgb): Oklch {
   return [L, Math.hypot(A, B), ((Math.atan2(B, A) * 180) / Math.PI + 360) % 360];
 }
 
+const inGamut = (channels: number[]) => channels.every(c => c >= -0.0005 && c <= 1.0005);
+
 /** OKLCH → sRGB, rounded; out of gamut colors lose chroma until they fit, keeping their lightness and hue */
 export function fromOklch([L, C, h]: Oklch): Rgb {
   const convert = (chroma: number) => {
@@ -58,7 +60,6 @@ export function fromOklch([L, C, h]: Oklch): Rgb {
       -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s,
     ].map(c => fromLinear(c));
   };
-  const inGamut = (channels: number[]) => channels.every(c => c >= -0.0005 && c <= 1.0005);
   let channels = convert(C);
   if (!inGamut(channels)) {
     let [low, high] = [0, C];
