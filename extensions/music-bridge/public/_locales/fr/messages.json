@@ -19,6 +19,14 @@
     "message": "Ouvrir les liens dans l'application.",
     "description": "Options page label to open links in desktop app."
   },
+  "optionsCloseTabLabel": {
+    "message": "Fermer l'onglet une fois l'application ouverte.",
+    "description": "Options page label to close the tab after opening the desktop app."
+  },
+  "optionsCloseTabHelp": {
+    "message": "Cochez « Toujours autoriser » dans la fenêtre du navigateur la première fois, sinon l'onglet se ferme avant votre réponse.",
+    "description": "Options page help under the close tab option."
+  },
   "optionsSaveButton": {
     "message": "Enregistrer",
     "description": "Save options button"
