@@ -1,0 +1,10 @@
+{
+  "name": {
+    "message": "Deezer Tab",
+    "description": "Extension name."
+  },
+  "description": {
+    "message": "Découvrez un titre Deezer à chaque nouvel onglet.",
+    "description": "Extension description."
+  }
+}

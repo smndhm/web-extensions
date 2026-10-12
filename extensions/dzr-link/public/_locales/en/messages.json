@@ -1,0 +1,10 @@
+{
+  "name": {
+    "message": "Open Deezer in desktop app",
+    "description": "Extension name."
+  },
+  "description": {
+    "message": "Get redirected to the Deezer desktop app when you open a Deezer link in the browser.",
+    "description": "Extension description."
+  }
+}
