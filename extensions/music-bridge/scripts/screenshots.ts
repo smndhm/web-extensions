@@ -44,7 +44,7 @@ for (const locale of ['en', 'fr']) {
       await page.addStyleTag({ content: `html { zoom: ${ZOOM}; }` });
       await page.evaluate(() => document.fonts.ready);
 
-      const file = resolve(OUTPUT_DIR, `1280x800-${locale}-${colorScheme}.png`);
+      const file = resolve(OUTPUT_DIR, `screenshot-1280x800-${locale}-${colorScheme}.png`);
       await page.screenshot({ path: file });
       console.log(file);
     } finally {
