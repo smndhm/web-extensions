@@ -20,7 +20,7 @@ on:
         required: false
         type: string
       commit:
-        description: Replace the extension's medias/ with the screenshots and commit them to the branch (not main)
+        description: Replace the extension's screenshots in medias/ and commit them to the branch (not main)
         required: true
         type: boolean
         default: false
@@ -68,7 +68,8 @@ jobs:
         env:
           EXTENSION: ${{ inputs.extension }}
         run: |
-          rm -rf medias && mkdir medias && cp .output/screenshots/*.png medias/
+          # Only the screenshots: the logo and the promotional tiles come from pnpm store-assets
+          mkdir -p medias && rm -f medias/1280x800-*.png && cp .output/screenshots/*.png medias/
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add medias

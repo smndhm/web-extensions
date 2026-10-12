@@ -81,7 +81,7 @@ for (const track of tracks) {
   }
 
   await page.evaluate(() => document.fonts.ready);
-  const file = resolve(OUTPUT_DIR, `screenshot-${++taken}.png`);
+  const file = resolve(OUTPUT_DIR, `1280x800-${++taken}.png`);
   await page.screenshot({ path: file });
   console.log(`${file}: ${track.title} – ${track.artist.name}`);
 }
