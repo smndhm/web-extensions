@@ -124,7 +124,12 @@ try {
     await driver.wait(
       async () => {
         if (!(await driver.getAllWindowHandles()).includes(tab)) return (outcome = 'tab closed after redirecting');
-        const url = decodeURIComponent(await driver.getCurrentUrl());
+        // The tab may close between the two calls: Firefox then discards its browsing context
+        const url = await driver.getCurrentUrl().then(decodeURIComponent, (error: Error) => {
+          if (error.name === 'NoSuchWindowError' || /discarded/i.test(error.message)) return undefined;
+          throw error;
+        });
+        if (url === undefined) return (outcome = 'tab closed after redirecting');
         if (url.includes('deezer://track/3135556')) return (outcome = `redirected (${url})`);
         return false;
       },
