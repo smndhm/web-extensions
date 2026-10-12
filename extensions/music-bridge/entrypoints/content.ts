@@ -1,5 +1,6 @@
-import { getRedirectUrl } from '@/utils/redirect';
+import { getRedirectUrl, shouldCloseTab } from '@/utils/redirect';
 import { getSettings } from '@/utils/settings';
+import { CLOSE_TAB_MESSAGE } from '@/utils/close-tab';
 
 export default defineContentScript({
   matches: [
@@ -27,7 +28,11 @@ export default defineContentScript({
   ],
   runAt: 'document_start',
   async main() {
-    const redirect = getRedirectUrl(window.location.href, await getSettings(), navigator.userAgent);
-    if (redirect) window.location.href = redirect;
+    const settings = await getSettings();
+    const redirect = getRedirectUrl(window.location.href, settings, navigator.userAgent);
+    if (!redirect) return;
+    const closeTab = shouldCloseTab(redirect, settings, history.length);
+    window.location.href = redirect;
+    if (closeTab) void browser.runtime.sendMessage(CLOSE_TAB_MESSAGE);
   },
 });
