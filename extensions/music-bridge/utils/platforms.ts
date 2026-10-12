@@ -1,4 +1,4 @@
-export const PLATFORM_IDS = ['amazonMusic', 'appleMusic', 'deezer', 'napster', 'pandora', 'soundcloud', 'spotify', 'tidal', 'youtube', 'youtubeMusic'] as const;
+export const PLATFORM_IDS = ['amazonMusic', 'appleMusic', 'deezer', 'pandora', 'soundcloud', 'spotify', 'tidal', 'youtube', 'youtubeMusic'] as const;
 
 /** Platform IDs, as the Odesli API names them */
 export type PlatformId = (typeof PLATFORM_IDS)[number];
@@ -26,12 +26,6 @@ export const platforms: Record<PlatformId, Platform> = {
     name: 'Deezer',
     url: 'https://www.deezer.com',
     hasNativeAppLink: true,
-  },
-  napster: {
-    name: 'Napster',
-    // Odesli now links to play.napster.com
-    url: 'https://play.napster.com',
-    aliases: ['https://web.napster.com'],
   },
   pandora: {
     name: 'Pandora',

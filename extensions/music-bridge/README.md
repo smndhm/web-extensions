@@ -1,9 +1,8 @@
 # Music Bridge
 
-**With Music Bridge open any music link on your favorite platform with one click!**
+**Open any music link on your favorite streaming platform, in one click.**
 
-When you want to listen to music from a streaming platform that is not the one you are using, you must open the link to retrieve the title information and then go find it on your music streaming platform. Many manipulations to listen to your song!
-With Music Bridge, you just have to click on this link to listen directly to the music on your platform!
+Found a song on a streaming platform you don't use? Music Bridge opens it on yours: pick your platform once in the options, and every track or album link from another platform takes you straight to the same music on yours.
 
 Available for:
 
@@ -18,12 +17,11 @@ Made with the [Odesli](https://odesli.co/) API, through the [music-bridge-redire
 - Amazon Music
 - Apple Music
 - Deezer
-- Napster
 - Pandora
-- SoundCloud (only redirection to)
+- SoundCloud (as a destination only)
 - Spotify
 - Tidal
-- YouTube (only redirection to)
+- YouTube (as a destination only)
 - YouTube Music
 
 ## How it works
