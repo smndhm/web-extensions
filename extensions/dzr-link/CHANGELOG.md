@@ -1,5 +1,24 @@
 # dzr-link
 
+## 1.4.0
+
+### Minor Changes
+
+- 6ea4211: Translate the extension name and description into French.
+
+### Patch Changes
+
+- bf35dce: Open Deezer links without a language in the URL (`deezer.com/track/…`) in the app too: they used to lose the start of their path.
+- ff1643a: Icons in 16, 32, 48 and 128 px, the same set for every extension.
+- 9b48950: Updated dependency `@types/node` to `24.19.2`.
+  Updated dependency `jsdom` to `30.1.2`.
+  Updated dependency `normalize.css` to `8.0.1`.
+  Updated dependency `sass` to `1.105.1`.
+  Updated dependency `typescript` to `7.0.2`.
+  Updated dependency `wxt` to `0.21.4`.
+  Updated dependency `axe-core` to `4.14.0`.
+  Updated dependency `selenium-webdriver` to `4.51.0`.
+
 ## 1.3.0
 
 ### Minor Changes
