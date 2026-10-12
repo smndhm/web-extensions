@@ -77,7 +77,7 @@ The [Store screenshots](.github/workflows/screenshots.yml) workflow (**Actions**
 - **dzr-tab**: the new tab page with real Deezer tracks, the top of the Deezer chart or the track IDs given in **tracks**;
 - **music-bridge**: the options page in English and French, light and dark.
 
-With **commit**, run on a branch other than `main`, the screenshots also replace the extension's `store/screenshot-1280x800-*.png` in a commit on that branch. Upload them to the store listings by hand: the store APIs only handle packages.
+With **commit**, run on a branch other than `main`, the screenshots also replace the extension's `store/screenshot-1280x800-*.png` in a commit on that branch. The [AMO listing](#store-listings) workflow sends them to addons.mozilla.org; upload them to the Chrome Web Store and Microsoft Edge Add-ons by hand.
 
 Locally (`dzr-tab` or `music-bridge`):
 
@@ -87,7 +87,14 @@ pnpm --filter dzr-tab build
 pnpm --filter dzr-tab screenshots   # -> extensions/dzr-tab/.output/screenshots
 ```
 
-## Releasing
+## Store listings
+
+Each extension's listing comes from the repository: its name and summary from `public/_locales`, its description from `store/description-<locale>.md`, its images from `store/` (see [Icons and store images](#icons-and-store-images)).
+
+- **addons.mozilla.org** is updated by `pnpm amo-listing <extension> [--images] [--dry-run]`, with the AMO API and the Firefox credentials of [Publishing](#publishing):
+  - the [Publish extension](.github/workflows/publish.yml) workflow updates the name, summary, description (in every language) and categories after each Firefox submission;
+  - the [AMO listing](.github/workflows/amo-listing.yml) workflow (**Actions** tab) updates them on demand, and with **images** also replaces the icon and the screenshots (the English ones when they differ by language, since AMO shows the same ones in every language).
+- **Chrome Web Store** and **Microsoft Edge Add-ons** have no listing API: copy the texts of `store/README.md` and upload the images by hand, in their dashboards.
 
 Versions and changelogs are managed with [Changesets](https://github.com/changesets/changesets).
 

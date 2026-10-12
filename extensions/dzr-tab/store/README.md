@@ -12,7 +12,8 @@ Everything the store listings ask for, in one place, in every language of the ex
 
 ## Category
 
-Entertainment (Divertissement)
+- Chrome Web Store, Microsoft Edge Add-ons: Entertainment (Divertissement)
+- addons.mozilla.org: Photos, Music & Videos; Tabs, set by `pnpm amo-listing`
 
 ## Search terms
 
@@ -28,27 +29,10 @@ The manifest takes them from [`public/_locales`](../public/_locales).
 
 ## Description
 
-### English
+The long description, sent as is to addons.mozilla.org by `pnpm amo-listing` (some Markdown: lists, bold, links), and to paste in the other stores:
 
-Deezer Tab replaces your new tab page with a track from Deezer's top playlists. Every new tab shows a different song, its cover, and a background made from the cover's colors.
-
-- One click on the cover, the title or the artist opens it on Deezer.
-- The text always stays readable: its color and the background are chosen for a contrast that meets the WCAG accessibility guidelines.
-- Tracks are cached for an hour, so the page opens quickly and still works when Deezer cannot be reached.
-- No account needed, no tracking: the extension sends no data to its developer.
-
-Available in English and French.
-
-### Français
-
-Deezer Tab remplace la page du nouvel onglet par un titre des playlists phares de Deezer. Chaque nouvel onglet affiche une chanson différente, sa pochette et un fond aux couleurs de la pochette.
-
-- Un clic sur la pochette, le titre ou l'artiste l'ouvre sur Deezer.
-- Le texte reste toujours lisible : sa couleur et le fond sont choisis pour un contraste conforme aux règles d'accessibilité WCAG.
-- Les titres sont gardés en cache une heure : la page s'ouvre vite et fonctionne même quand Deezer ne répond pas.
-- Sans compte ni pistage : l'extension n'envoie aucune donnée à son développeur.
-
-Disponible en anglais et en français.
+- English: [`description-en.md`](description-en.md)
+- Français : [`description-fr.md`](description-fr.md)
 
 ## Images
 

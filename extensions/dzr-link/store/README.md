@@ -12,7 +12,8 @@ Everything the store listings ask for, in one place, in every language of the ex
 
 ## Category
 
-Entertainment (Divertissement)
+- Chrome Web Store, Microsoft Edge Add-ons: Entertainment (Divertissement)
+- addons.mozilla.org: Photos, Music & Videos, set by `pnpm amo-listing`
 
 ## Search terms
 
@@ -28,29 +29,10 @@ The manifest takes them from [`public/_locales`](../public/_locales).
 
 ## Description
 
-### English
+The long description, sent as is to addons.mozilla.org by `pnpm amo-listing` (some Markdown: lists, bold, links), and to paste in the other stores:
 
-Clicked a Deezer link and landed in your browser? This extension opens it in the Deezer desktop app instead, right where you want to listen.
-
-- Works with every deezer.com link: tracks, albums, playlists, artists, podcasts.
-- Links with or without a language in the address (deezer.com/fr/…, deezer.com/pt-br/…) are supported.
-- Nothing to set up: install it and open a Deezer link.
-- On Firefox, the tab left behind closes on its own.
-- No tracking: the extension sends no data to its developer.
-
-Requires the Deezer desktop app. Not available on ChromeOS, which has no Deezer desktop app.
-
-### Français
-
-Vous cliquez sur un lien Deezer et vous vous retrouvez dans le navigateur ? Cette extension l'ouvre plutôt dans l'application Deezer, là où vous voulez écouter.
-
-- Fonctionne avec tous les liens deezer.com : titres, albums, playlists, artistes, podcasts.
-- Les liens avec ou sans langue dans l'adresse (deezer.com/fr/…, deezer.com/pt-br/…) sont pris en charge.
-- Rien à configurer : installez-la, puis ouvrez un lien Deezer.
-- Sur Firefox, l'onglet resté ouvert se ferme tout seul.
-- Aucun pistage : l'extension n'envoie aucune donnée à son développeur.
-
-Nécessite l'application Deezer pour ordinateur. Non disponible sur ChromeOS, où il n'y a pas d'application Deezer.
+- English: [`description-en.md`](description-en.md)
+- Français : [`description-fr.md`](description-fr.md)
 
 ## Images
 
