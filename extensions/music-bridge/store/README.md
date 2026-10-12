@@ -24,7 +24,7 @@ Entertainment (Divertissement)
 The manifest takes them from [`public/_locales`](../public/_locales).
 
 - **EN**: Music Bridge. Open any music link on your favorite streaming platform, in one click.
-- **FR**: Music Bridge. Ouvrez n'importe quel lien de musique sur votre plateforme de streaming préférée, en un clic.
+- **FR**: Music Bridge. Ouvrez n'importe quel titre ou album sur votre plateforme de streaming préférée, en un clic.
 
 ## Description
 
@@ -54,7 +54,7 @@ Choisissez votre plateforme une fois dans les options de l'extension. Ensuite, c
 - Ouvrez la musique dans l'application de bureau de votre plateforme (Apple Music, Deezer, Spotify), et fermez l'onglet resté ouvert si vous le souhaitez.
 - Disponible en anglais et en français.
 
-Confidentialité : l'adresse de la page de musique que vous ouvrez est envoyée au service de redirection de Music Bridge, qui trouve la même musique avec l'API Odesli (song.link). Rien d'autre n'est collecté, et vos réglages restent dans votre navigateur.
+Confidentialité : l'adresse de la page du titre ou de l'album que vous ouvrez est envoyée au service de redirection de Music Bridge, qui trouve la même musique avec l'API Odesli (song.link). Rien d'autre n'est collecté, et vos réglages restent dans votre navigateur.
 
 **Chrome Web Store** : la fiche ne peut pas citer plus de 5 autres marques, remplacer le premier point de la liste par :
 
@@ -77,7 +77,7 @@ Confidentialité : l'adresse de la page de musique que vous ouvrez est envoyée 
 
 ### Français
 
-> Aucun compte ni identifiant nécessaire. Choisissez une plateforme de streaming dans les options de l'extension (Deezer, par exemple). Ouvrez ensuite un lien de musique d'une autre plateforme, par exemple https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC : l'extension redirige vers le même titre sur la plateforme choisie, via le service music-bridge-redirect (API Odesli). « Ouvrir dans l'application » nécessite l'application de bureau de cette plateforme.
+> Aucun compte ni identifiant nécessaire. Choisissez une plateforme de streaming dans les options de l'extension (Deezer, par exemple). Ouvrez ensuite le lien d'un titre d'une autre plateforme, par exemple https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC : l'extension redirige vers le même titre sur la plateforme choisie, via le service music-bridge-redirect (API Odesli). « Ouvrir dans l'application » nécessite l'application de bureau de cette plateforme.
 
 ## Permissions (Chrome Web Store privacy practices)
 
@@ -101,4 +101,4 @@ The link of the music page is sent to the redirect service (https://music-bridge
 
 ### Français
 
-Le lien de la page de musique est envoyé au service de redirection (https://music-bridge-redirect.smndhm.workers.dev/), qui le recherche avec l'API Odesli. Rien d'autre n'est collecté ; les réglages restent dans le navigateur. Firefox : `data_collection_permissions: browsingActivity`.
+L'adresse de la page du titre ou de l'album est envoyée au service de redirection (https://music-bridge-redirect.smndhm.workers.dev/), qui retrouve la musique avec l'API Odesli. Rien d'autre n'est collecté ; les réglages restent dans le navigateur. Firefox : `data_collection_permissions: browsingActivity`.
