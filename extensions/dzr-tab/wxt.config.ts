@@ -1,4 +1,4 @@
-import { firefoxSettings, sourcesZip } from '@web-extensions/shared/wxt';
+import { firefoxSettings, icons, sourcesZip } from '@web-extensions/shared/wxt';
 import { defineConfig } from 'wxt';
 
 export default defineConfig({
@@ -8,11 +8,7 @@ export default defineConfig({
     short_name: '__MSG_name__',
     description: '__MSG_description__',
     default_locale: 'en',
-    icons: {
-      16: 'img/icon16.png',
-      48: 'img/icon48.png',
-      128: 'img/icon128.png',
-    },
+    icons,
     permissions: ['storage'],
     host_permissions: ['https://api.deezer.com/*'],
     ...firefoxSettings(browser, {

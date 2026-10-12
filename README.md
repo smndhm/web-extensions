@@ -50,6 +50,15 @@ The [CI](.github/workflows/ci.yml) workflow runs on every pull request and on pu
 - **Accessibility (dzr-tab)**: loads the new tab page in Chromium with mocked Deezer responses and four covers (dark, light, grey, half white / half black). It fails on any axe-core violation (WCAG 2.2 A/AA and best practices), on text below a 4.5:1 contrast ratio against either end of the gradient, or on a wrong keyboard order. Locally: `pnpm --filter dzr-tab build && pnpm --filter dzr-tab a11y`.
 - **Firefox smoke tests**: installs the Firefox builds as temporary add-ons in a real Firefox (Selenium and geckodriver). It checks that dzr-tab shows a real Deezer track with its gradient and logo and passes axe-core, that dzr-link redirects a Deezer track page to `deezer://` or closes the tab, and that music-bridge sends a Tidal track page to its redirect service. Screenshots are uploaded as the `firefox-screenshots` artifact. Locally, with Firefox installed: `pnpm zip:firefox && pnpm test:firefox`.
 
+## Icons and store images
+
+Every extension has the same images, rendered from one source icon by `pnpm store-assets` (in Chromium, with Playwright):
+
+- `public/icons/{16,32,48,128}.png`: the manifest icons;
+- `medias/logo.png` (300×300), `medias/promo-small.png` (440×280) and `medias/promo-large.png` (1400×560): the logo and the promotional tiles of the store listings, with the extension's English name and description.
+
+The Deezer extensions use the Deezer heart, [`packages/shared/assets/deezer-heart.svg`](packages/shared/assets/deezer-heart.svg). Music Bridge has no vector icon yet: its images come from its 128 px icon, so its 300 px logo and large tile are blurry.
+
 ## Store screenshots
 
 The [Store screenshots](.github/workflows/screenshots.yml) workflow (**Actions** tab) loads an extension in Chromium and uploads 1280×800 screenshots, the size the Chrome Web Store, addons.mozilla.org and Microsoft Edge Add-ons accept, as the `<extension>-screenshots` artifact:
