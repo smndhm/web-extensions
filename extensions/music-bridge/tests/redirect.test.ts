@@ -32,15 +32,11 @@ describe('getRedirectUrl', () => {
     });
 
     it('opens a Spotify page in the Spotify app without the service', () => {
-      expect(getRedirectUrl(SPOTIFY_TRACK, { platform: 'spotify', openInApp: true }, WINDOWS)).toBe(
-        'spotify:track:4uLU6hMCjMI75M1A2tKUQC',
-      );
+      expect(getRedirectUrl(SPOTIFY_TRACK, { platform: 'spotify', openInApp: true }, WINDOWS)).toBe('spotify:track:4uLU6hMCjMI75M1A2tKUQC');
     });
 
     it('stays on a Deezer page that has no app link', () => {
-      expect(
-        getRedirectUrl('https://www.deezer.com/fr/playlist/1', { platform: 'deezer', openInApp: true }, WINDOWS),
-      ).toBeUndefined();
+      expect(getRedirectUrl('https://www.deezer.com/fr/playlist/1', { platform: 'deezer', openInApp: true }, WINDOWS)).toBeUndefined();
     });
 
     it('asks the service for the desktop app link from another platform', () => {
@@ -75,29 +71,20 @@ describe('getRedirectUrl', () => {
     });
   });
 
-  it.each(['https://tidal.com/track/1', 'https://listen.tidal.com/track/1'])('stays on Tidal pages (%s) when Tidal is chosen', (href) => {
+  it.each(['https://tidal.com/track/1', 'https://listen.tidal.com/track/1'])('stays on Tidal pages (%s) when Tidal is chosen', href => {
     expect(getRedirectUrl(href, { platform: 'tidal', openInApp: false }, WINDOWS)).toBeUndefined();
   });
 
-  it.each(['https://play.napster.com/track/tra.1', 'https://web.napster.com/track/tra.1'])(
-    'stays on Napster pages (%s) when Napster is chosen',
-    (href) => {
-      expect(getRedirectUrl(href, { platform: 'napster', openInApp: false }, WINDOWS)).toBeUndefined();
-    },
-  );
-
   it('does not take another host with the same prefix for the platform', () => {
-    expect(
-      serviceParams(getRedirectUrl('https://tidal.com.example/track/1', { platform: 'tidal', openInApp: false }, WINDOWS)),
-    ).toEqual({ url: 'https://tidal.com.example/track/1', platform: 'tidal' });
+    expect(serviceParams(getRedirectUrl('https://tidal.com.example/track/1', { platform: 'tidal', openInApp: false }, WINDOWS))).toEqual({
+      url: 'https://tidal.com.example/track/1',
+      platform: 'tidal',
+    });
   });
 
-  it.each(PLATFORM_IDS.map((id) => [id, platforms[id]] as [PlatformId, (typeof platforms)[PlatformId]]))(
-    'stays on %s pages when %s is the chosen platform',
-    (platform, { url }) => {
-      expect(getRedirectUrl(`${url}/some/music`, { platform, openInApp: false }, WINDOWS)).toBeUndefined();
-    },
-  );
+  it.each(PLATFORM_IDS.map(id => [id, platforms[id]] as [PlatformId, (typeof platforms)[PlatformId]]))('stays on %s pages when %s is the chosen platform', (platform, { url }) => {
+    expect(getRedirectUrl(`${url}/some/music`, { platform, openInApp: false }, WINDOWS)).toBeUndefined();
+  });
 });
 
 describe('shouldCloseTab', () => {

@@ -45,7 +45,7 @@ export const random = <T>(items: readonly T[]): T | undefined => items[Math.floo
 /** Tracks of one of the top playlists */
 export async function fetchTracks(): Promise<DeezerTrack[]> {
   const items = await getData<DeezerTrack | DeezerPlaylist>(SOURCE);
-  if (items[0]?.type !== 'playlist') return items.filter((item) => item.type === 'track');
+  if (items[0]?.type !== 'playlist') return items.filter(item => item.type === 'track');
   const playlist = random(items.slice(0, PLAYLISTS) as DeezerPlaylist[])!;
   return getData<DeezerTrack>(`playlist/${playlist.id}/tracks`);
 }

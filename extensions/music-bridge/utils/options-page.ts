@@ -1,5 +1,5 @@
 import { browser } from 'wxt/browser';
-import { isChromeOs } from './links';
+import { isChromeOS } from './links';
 import { isPlatformId, platforms, PLATFORM_IDS } from './platforms';
 import { getSettings, saveSettings } from './settings';
 
@@ -44,7 +44,7 @@ export async function initOptionsPage(doc: Document, userAgent: string): Promise
 
   const settings = await getSettings();
   select.append(
-    ...PLATFORM_IDS.map((id) => {
+    ...PLATFORM_IDS.map(id => {
       const option = doc.createElement('option');
       option.value = id;
       option.textContent = platforms[id].name;
@@ -58,7 +58,7 @@ export async function initOptionsPage(doc: Document, userAgent: string): Promise
   // Opening in the app only makes sense for platforms with app links, and not on ChromeOS
   const updateOpenAppOption = () => {
     const available = isPlatformId(select.value) && platforms[select.value].hasNativeAppLink === true;
-    openAppOption.hidden = !available || isChromeOs(userAgent);
+    openAppOption.hidden = !available || isChromeOS(userAgent);
     if (openAppOption.hidden) checkbox.checked = false;
     // Closing the tab only applies when links open in the app
     closeTabOption.hidden = !checkbox.checked;
@@ -72,7 +72,7 @@ export async function initOptionsPage(doc: Document, userAgent: string): Promise
   });
 
   let clearStatus: ReturnType<typeof setTimeout> | undefined;
-  form.addEventListener('submit', async (event) => {
+  form.addEventListener('submit', async event => {
     event.preventDefault();
     if (!isPlatformId(select.value)) return;
     await saveSettings({ platform: select.value, openInApp: checkbox.checked, closeTab: closeTab.checked });
