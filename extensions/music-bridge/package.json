@@ -1,6 +1,6 @@
 {
   "name": "music-bridge",
-  "version": "1.5.4",
+  "version": "1.6.0",
   "description": "Open any music link on your favorite streaming platform with one click.",
   "private": true,
   "type": "module",
