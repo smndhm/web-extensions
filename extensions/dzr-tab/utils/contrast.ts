@@ -24,7 +24,7 @@ export const Utils = {
   },
 
   minContrast: function (text: Rgb, backgrounds: Rgb[]) {
-    return Math.min(...backgrounds.map((background) => Utils.contrast(text, background)));
+    return Math.min(...backgrounds.map(background => Utils.contrast(text, background)));
   },
 
   // Mix each background with the opposite of the text color until it reaches the target contrast

@@ -1,33 +1,31 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Deezer Tab</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/img/icon48.png" />
+  </head>
 
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Deezer Tab</title>
-	<link rel="icon" type="image/svg+xml" href="/favicon.svg">
-	<link rel="icon" type="image/png" sizes="48x48" href="/img/icon48.png">
-</head>
+  <body>
+    <!-- Deezer Track -->
+    <main id="track">
+      <!-- The cover links to the same page as the title: hide it from assistive technologies and keyboard navigation -->
+      <div class="track-cover">
+        <a tabindex="-1" aria-hidden="true"><img alt="" /></a>
+      </div>
+      <h1 class="track-title"><a></a></h1>
+      <p class="track-artist"><a></a></p>
+    </main>
+    <!--/Infos -->
 
-<body>
+    <!-- Deezer Logo -->
+    <footer id="logo">
+      <a href="https://www.deezer.com/" aria-label="Deezer"></a>
+    </footer>
+    <!--/Deezer Logo -->
 
-	<!-- Deezer Track -->
-	<main id="track">
-		<!-- The cover links to the same page as the title: hide it from assistive technologies and keyboard navigation -->
-		<div class="track-cover"><a tabindex="-1" aria-hidden="true"><img alt=""/></a></div>
-		<h1 class="track-title"><a></a></h1>
-		<p class="track-artist"><a></a></p>
-	</main>
-	<!--/Infos -->
-
-	<!-- Deezer Logo -->
-	<footer id="logo">
-		<a href="https://www.deezer.com/" aria-label="Deezer"></a>
-	</footer>
-	<!--/Deezer Logo -->
-
-	<script type="module" src="./main.ts"></script>
-
-</body>
-
+    <script type="module" src="./main.ts"></script>
+  </body>
 </html>

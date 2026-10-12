@@ -44,21 +44,14 @@ async function firefoxZip(extension: 'dzr-link' | 'dzr-tab' | 'music-bridge') {
 const options = new firefox.Options()
   .addArguments('-headless')
   .windowSize({ width: 1280, height: 800 })
-  .setPreference(
-    'extensions.webextensions.uuids',
-    JSON.stringify(Object.fromEntries(Object.values(UUIDS).map(({ id, uuid }) => [id, uuid]))),
-  )
+  .setPreference('extensions.webextensions.uuids', JSON.stringify(Object.fromEntries(Object.values(UUIDS).map(({ id, uuid }) => [id, uuid]))))
   // Let a page close a tab it opened itself (dzr-link closes the Deezer tab after redirecting)
   .setPreference('dom.allow_scripts_to_close_windows', true);
 options.setPageLoadStrategy('eager');
 
 // --allow-system-access lets the tests open a new tab through the browser UI (chrome context)
 const service = new firefox.ServiceBuilder().addArguments('--allow-system-access');
-const driver = await new webdriver.Builder()
-  .forBrowser('firefox')
-  .setFirefoxOptions(options)
-  .setFirefoxService(service)
-  .build();
+const driver = await new webdriver.Builder().forBrowser('firefox').setFirefoxOptions(options).setFirefoxService(service).build();
 const errors: string[] = [];
 await mkdir(OUTPUT_DIR, { recursive: true });
 
@@ -83,18 +76,15 @@ try {
     await driver.executeScript('(window.BrowserCommands?.openTab ?? window.BrowserOpenTab)()');
     await driver.setContext(firefox.Context.CONTENT);
     await driver.wait(async () => (await driver.getAllWindowHandles()).length > before.length, 10_000, 'no new tab opened');
-    await driver.switchTo().window((await driver.getAllWindowHandles()).find((handle) => !before.includes(handle))!);
+    await driver.switchTo().window((await driver.getAllWindowHandles()).find(handle => !before.includes(handle))!);
     const newTabUrl = `moz-extension://${UUIDS['dzr-tab'].uuid}/newtab.html`;
-    await driver.wait(async () => (await driver.getCurrentUrl()) === newTabUrl, 10_000).catch(async () => {
-      throw new Error(`the new tab is ${await driver.getCurrentUrl()}, expected ${newTabUrl}`);
-    });
+    await driver
+      .wait(async () => (await driver.getCurrentUrl()) === newTabUrl, 10_000)
+      .catch(async () => {
+        throw new Error(`the new tab is ${await driver.getCurrentUrl()}, expected ${newTabUrl}`);
+      });
     await driver.wait(
-      () =>
-        driver.executeScript(
-          () =>
-            !!document.querySelector('.track-title')?.textContent?.trim() &&
-            document.body.style.backgroundImage !== '',
-        ),
+      () => driver.executeScript(() => !!document.querySelector('.track-title')?.textContent?.trim() && document.body.style.backgroundImage !== ''),
       20_000,
       'no track or gradient after 20 s',
     );
@@ -114,7 +104,7 @@ try {
         .run(document, { runOnly: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'] })
         .then((result) => done(result.violations.map((v) => v.id + ': ' + v.help)), (error) => done(['axe failed: ' + error]));`,
     )) as string[];
-    errors.push(...violations.map((violation) => `dzr-tab: axe ${violation}`));
+    errors.push(...violations.map(violation => `dzr-tab: axe ${violation}`));
     await screenshot('dzr-tab');
   } catch (error) {
     errors.push(`dzr-tab: ${(error as Error).message}`);
@@ -127,7 +117,7 @@ try {
     const before = await driver.getAllWindowHandles();
     await driver.executeScript(() => window.open('https://www.deezer.com/fr/track/3135556', '_blank'));
     await driver.wait(async () => (await driver.getAllWindowHandles()).length > before.length, 10_000, 'the Deezer tab did not open');
-    const tab = (await driver.getAllWindowHandles()).find((handle) => !before.includes(handle))!;
+    const tab = (await driver.getAllWindowHandles()).find(handle => !before.includes(handle))!;
     await driver.switchTo().window(tab);
 
     let outcome = '';
@@ -159,7 +149,7 @@ try {
     const before = await driver.getAllWindowHandles();
     await driver.executeScript(() => window.open('https://tidal.com/track/491206012', '_blank'));
     await driver.wait(async () => (await driver.getAllWindowHandles()).length > before.length, 10_000, 'the Tidal tab did not open');
-    await driver.switchTo().window((await driver.getAllWindowHandles()).find((handle) => !before.includes(handle))!);
+    await driver.switchTo().window((await driver.getAllWindowHandles()).find(handle => !before.includes(handle))!);
 
     let outcome = '';
     await driver.wait(

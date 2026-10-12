@@ -32,5 +32,5 @@ export function showTrack(dzTrack: DeezerTrack) {
   setLink('.track-title', dzTrack.link, dzTrack.title);
   setLink('.track-artist', dzTrack.artist.link, dzTrack.artist.name);
   // Without a palette (cover unreachable or without colors), the page keeps its default colors
-  paintBackground(cover).catch((error) => console.warn('[Deezer Tab]', error));
+  paintBackground(cover).catch(error => console.warn('[Deezer Tab]', error));
 }
