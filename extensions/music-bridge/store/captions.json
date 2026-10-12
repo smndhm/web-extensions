@@ -1,0 +1,10 @@
+{
+  "screenshot-1280x800-en-light.png": {
+    "en": "Pick your streaming platform, and whether to open the music in its desktop app.",
+    "fr": "Choisissez votre plateforme de streaming, et si la musique s'ouvre dans son application de bureau."
+  },
+  "screenshot-1280x800-en-dark.png": {
+    "en": "The options page follows the light or dark theme of your system.",
+    "fr": "La page d'options suit le thème clair ou sombre de votre système."
+  }
+}
