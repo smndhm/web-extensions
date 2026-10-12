@@ -16,6 +16,8 @@ Monorepo of my browser extensions (WebExtensions), built with [WXT](https://wxt.
 
 Each extension lives in its own folder under `extensions/`, with its full Git history imported from its original repository.
 
+Code shared by several extensions lives in [`packages/shared`](packages/shared) (`@web-extensions/shared`): the Deezer link helpers and the common WXT configuration. It is bundled into each extension at build time and never published; its tests run with the others (`pnpm test`). It has no dependencies of its own, so that Renovate and Changesets never version it.
+
 ## Development
 
 ```sh

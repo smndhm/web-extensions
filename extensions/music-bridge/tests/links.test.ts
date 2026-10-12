@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { getDeezerDesktopUri, getSpotifyDesktopUri, isChromeOs } from '@/utils/links';
+import { getDeezerDesktopUri, getSpotifyDesktopUri, isChromeOS } from '@/utils/links';
 
-describe('isChromeOs', () => {
+describe('isChromeOS', () => {
   it.each([
     ['Mozilla/5.0 (X11; CrOS x86_64 10032.75.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.199 Safari/537.36', true],
     ['Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36', false],
     ['Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gecko/20100101 Firefox/58.0', false],
   ])('%s → %s', (userAgent, expected) => {
-    expect(isChromeOs(userAgent)).toBe(expected);
+    expect(isChromeOS(userAgent)).toBe(expected);
   });
 });
 
@@ -15,6 +15,7 @@ describe('getDeezerDesktopUri', () => {
   it.each([
     ['https://www.deezer.com/track/123', 'deezer://track/123'],
     ['https://www.deezer.com/fr/track/123', 'deezer://track/123'],
+    ['https://www.deezer.com/pt-br/track/123', 'deezer://track/123'],
     ['https://www.deezer.com/album/123', 'deezer://album/123'],
     ['https://www.deezer.com/fr/album/123', 'deezer://album/123'],
     ['https://www.deezer.com/fr/album/123?blu=blu', 'deezer://album/123'],

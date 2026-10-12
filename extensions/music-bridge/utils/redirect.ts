@@ -1,4 +1,4 @@
-import { getDeezerDesktopUri, getSpotifyDesktopUri, isChromeOs } from './links';
+import { getDeezerDesktopUri, getSpotifyDesktopUri, isChromeOS } from './links';
 import { isOnPlatform, platforms } from './platforms';
 import type { Settings } from './settings';
 
@@ -18,7 +18,7 @@ export function getRedirectUrl(
   userAgent: string,
 ): string | undefined {
   // There are no desktop apps on ChromeOS
-  const inApp = openInApp && platforms[platform].hasNativeAppLink === true && !isChromeOs(userAgent);
+  const inApp = openInApp && platforms[platform].hasNativeAppLink === true && !isChromeOS(userAgent);
   const onPlatform = isOnPlatform(href, platforms[platform]);
 
   if (onPlatform) {
