@@ -1,13 +1,15 @@
 /**
  * Takes store screenshots of the new tab page with real Deezer tracks.
  *
- * The tracks are the Deezer track IDs in TRACKS (comma separated), or else the top of the Deezer
- * chart. Each one is put alone in the extension's track cache before opening the new tab page, so
+ * The tracks are the Deezer track IDs in TRACKS (comma separated), else the first tracks of the
+ * Deezer playlist PLAYLIST (an ID, e.g. 1109890291 for Top France), else the top of the Deezer chart
+ * (the chart of the country the request comes from). Each one is put alone in the extension's track cache before opening the new tab page, so
  * the page shows it. Loads the Chrome build (.output/chrome-mv3) in Chromium and saves 1280×800
  * PNGs, the size the stores accept, to .output/screenshots/.
  *
  * Usage: pnpm build && pnpm screenshots [count]
  *        TRACKS=3135556,916424 pnpm screenshots
+ *        PLAYLIST=1109890291 pnpm screenshots 6
  * CHROMIUM_PATH can point to a Chromium binary other than the one Playwright installs.
  */
 
@@ -21,6 +23,7 @@ const OUTPUT_DIR = resolve(import.meta.dirname, '../.output/screenshots');
 const VIEWPORT = { width: 1280, height: 800 };
 const COUNT = Number(process.argv[2] || 5);
 const TRACK_IDS = (process.env.TRACKS ?? '').split(/[\s,]+/).filter(Boolean);
+const PLAYLIST = process.env.PLAYLIST?.trim();
 
 async function deezer<T>(path: string): Promise<T> {
   const response = await fetch(`https://api.deezer.com/${path}`);
@@ -29,10 +32,18 @@ async function deezer<T>(path: string): Promise<T> {
   return body;
 }
 
-// Without track IDs, take more chart tracks than needed: some covers yield no usable palette
+async function playlistTracks(id: string, limit: number): Promise<DeezerTrack[]> {
+  const { title } = await deezer<{ title: string }>(`playlist/${id}`);
+  console.log(`Playlist: ${title}`);
+  return (await deezer<{ data: DeezerTrack[] }>(`playlist/${id}/tracks?limit=${limit}`)).data;
+}
+
+// Without track IDs, take more tracks than needed: some covers yield no usable palette
 const tracks = TRACK_IDS.length
   ? await Promise.all(TRACK_IDS.map(id => deezer<DeezerTrack>(`track/${id}`)))
-  : (await deezer<{ data: DeezerTrack[] }>(`chart/0/tracks?limit=${COUNT * 2}`)).data;
+  : PLAYLIST
+    ? await playlistTracks(PLAYLIST, COUNT * 2)
+    : (await deezer<{ data: DeezerTrack[] }>(`chart/0/tracks?limit=${COUNT * 2}`)).data;
 const wanted = TRACK_IDS.length || COUNT;
 
 await rm(OUTPUT_DIR, { recursive: true, force: true });
