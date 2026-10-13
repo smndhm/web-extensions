@@ -2,11 +2,11 @@
 
 Monorepo of my browser extensions (WebExtensions), built with [WXT](https://wxt.dev) and pnpm workspaces.
 
-| Extension                               | Description                                                             |
-| --------------------------------------- | ----------------------------------------------------------------------- |
-| [dzr-link](extensions/dzr-link)         | Open Deezer links in the desktop app instead of the browser.            |
-| [dzr-tab](extensions/dzr-tab)           | Discover a Deezer track every time you open a new tab.                  |
-| [music-bridge](extensions/music-bridge) | Open any music link on your favorite streaming platform with one click. |
+| Extension                               | Name         | Description                                                            |
+| --------------------------------------- | ------------ | ---------------------------------------------------------------------- |
+| [dzr-link](extensions/dzr-link)         | Deezer Link  | Open Deezer links in the desktop app instead of the browser.           |
+| [dzr-tab](extensions/dzr-tab)           | Deezer Tab   | Discover a Deezer track every time you open a new tab.                 |
+| [music-bridge](extensions/music-bridge) | Music Bridge | Open any music link on your favorite streaming platform, in one click. |
 
 | Extension    | Chrome Web Store                                                                                                | addons.mozilla.org                                                                                                               | Microsoft Edge Add-ons                                                                                                   |
 | ------------ | --------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
