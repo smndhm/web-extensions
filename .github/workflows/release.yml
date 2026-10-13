@@ -43,6 +43,9 @@ jobs:
     if: needs.changesets.outputs.published == 'true'
     strategy:
       fail-fast: false
+      # One extension at a time: the stores, addons.mozilla.org first, throttle parallel submissions
+      # made with the same API key
+      max-parallel: 1
       matrix:
         package: ${{ fromJSON(needs.changesets.outputs.published-packages) }}
     permissions:
