@@ -136,6 +136,8 @@ function token(): string {
 }
 
 const THROTTLE_RETRIES = 3;
+// Longer waits mean AMO's hourly or daily limit: better fail and run again later than hold a runner
+const MAX_THROTTLE_WAIT = 120;
 
 async function amo<T>(method: string, url: string, body?: object | FormData, retries = THROTTLE_RETRIES): Promise<T> {
   const json = body !== undefined && !(body instanceof FormData);
@@ -148,6 +150,9 @@ async function amo<T>(method: string, url: string, body?: object | FormData, ret
   // AMO throttles the API right after a version upload: wait as long as it says, then try again
   if (response.status === 429 && retries > 0) {
     const seconds = Number(response.headers.get('Retry-After') ?? /available in (\d+) seconds/.exec(text)?.[1] ?? 60);
+    if (seconds > MAX_THROTTLE_WAIT) {
+      throw new Error(`AMO API throttled for ${Math.ceil(seconds / 60)} minutes: run again after ${new Date(Date.now() + seconds * 1000).toISOString()}`);
+    }
     console.log(`AMO API throttled: retrying in ${seconds + 1} s`);
     await new Promise(done => setTimeout(done, (seconds + 1) * 1000));
     return amo<T>(method, url, body, retries - 1);
