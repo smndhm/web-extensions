@@ -1,25 +1,25 @@
 {
-  "screenshot-1280x800-1.png": {
+  "screenshot-1280x800-en-1.png": {
     "en": "Every new tab shows a track from Deezer's top playlists.",
     "fr": "Chaque nouvel onglet affiche un titre des playlists phares de Deezer."
   },
-  "screenshot-1280x800-2.png": {
+  "screenshot-1280x800-en-2.png": {
     "en": "The background is made from the colors of the cover.",
     "fr": "Le fond est fait des couleurs de la pochette."
   },
-  "screenshot-1280x800-3.png": {
+  "screenshot-1280x800-en-3.png": {
     "en": "The text always stays readable: its contrast meets the WCAG accessibility guidelines.",
     "fr": "Le texte reste toujours lisible : son contraste respecte les règles d'accessibilité WCAG."
   },
-  "screenshot-1280x800-4.png": {
+  "screenshot-1280x800-en-4.png": {
     "en": "Click the cover, the title or the artist to open it on Deezer.",
     "fr": "Un clic sur la pochette, le titre ou l'artiste l'ouvre sur Deezer."
   },
-  "screenshot-1280x800-5.png": {
+  "screenshot-1280x800-en-5.png": {
     "en": "A different song every time you open a new tab.",
     "fr": "Une chanson différente à chaque nouvel onglet."
   },
-  "screenshot-1280x800-6.png": {
+  "screenshot-1280x800-en-6.png": {
     "en": "No account needed, and no tracking.",
     "fr": "Sans compte, et sans pistage."
   }
