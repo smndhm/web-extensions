@@ -4,5 +4,3 @@ Deezer Tab remplace la page du nouvel onglet par un titre des playlists phares d
 - Le texte reste toujours lisible : sa couleur et le fond sont choisis pour un contraste conforme aux règles d'accessibilité WCAG.
 - Les titres sont gardés en cache une heure : la page s'ouvre vite, même quand l'API ne répond pas.
 - Sans compte ni pistage : l'extension n'envoie aucune donnée à son développeur.
-
-Disponible en anglais et en français.

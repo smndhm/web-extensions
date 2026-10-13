@@ -1,4 +1,4 @@
-import { getDeezerAppUrl, isChromeOS } from '@web-extensions/shared/deezer';
+import { getDeezerAppUrl, isChromeOS } from '~shared/deezer';
 
 export default defineContentScript({
   matches: ['https://www.deezer.com/*'],
