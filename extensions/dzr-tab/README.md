@@ -2,7 +2,7 @@
 
 **Discover a Deezer track every time you open a new tab.**
 
-![Deezer Tab Preview](store/screenshot-1280x800-1.png)
+![Deezer Tab Preview](store/screenshot-1280x800-en-1.png)
 
 Available for:
 
