@@ -1,0 +1,1 @@
+No account or credentials needed. The Deezer desktop app must be installed (free, https://www.deezer.com/download) to see the redirect. Open a Deezer link in the browser, for example https://www.deezer.com/track/3135556: the extension opens it in the Deezer desktop app (deezer:// link). Without the desktop app, the browser shows its "open external application" prompt.

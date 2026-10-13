@@ -46,13 +46,7 @@ The long description, sent as is to addons.mozilla.org by `pnpm amo-listing` (so
 
 ## Notes for reviewers
 
-### English
-
-> No account or credentials needed. The Deezer desktop app must be installed (free, https://www.deezer.com/download) to see the redirect. Open a Deezer link in the browser, for example https://www.deezer.com/track/3135556: the extension opens it in the Deezer desktop app (deezer:// link). Without the desktop app, the browser shows its "open external application" prompt.
-
-### Français
-
-> Aucun compte ni identifiant nécessaire. L'application Deezer pour ordinateur doit être installée (gratuite, https://www.deezer.com/download) pour voir la redirection. Ouvrez un lien Deezer dans le navigateur, par exemple https://www.deezer.com/track/3135556 : l'extension l'ouvre dans l'application Deezer (lien deezer://). Sans l'application, le navigateur affiche sa demande « ouvrir une application externe ».
+In English, for the reviewers of every store: [`notes-for-reviewers.md`](notes-for-reviewers.md). The Publish workflow sends it to addons.mozilla.org with each version.
 
 ## Permissions (Chrome Web Store privacy practices)
 

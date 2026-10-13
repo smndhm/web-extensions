@@ -48,13 +48,7 @@ The Chrome Web Store takes up to 5 screenshots (leave out the 6th): the English 
 
 ## Notes for reviewers
 
-### English
-
-> No account or credentials needed. Open a new tab: the page shows a track from Deezer's public API (api.deezer.com, no key required) with its cover, title and artist, on a background made from the cover's colors. Clicking the cover, title or artist opens it on deezer.com.
-
-### Français
-
-> Aucun compte ni identifiant nécessaire. Ouvrez un nouvel onglet : la page affiche un titre de l'API publique de Deezer (api.deezer.com, sans clé) avec sa pochette, son titre et son artiste, sur un fond aux couleurs de la pochette. Un clic sur la pochette, le titre ou l'artiste l'ouvre sur deezer.com.
+In English, for the reviewers of every store: [`notes-for-reviewers.md`](notes-for-reviewers.md). The Publish workflow sends it to addons.mozilla.org with each version.
 
 ## Permissions (Chrome Web Store privacy practices)
 
