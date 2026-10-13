@@ -101,6 +101,7 @@ jobs:
 
       - name: Submit to the stores
         env:
+          EXTENSION: ${{ inputs.extension }}
           CHROME_API_VERSION: v2
           CHROME_EXTENSION_ID: ${{ vars.CHROME_EXTENSION_ID }}
           CHROME_PUBLISHER_ID: ${{ secrets.CHROME_PUBLISHER_ID }}
@@ -119,6 +120,9 @@ jobs:
           fi
           if [[ "$STORES" == *firefox* ]]; then
             args+=(--firefox-zip .output/*-firefox.zip --firefox-sources-zip .output/*-sources.zip)
+            # Notes for reviewers and release notes of the version
+            node ../../scripts/amo-listing.ts "$EXTENSION" --version-metadata .output/amo-version.json
+            args+=(--firefox-amo-metadata-file .output/amo-version.json)
           fi
           if [[ "$STORES" == *edge* ]]; then
             if [[ -n "$EDGE_PRODUCT_ID" ]]; then

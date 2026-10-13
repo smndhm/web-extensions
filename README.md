@@ -2,17 +2,17 @@
 
 Monorepo of my browser extensions (WebExtensions), built with [WXT](https://wxt.dev) and pnpm workspaces.
 
-| Extension                               | Description                                                             |
-| --------------------------------------- | ----------------------------------------------------------------------- |
-| [dzr-link](extensions/dzr-link)         | Open Deezer links in the desktop app instead of the browser.            |
-| [dzr-tab](extensions/dzr-tab)           | Discover a Deezer track every time you open a new tab.                  |
-| [music-bridge](extensions/music-bridge) | Open any music link on your favorite streaming platform with one click. |
+| Extension                               | Name         | Description                                                            |
+| --------------------------------------- | ------------ | ---------------------------------------------------------------------- |
+| [dzr-link](extensions/dzr-link)         | Deezer Link  | Open Deezer links in the desktop app instead of the browser.           |
+| [dzr-tab](extensions/dzr-tab)           | Deezer Tab   | Discover a Deezer track every time you open a new tab.                 |
+| [music-bridge](extensions/music-bridge) | Music Bridge | Open any music link on your favorite streaming platform, in one click. |
 
-| Extension    | Chrome Web Store                                                                                                | addons.mozilla.org                                                                                                               | Microsoft Edge Add-ons                                                                                                   |
-| ------------ | --------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| dzr-link     | [`depodknemkobjklhmpemeagnehojilng`](https://chromewebstore.google.com/detail/depodknemkobjklhmpemeagnehojilng) | [`{a1abd3a6-a241-401e-bac4-f7338abac0ad}`](https://addons.mozilla.org/firefox/addon/%7Ba1abd3a6-a241-401e-bac4-f7338abac0ad%7D/) | –                                                                                                                        |
-| dzr-tab      | [`meiclleccmfmheoplgelombebilpndea`](https://chromewebstore.google.com/detail/meiclleccmfmheoplgelombebilpndea) | [`{52114cbe-92a2-4828-8b44-109c35fbc0e7}`](https://addons.mozilla.org/firefox/addon/deezer-tab/)                                 | –                                                                                                                        |
-| music-bridge | [`mbebbcaajfmockkcflajghbambbimpck`](https://chromewebstore.google.com/detail/mbebbcaajfmockkcflajghbambbimpck) | [`{987b3f6c-05ca-4dc6-a140-38ce920051c7}`](https://addons.mozilla.org/firefox/addon/music-bridge/)                               | [`kfbedaeciahfjnknbjkcnjknkbdlcnld`](https://microsoftedge.microsoft.com/addons/detail/kfbedaeciahfjnknbjkcnjknkbdlcnld) |
+| Extension    | Chrome Web Store                                                                                                | addons.mozilla.org                                                                                                               | Microsoft Edge Add-ons                                                                                                              |
+| ------------ | --------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| dzr-link     | [`depodknemkobjklhmpemeagnehojilng`](https://chromewebstore.google.com/detail/depodknemkobjklhmpemeagnehojilng) | [`{a1abd3a6-a241-401e-bac4-f7338abac0ad}`](https://addons.mozilla.org/firefox/addon/%7Ba1abd3a6-a241-401e-bac4-f7338abac0ad%7D/) | [`ninmdmngfpladjdhbbdlbiclcadhcchl`](https://microsoftedge.microsoft.com/addons/detail/ninmdmngfpladjdhbbdlbiclcadhcchl)            |
+| dzr-tab      | [`meiclleccmfmheoplgelombebilpndea`](https://chromewebstore.google.com/detail/meiclleccmfmheoplgelombebilpndea) | [`{52114cbe-92a2-4828-8b44-109c35fbc0e7}`](https://addons.mozilla.org/firefox/addon/deezer-tab/)                                 | [`habblbkjnflamlbeejkenflhlfamjdpa`](https://microsoftedge.microsoft.com/addons/detail/deezer-tab/habblbkjnflamlbeejkenflhlfamjdpa) |
+| music-bridge | [`mbebbcaajfmockkcflajghbambbimpck`](https://chromewebstore.google.com/detail/mbebbcaajfmockkcflajghbambbimpck) | [`{987b3f6c-05ca-4dc6-a140-38ce920051c7}`](https://addons.mozilla.org/firefox/addon/music-bridge/)                               | [`kfbedaeciahfjnknbjkcnjknkbdlcnld`](https://microsoftedge.microsoft.com/addons/detail/kfbedaeciahfjnknbjkcnjknkbdlcnld)            |
 
 Each extension lives in its own folder under `extensions/`, with its full Git history imported from its original repository.
 
@@ -92,7 +92,7 @@ pnpm --filter dzr-tab screenshots   # -> extensions/dzr-tab/.output/screenshots
 Each extension's listing comes from the repository: its name and summary from `public/_locales`, its description from `store/description-<locale>.md`, its images from `store/` (see [Icons and store images](#icons-and-store-images)).
 
 - **addons.mozilla.org** is updated by `pnpm amo-listing <extension> [--images] [--dry-run]`, with the AMO API and the Firefox credentials of [Publishing](#publishing):
-  - the [Publish extension](.github/workflows/publish.yml) workflow updates the name, summary, description (in every language) and categories after each Firefox submission;
+  - the [Publish extension](.github/workflows/publish.yml) workflow submits each version with its notes for reviewers (`store/notes-for-reviewers.md`) and release notes (its `CHANGELOG.md` entry, without the dependency updates), then updates the name, summary, description (in every language), categories, homepage and privacy policy (`store/privacy-<locale>.md`, when there is one);
   - the [AMO listing](.github/workflows/amo-listing.yml) workflow (**Actions** tab) updates them on demand, and with **images** also replaces the icon and the screenshots (the English ones when they differ by language, since AMO shows the same ones in every language), with their captions in every language from `store/captions.json`, which also sets their order.
 - **Chrome Web Store** and **Microsoft Edge Add-ons** have no listing API: copy the texts of `store/README.md` and upload the images by hand, in their dashboards.
 
