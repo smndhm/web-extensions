@@ -17,8 +17,8 @@ Everything the store listings ask for, in one place, in every language of the ex
 
 ## Search terms
 
-- **EN**: Deezer, Deezer app, open in app, desktop app, music link, Deezer desktop, ouvrir dans l'application
-- **FR**: Deezer, application Deezer, ouvrir dans l'application, application de bureau, lien musique, Deezer bureau, open in app
+- **EN**: Deezer, Deezer app, open in app, desktop app, music link, Deezer desktop, Deezer links
+- **FR**: Deezer, application Deezer, ouvrir dans l'application, application de bureau, lien musique, Deezer bureau, liens Deezer
 
 ## Name and short description
 
