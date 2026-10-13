@@ -1,5 +1,11 @@
 # dzr-tab
 
+## 2.2.1
+
+### Patch Changes
+
+- a64a548: 128 px icon with transparent padding, as the Chrome Web Store asks.
+
 ## 2.2.0
 
 ### Minor Changes
