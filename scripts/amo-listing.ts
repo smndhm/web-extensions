@@ -3,24 +3,30 @@
  * (https://mozilla.github.io/addons-server/topics/api/addons.html#edit):
  * - name and summary: the name and description of each locale in public/_locales;
  * - description: store/description-<locale>.md;
- * - categories: AMO_CATEGORIES below;
+ * - categories: AMO_CATEGORIES below; homepage: the extension's folder on GitHub;
+ * - privacy policy: store/privacy-<locale>.md, when the extension has one;
  * - with --images, also the icon (public/icons/128.png) and the screenshots (store/screenshot-*.png,
  *   the English ones when they differ by language): they replace the listing's previews, with their captions
  *   from store/captions.json ({ "<file>": { "<locale>": "<caption>" } }).
  *
  * Usage: node scripts/amo-listing.ts <extension> [--images] [--dry-run]
+ *        node scripts/amo-listing.ts <extension> --version-metadata <file>
+ * --version-metadata writes, instead, the metadata of the version to submit for wxt submit's
+ * --firefox-amo-metadata-file: the notes for reviewers (store/notes-for-reviewers.md) and the release
+ * notes (the version's CHANGELOG.md entry, without the dependency updates).
  * Needs FIREFOX_EXTENSION_ID (the add-on ID), FIREFOX_JWT_ISSUER and FIREFOX_JWT_SECRET (the AMO API
  * key and secret, as for wxt submit), except with --dry-run, which only prints what would be sent.
  */
 
 import { createHmac, randomUUID } from 'node:crypto';
 import { existsSync } from 'node:fs';
-import { readdir, readFile } from 'node:fs/promises';
+import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { basename, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 
 const ROOT = resolve(import.meta.dirname, '..');
 const API = 'https://addons.mozilla.org/api/v5/addons/addon';
+const REPO = 'https://github.com/smndhm/web-extensions';
 const DEFAULT_LOCALE = 'en';
 
 // https://github.com/mozilla/addons-server/blob/master/src/olympia/constants/categories.py (up to 3)
@@ -32,14 +38,45 @@ const AMO_CATEGORIES: Record<string, string[]> = {
 
 const {
   positionals: [extension],
-  values: { images, 'dry-run': dryRun },
-} = parseArgs({ allowPositionals: true, options: { 'images': { type: 'boolean', default: false }, 'dry-run': { type: 'boolean', default: false } } });
+  values: { images, 'dry-run': dryRun, 'version-metadata': versionMetadata },
+} = parseArgs({
+  allowPositionals: true,
+  options: { 'images': { type: 'boolean', default: false }, 'dry-run': { type: 'boolean', default: false }, 'version-metadata': { type: 'string' } },
+});
 
 if (!extension || !AMO_CATEGORIES[extension]) {
   throw new Error(`Usage: node scripts/amo-listing.ts <${Object.keys(AMO_CATEGORIES).join('|')}> [--images] [--dry-run]`);
 }
 
 const dir = resolve(ROOT, 'extensions', extension);
+const readIfExists = async (file: string): Promise<string | undefined> => (existsSync(file) ? (await readFile(file, 'utf8')).trim() : undefined);
+
+/** The CHANGELOG.md entry of `version`, as a Markdown list, without the commit hashes and the dependency updates */
+function releaseNotes(changelog: string, version: string): string | undefined {
+  const entry = changelog.split(/^## /m).find(section => section.startsWith(`${version}\n`));
+  if (!entry) return undefined;
+  const items = entry
+    .split(/^- /m)
+    .slice(1)
+    .map(item =>
+      item
+        .replace(/^[0-9a-f]{7,}: /, '')
+        .replace(/^### .*$/m, '')
+        .trim(),
+    )
+    .filter(item => item && !item.startsWith('Updated dependency'));
+  return items.length ? items.map(item => `- ${item.replace(/\n\s*/g, ' ')}`).join('\n') : undefined;
+}
+
+if (versionMetadata) {
+  const { version } = JSON.parse(await readFile(resolve(dir, 'package.json'), 'utf8')) as { version: string };
+  const notes = releaseNotes((await readIfExists(resolve(dir, 'CHANGELOG.md'))) ?? '', version);
+  const approvalNotes = await readIfExists(resolve(dir, 'store/notes-for-reviewers.md'));
+  const metadata = { version: { ...(approvalNotes && { approval_notes: approvalNotes }), ...(notes && { release_notes: { 'en-US': notes } }) } };
+  await writeFile(resolve(versionMetadata), JSON.stringify(metadata, null, 2));
+  console.log(`${extension} ${version}: version metadata written to ${versionMetadata}\n${JSON.stringify(metadata, null, 2)}`);
+  process.exit(0);
+}
 
 /** AMO locale codes: en-US rather than en, pt-BR rather than pt_BR */
 const amoLocale = (locale: string): string => (locale === 'en' ? 'en-US' : locale.replace('_', '-'));
@@ -47,14 +84,17 @@ const amoLocale = (locale: string): string => (locale === 'en' ? 'en-US' : local
 const name: Record<string, string> = {};
 const summary: Record<string, string> = {};
 const description: Record<string, string> = {};
+const privacyPolicy: Record<string, string> = {};
 for (const locale of await readdir(resolve(dir, 'public/_locales'))) {
   const messages = JSON.parse(await readFile(resolve(dir, `public/_locales/${locale}/messages.json`), 'utf8')) as Record<string, { message: string }>;
   name[amoLocale(locale)] = messages.name!.message;
   summary[amoLocale(locale)] = messages.description!.message;
-  const file = resolve(dir, `store/description-${locale}.md`);
-  if (existsSync(file)) description[amoLocale(locale)] = (await readFile(file, 'utf8')).trim();
+  const text = await readIfExists(resolve(dir, `store/description-${locale}.md`));
+  if (text) description[amoLocale(locale)] = text;
+  const privacy = await readIfExists(resolve(dir, `store/privacy-${locale}.md`));
+  if (privacy) privacyPolicy[amoLocale(locale)] = privacy;
 }
-const listing = { name, summary, description, categories: AMO_CATEGORIES[extension] };
+const listing = { name, summary, description, categories: AMO_CATEGORIES[extension], homepage: { 'en-US': `${REPO}/tree/main/extensions/${extension}` } };
 
 const icon = resolve(dir, 'public/icons/128.png');
 const allScreenshots = (await readdir(resolve(dir, 'store'))).filter(file => /^screenshot-.*\.png$/.test(file)).toSorted();
@@ -76,6 +116,7 @@ for (const file of screenshots) if (!captionOf(file)) console.warn(`${extension}
 
 if (dryRun) {
   console.log(JSON.stringify(listing, null, 2));
+  if (Object.keys(privacyPolicy).length) console.log(JSON.stringify({ privacy_policy: privacyPolicy }, null, 2));
   if (images)
     console.log(`Icon: ${icon}\nPreviews (replacing the current ones):\n${screenshots.map(file => `- ${file} ${JSON.stringify(captionOf(file) ?? {})}`).join('\n') || '- none'}`);
   process.exit(0);
@@ -123,7 +164,11 @@ const imageForm = async (field: string, file: string, extra: Record<string, stri
 };
 
 await amo('PATCH', addonUrl, listing);
-console.log(`${extension}: name, summary, description and categories updated (${Object.keys(name).join(', ')})`);
+console.log(`${extension}: name, summary, description, categories and homepage updated (${Object.keys(name).join(', ')})`);
+if (Object.keys(privacyPolicy).length) {
+  await amo('PATCH', `${addonUrl}eula_policy/`, { privacy_policy: privacyPolicy });
+  console.log(`${extension}: privacy policy updated`);
+}
 
 if (images) {
   await amo('PATCH', addonUrl, await imageForm('icon', icon));

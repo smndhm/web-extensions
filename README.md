@@ -92,7 +92,7 @@ pnpm --filter dzr-tab screenshots   # -> extensions/dzr-tab/.output/screenshots
 Each extension's listing comes from the repository: its name and summary from `public/_locales`, its description from `store/description-<locale>.md`, its images from `store/` (see [Icons and store images](#icons-and-store-images)).
 
 - **addons.mozilla.org** is updated by `pnpm amo-listing <extension> [--images] [--dry-run]`, with the AMO API and the Firefox credentials of [Publishing](#publishing):
-  - the [Publish extension](.github/workflows/publish.yml) workflow updates the name, summary, description (in every language) and categories after each Firefox submission;
+  - the [Publish extension](.github/workflows/publish.yml) workflow submits each version with its notes for reviewers (`store/notes-for-reviewers.md`) and release notes (its `CHANGELOG.md` entry, without the dependency updates), then updates the name, summary, description (in every language), categories, homepage and privacy policy (`store/privacy-<locale>.md`, when there is one);
   - the [AMO listing](.github/workflows/amo-listing.yml) workflow (**Actions** tab) updates them on demand, and with **images** also replaces the icon and the screenshots (the English ones when they differ by language, since AMO shows the same ones in every language), with their captions in every language from `store/captions.json`, which also sets their order.
 - **Chrome Web Store** and **Microsoft Edge Add-ons** have no listing API: copy the texts of `store/README.md` and upload the images by hand, in their dashboards.
 

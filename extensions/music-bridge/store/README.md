@@ -53,13 +53,7 @@ Chrome Web Store: the English screenshots go to the international assets, the Fr
 
 ## Notes for reviewers
 
-### English
-
-> No account or credentials needed. Pick a streaming platform in the extension options (Deezer, for example). Then open a music link from another platform, for example https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC: the extension redirects to the same track on the chosen platform, through the music-bridge-redirect service (Odesli API). "Open in desktop app" needs that platform's desktop app installed.
-
-### Français
-
-> Aucun compte ni identifiant nécessaire. Choisissez une plateforme de streaming dans les options de l'extension (Deezer, par exemple). Ouvrez ensuite le lien d'un titre d'une autre plateforme, par exemple https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC : l'extension redirige vers le même titre sur la plateforme choisie, via le service music-bridge-redirect (API Odesli). « Ouvrir dans l'application » nécessite l'application de bureau de cette plateforme.
+In English, for the reviewers of every store: [`notes-for-reviewers.md`](notes-for-reviewers.md). The Publish workflow sends it to addons.mozilla.org with each version.
 
 ## Permissions (Chrome Web Store privacy practices)
 
@@ -77,10 +71,4 @@ Chrome Web Store: the English screenshots go to the international assets, the Fr
 
 ## Privacy
 
-### English
-
-The link of the music page is sent to the redirect service (https://music-bridge-redirect.smndhm.workers.dev/), which looks it up with the Odesli API. Nothing else is collected; the settings stay in the browser. Firefox: `data_collection_permissions: browsingActivity`.
-
-### Français
-
-L'adresse de la page du titre ou de l'album est envoyée au service de redirection (https://music-bridge-redirect.smndhm.workers.dev/), qui retrouve la musique avec l'API Odesli. Rien d'autre n'est collecté ; les réglages restent dans le navigateur. Firefox : `data_collection_permissions: browsingActivity`.
+The privacy policy, sent to addons.mozilla.org by `pnpm amo-listing`, and to paste in the other stores' privacy policy fields: [`privacy-en.md`](privacy-en.md), [`privacy-fr.md`](privacy-fr.md). Firefox manifest: `data_collection_permissions: browsingActivity`.
