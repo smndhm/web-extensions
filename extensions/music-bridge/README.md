@@ -45,6 +45,7 @@ pnpm --filter music-bridge dev           # Chrome
 pnpm --filter music-bridge dev:firefox   # Firefox
 pnpm --filter music-bridge test          # unit tests
 pnpm --filter music-bridge build && pnpm --filter music-bridge screenshots   # store screenshots
+pnpm --filter music-bridge build && pnpm --filter music-bridge a11y          # accessibility checks
 ```
 
 Store listing texts, search terms, notes for reviewers and images: [store/README.md](store/README.md).
