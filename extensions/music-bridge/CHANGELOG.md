@@ -1,5 +1,11 @@
 # music-bridge
 
+## 1.7.1
+
+### Patch Changes
+
+- a64a548: 128 px icon with transparent padding, as the Chrome Web Store asks.
+
 ## 1.7.0
 
 ### Minor Changes

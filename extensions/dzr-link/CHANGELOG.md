@@ -1,5 +1,13 @@
 # dzr-link
 
+## 1.4.1
+
+### Patch Changes
+
+- 10e72ab: Shorter description, with fewer repetitions of Deezer.
+- d49cd24: Renamed to Deezer Link, in every language.
+- a64a548: 128 px icon with transparent padding, as the Chrome Web Store asks.
+
 ## 1.4.0
 
 ### Minor Changes
