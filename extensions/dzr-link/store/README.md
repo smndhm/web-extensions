@@ -8,7 +8,7 @@ Everything the store listings ask for, in one place, in every language of the ex
 | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | Chrome Web Store       | [`depodknemkobjklhmpemeagnehojilng`](https://chromewebstore.google.com/detail/depodknemkobjklhmpemeagnehojilng)                  |
 | addons.mozilla.org     | [`{a1abd3a6-a241-401e-bac4-f7338abac0ad}`](https://addons.mozilla.org/firefox/addon/%7Ba1abd3a6-a241-401e-bac4-f7338abac0ad%7D/) |
-| Microsoft Edge Add-ons | –                                                                                                                                |
+| Microsoft Edge Add-ons | [`ninmdmngfpladjdhbbdlbiclcadhcchl`](https://microsoftedge.microsoft.com/addons/detail/ninmdmngfpladjdhbbdlbiclcadhcchl)         |
 
 ## Category
 

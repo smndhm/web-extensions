@@ -8,6 +8,7 @@ Available for:
 
 - [Chrome](https://chromewebstore.google.com/detail/meiclleccmfmheoplgelombebilpndea)
 - [Firefox](https://addons.mozilla.org/firefox/addon/deezer-tab/)
+- [Edge](https://microsoftedge.microsoft.com/addons/detail/deezer-tab/habblbkjnflamlbeejkenflhlfamjdpa)
 
 ## How it works
 

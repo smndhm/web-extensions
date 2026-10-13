@@ -4,11 +4,11 @@ Everything the store listings ask for, in one place, in every language of the ex
 
 ## Stores
 
-| Store                  | Listing                                                                                                         |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------- |
-| Chrome Web Store       | [`meiclleccmfmheoplgelombebilpndea`](https://chromewebstore.google.com/detail/meiclleccmfmheoplgelombebilpndea) |
-| addons.mozilla.org     | [`deezer-tab`](https://addons.mozilla.org/firefox/addon/deezer-tab/)                                            |
-| Microsoft Edge Add-ons | –                                                                                                               |
+| Store                  | Listing                                                                                                                             |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Chrome Web Store       | [`meiclleccmfmheoplgelombebilpndea`](https://chromewebstore.google.com/detail/meiclleccmfmheoplgelombebilpndea)                     |
+| addons.mozilla.org     | [`deezer-tab`](https://addons.mozilla.org/firefox/addon/deezer-tab/)                                                                |
+| Microsoft Edge Add-ons | [`habblbkjnflamlbeejkenflhlfamjdpa`](https://microsoftedge.microsoft.com/addons/detail/deezer-tab/habblbkjnflamlbeejkenflhlfamjdpa) |
 
 ## Category
 
