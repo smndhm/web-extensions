@@ -142,8 +142,9 @@ jobs:
 
       # The listing texts (name, summary, description, categories) follow the released version.
       # The images change less often: the AMO listing workflow replaces them on demand.
+      # Also when another store refused the version (a Chrome review still pending, for example)
       - name: Update the addons.mozilla.org listing
-        if: contains(inputs.stores, 'firefox')
+        if: ${{ !cancelled() && contains(inputs.stores, 'firefox') }}
         env:
           EXTENSION: ${{ inputs.extension }}
           FIREFOX_EXTENSION_ID: ${{ vars.FIREFOX_EXTENSION_ID }}
