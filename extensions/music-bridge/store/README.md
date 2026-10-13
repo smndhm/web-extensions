@@ -29,18 +29,15 @@ The manifest takes them from [`public/_locales`](../public/_locales).
 
 ## Description
 
-The long description, sent as is to addons.mozilla.org by `pnpm amo-listing` (some Markdown: lists, bold, links), and to paste in the other stores:
+The long description, sent as is to addons.mozilla.org by `pnpm amo-listing` (some Markdown: lists, bold, links), and to paste in Microsoft Edge Add-ons:
 
 - English: [`description-en.md`](description-en.md)
 - Français : [`description-fr.md`](description-fr.md)
 
-**Chrome Web Store**: the listing may not name more than 5 other brands, so replace the first item of its list with:
+**Chrome Web Store**: its spam policy limits lists of other brands, so its listing has its own description, with 5 third-party names at most (Spotify, Apple Music, Deezer, YouTube Music, Odesli):
 
-> Works with the major music streaming platforms (Apple Music, Spotify, Deezer, YouTube Music, Amazon Music, etc.).
-
-**Chrome Web Store** : la fiche ne peut pas citer plus de 5 autres marques, remplacer le premier point de sa liste par :
-
-> Fonctionne avec les principales plateformes de streaming musical (Apple Music, Spotify, Deezer, YouTube Music, Amazon Music, etc.).
+- English: [`description-chrome-en.md`](description-chrome-en.md)
+- Français : [`description-chrome-fr.md`](description-chrome-fr.md)
 
 ## Images
 
