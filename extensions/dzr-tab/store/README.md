@@ -17,8 +17,8 @@ Everything the store listings ask for, in one place, in every language of the ex
 
 ## Search terms
 
-- **EN**: Deezer, new tab, music discovery, new tab music, album cover, music charts, nouvel onglet
-- **FR**: Deezer, nouvel onglet, découverte musicale, musique nouvel onglet, pochette d'album, classement musical, new tab
+- **EN**: Deezer, new tab, music discovery, new tab music, album cover, music charts, top hits
+- **FR**: Deezer, nouvel onglet, découverte musicale, musique nouvel onglet, pochette d'album, classement musical, top titres
 
 ## Name and short description
 
