@@ -11,12 +11,17 @@ on:
           - dzr-tab
           - music-bridge
       count:
-        description: 'dzr-tab: number of screenshots, from the top of the Deezer chart'
+        description: 'dzr-tab: number of screenshots, from the playlist'
         required: true
         type: number
         default: 5
+      playlist:
+        description: 'dzr-tab: Deezer playlist ID to take the tracks from (deezer.com/playlist/<ID>), 1109890291 is Top France; empty for the chart seen from GitHub (US)'
+        required: false
+        type: string
+        default: '1109890291'
       tracks:
-        description: 'dzr-tab: Deezer track IDs instead of the chart, comma separated (deezer.com/track/<ID>)'
+        description: 'dzr-tab: Deezer track IDs instead of the playlist, comma separated (deezer.com/track/<ID>)'
         required: false
         type: string
       commit:
@@ -52,6 +57,7 @@ jobs:
         env:
           COUNT: ${{ inputs.count }}
           TRACKS: ${{ inputs.tracks }}
+          PLAYLIST: ${{ inputs.playlist }}
         run: pnpm screenshots "$COUNT"
 
       - name: Upload screenshots
