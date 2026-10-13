@@ -1,6 +1,6 @@
 {
   "name": "dzr-link",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Open Deezer links in the desktop app instead of the browser.",
   "private": true,
   "type": "module",
