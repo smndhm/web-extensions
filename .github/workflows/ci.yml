@@ -42,11 +42,16 @@ jobs:
         run: pnpm lint:firefox
 
   a11y:
-    name: Accessibility (dzr-tab)
+    name: Accessibility (${{ matrix.extension }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # The extensions with a page: dzr-tab's new tab, music-bridge's options
+        extension: [dzr-tab, music-bridge]
     defaults:
       run:
-        working-directory: extensions/dzr-tab
+        working-directory: extensions/${{ matrix.extension }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
