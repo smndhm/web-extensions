@@ -1,6 +1,5 @@
 packages:
   - extensions/*
-  - packages/*
 
 # Dependencies allowed to run their install scripts (pnpm fails on the ones not listed)
 allowBuilds:

@@ -16,7 +16,7 @@ Monorepo of my browser extensions (WebExtensions), built with [WXT](https://wxt.
 
 Each extension lives in its own folder under `extensions/`, with its full Git history imported from its original repository.
 
-Code shared by several extensions lives in [`packages/shared`](packages/shared) (`@web-extensions/shared`): the Deezer link helpers and the common WXT configuration. It is bundled into each extension at build time and never published; its tests run with the others (`pnpm test`). It has no dependencies of its own, so that Renovate and Changesets never version it.
+Code shared by several extensions lives in [`shared/`](shared), a plain folder outside the pnpm workspace: the Deezer link helpers and the common WXT configuration. The extensions import it as `~shared/<module>` (an alias set in each `wxt.config.ts`), so it is bundled into each of them at build time; it is never published, and Changesets and Renovate don't see it. Its tests run with the others (`pnpm test`).
 
 ## Development
 
@@ -57,7 +57,7 @@ Every extension has the same images, rendered from one source icon by `pnpm stor
 - `public/icons/{16,32,48,128}.png`: the manifest icons. The 128 px one, also the store icon, has 96 px of artwork and 16 px of transparent padding, as the Chrome Web Store asks;
 - `store/logo-300x300.png`, and `store/promo-440x280-<locale>.png` and `store/promo-1400x560-<locale>.png` for each locale of `public/_locales`: the store listing images, named after their type and size, with the extension's name and description in that language.
 
-The Deezer extensions use the Deezer heart, [`packages/shared/assets/deezer-heart.svg`](packages/shared/assets/deezer-heart.svg). Music Bridge has no vector icon yet: its images come from its original 128 px icon, [`extensions/music-bridge/assets/icon.png`](extensions/music-bridge/assets/icon.png), so its 300 px logo and large tile are blurry.
+The Deezer extensions use the Deezer heart, [`shared/assets/deezer-heart.svg`](shared/assets/deezer-heart.svg). Music Bridge has no vector icon yet: its images come from its original 128 px icon, [`extensions/music-bridge/assets/icon.png`](extensions/music-bridge/assets/icon.png), so its 300 px logo and large tile are blurry.
 
 ### Store formats
 

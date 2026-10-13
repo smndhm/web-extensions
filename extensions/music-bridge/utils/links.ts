@@ -1,6 +1,6 @@
-import { getDeezerPath } from '@web-extensions/shared/deezer';
+import { getDeezerPath } from '~shared/deezer';
 
-export { isChromeOS } from '@web-extensions/shared/deezer';
+export { isChromeOS } from '~shared/deezer';
 
 export const getDeezerDesktopUri = (url: string): string | undefined => {
   const match = /^(track|album)\/(\d+)/.exec(getDeezerPath(url) ?? '');

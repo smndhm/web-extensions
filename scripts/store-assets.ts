@@ -18,7 +18,7 @@ const ROOT = resolve(import.meta.dirname, '..');
 // Playwright is a dependency of the extensions with browser scripts
 const { chromium } = createRequire(resolve(ROOT, 'extensions/dzr-tab/package.json'))('playwright') as typeof import('playwright');
 
-const DEEZER_HEART = 'packages/shared/assets/deezer-heart.svg';
+const DEEZER_HEART = 'shared/assets/deezer-heart.svg';
 const SOURCES: Record<string, { source: string; size: number }> = {
   'dzr-link': { source: DEEZER_HEART, size: Infinity },
   'dzr-tab': { source: DEEZER_HEART, size: Infinity },
