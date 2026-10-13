@@ -1,11 +1,14 @@
 /**
- * WXT configuration shared by the extensions. Plain objects, so that this package needs no
- * dependency: wxt.config.ts type checks them with defineConfig.
+ * WXT configuration shared by the extensions. Plain objects, so that shared/ needs no dependency:
+ * wxt.config.ts type checks them with defineConfig.
  */
+
+/** `~shared/<module>` imports shared/<module>.ts (WXT resolves alias paths from the extension's root) */
+export const sharedAlias = { '~shared': '../../shared' };
 
 /**
  * Firefox reviewers rebuild the extension from the sources zip: ship the whole workspace (root
- * package.json, lockfile, shared packages) but only this extension.
+ * package.json, lockfile, shared/) but only this extension.
  */
 export const sourcesZip = (extension: string) => ({
   sourcesRoot: '../..',

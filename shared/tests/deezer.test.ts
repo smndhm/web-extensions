@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getDeezerAppUrl, getDeezerPath, isChromeOS } from '../src/deezer';
+import { getDeezerAppUrl, getDeezerPath, isChromeOS } from '../deezer';
 
 describe('getDeezerPath', () => {
   it.each([

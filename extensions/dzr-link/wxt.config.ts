@@ -1,7 +1,8 @@
-import { firefoxSettings, icons, sourcesZip } from '@web-extensions/shared/wxt';
+import { firefoxSettings, icons, sharedAlias, sourcesZip } from '../../shared/wxt';
 import { defineConfig } from 'wxt';
 
 export default defineConfig({
+  alias: sharedAlias,
   zip: sourcesZip('dzr-link'),
   manifest: ({ browser }) => ({
     name: '__MSG_name__',
