@@ -4,11 +4,11 @@ Everything the store listings ask for, in one place, in every language of the ex
 
 ## Stores
 
-| Store                  | Listing                                                                                                         |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------- |
-| Chrome Web Store       | [`meiclleccmfmheoplgelombebilpndea`](https://chromewebstore.google.com/detail/meiclleccmfmheoplgelombebilpndea) |
-| addons.mozilla.org     | [`deezer-tab`](https://addons.mozilla.org/firefox/addon/deezer-tab/)                                            |
-| Microsoft Edge Add-ons | –                                                                                                               |
+| Store                  | Listing                                                                                                                             |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Chrome Web Store       | [`meiclleccmfmheoplgelombebilpndea`](https://chromewebstore.google.com/detail/meiclleccmfmheoplgelombebilpndea)                     |
+| addons.mozilla.org     | [`deezer-tab`](https://addons.mozilla.org/firefox/addon/deezer-tab/)                                                                |
+| Microsoft Edge Add-ons | [`habblbkjnflamlbeejkenflhlfamjdpa`](https://microsoftedge.microsoft.com/addons/detail/deezer-tab/habblbkjnflamlbeejkenflhlfamjdpa) |
 
 ## Category
 
@@ -17,8 +17,8 @@ Everything the store listings ask for, in one place, in every language of the ex
 
 ## Search terms
 
-- **EN**: Deezer, new tab, music discovery, new tab music, album cover, music charts, nouvel onglet
-- **FR**: Deezer, nouvel onglet, découverte musicale, musique nouvel onglet, pochette d'album, classement musical, new tab
+- **EN**: Deezer, new tab, music discovery, new tab music, album cover, music charts, top hits
+- **FR**: Deezer, nouvel onglet, découverte musicale, musique nouvel onglet, pochette d'album, classement musical, top titres
 
 ## Name and short description
 
@@ -48,13 +48,7 @@ The Chrome Web Store takes up to 5 screenshots (leave out the 6th): the English 
 
 ## Notes for reviewers
 
-### English
-
-> No account or credentials needed. Open a new tab: the page shows a track from Deezer's public API (api.deezer.com, no key required) with its cover, title and artist, on a background made from the cover's colors. Clicking the cover, title or artist opens it on deezer.com.
-
-### Français
-
-> Aucun compte ni identifiant nécessaire. Ouvrez un nouvel onglet : la page affiche un titre de l'API publique de Deezer (api.deezer.com, sans clé) avec sa pochette, son titre et son artiste, sur un fond aux couleurs de la pochette. Un clic sur la pochette, le titre ou l'artiste l'ouvre sur deezer.com.
+In English, for the reviewers of every store: [`notes-for-reviewers.md`](notes-for-reviewers.md). The Publish workflow sends it to addons.mozilla.org with each version.
 
 ## Permissions (Chrome Web Store privacy practices)
 

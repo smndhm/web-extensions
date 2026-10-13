@@ -6,6 +6,7 @@ Available for:
 
 - [Chrome](https://chromewebstore.google.com/detail/depodknemkobjklhmpemeagnehojilng)
 - [Firefox](https://addons.mozilla.org/firefox/addon/%7Ba1abd3a6-a241-401e-bac4-f7338abac0ad%7D/)
+- [Edge](https://microsoftedge.microsoft.com/addons/detail/ninmdmngfpladjdhbbdlbiclcadhcchl)
 
 ## How it works
 

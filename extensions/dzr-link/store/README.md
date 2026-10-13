@@ -8,7 +8,7 @@ Everything the store listings ask for, in one place, in every language of the ex
 | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | Chrome Web Store       | [`depodknemkobjklhmpemeagnehojilng`](https://chromewebstore.google.com/detail/depodknemkobjklhmpemeagnehojilng)                  |
 | addons.mozilla.org     | [`{a1abd3a6-a241-401e-bac4-f7338abac0ad}`](https://addons.mozilla.org/firefox/addon/%7Ba1abd3a6-a241-401e-bac4-f7338abac0ad%7D/) |
-| Microsoft Edge Add-ons | –                                                                                                                                |
+| Microsoft Edge Add-ons | [`ninmdmngfpladjdhbbdlbiclcadhcchl`](https://microsoftedge.microsoft.com/addons/detail/ninmdmngfpladjdhbbdlbiclcadhcchl)         |
 
 ## Category
 
@@ -17,8 +17,8 @@ Everything the store listings ask for, in one place, in every language of the ex
 
 ## Search terms
 
-- **EN**: Deezer, Deezer app, open in app, desktop app, music link, Deezer desktop, ouvrir dans l'application
-- **FR**: Deezer, application Deezer, ouvrir dans l'application, application de bureau, lien musique, Deezer bureau, open in app
+- **EN**: Deezer, Deezer app, open in app, desktop app, music link, Deezer desktop, Deezer links
+- **FR**: Deezer, application Deezer, ouvrir dans l'application, application de bureau, lien musique, Deezer bureau, liens Deezer
 
 ## Name and short description
 
@@ -46,13 +46,7 @@ The long description, sent as is to addons.mozilla.org by `pnpm amo-listing` (so
 
 ## Notes for reviewers
 
-### English
-
-> No account or credentials needed. The Deezer desktop app must be installed (free, https://www.deezer.com/download) to see the redirect. Open a Deezer link in the browser, for example https://www.deezer.com/track/3135556: the extension opens it in the Deezer desktop app (deezer:// link). Without the desktop app, the browser shows its "open external application" prompt.
-
-### Français
-
-> Aucun compte ni identifiant nécessaire. L'application Deezer pour ordinateur doit être installée (gratuite, https://www.deezer.com/download) pour voir la redirection. Ouvrez un lien Deezer dans le navigateur, par exemple https://www.deezer.com/track/3135556 : l'extension l'ouvre dans l'application Deezer (lien deezer://). Sans l'application, le navigateur affiche sa demande « ouvrir une application externe ».
+In English, for the reviewers of every store: [`notes-for-reviewers.md`](notes-for-reviewers.md). The Publish workflow sends it to addons.mozilla.org with each version.
 
 ## Permissions (Chrome Web Store privacy practices)
 
