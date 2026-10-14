@@ -51,8 +51,8 @@ jobs:
       - name: Build for Chrome
         run: pnpm build
 
-      # dzr-tab: the new tab page with real Deezer tracks; music-bridge: the options page in English and
-      # French, light and dark
+      # dzr-tab: the new tab page with real Deezer tracks; music-bridge: composed visuals in English and
+      # French, with covers from the Deezer API
       - name: Take screenshots
         env:
           COUNT: ${{ inputs.count }}

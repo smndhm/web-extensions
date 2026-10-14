@@ -41,13 +41,13 @@ The long description, sent as is to addons.mozilla.org by `pnpm amo-listing` (so
 
 ## Images
 
-| Image                         | English                                                       | Français                                                         |
-| ----------------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------- |
-| Store icon (128×128)          | [`../public/icons/128.png`](../public/icons/128.png)          | [`../public/icons/128.png`](../public/icons/128.png)             |
-| Logo (300×300)                | [`logo-300x300.png`](logo-300x300.png)                        | [`logo-300x300.png`](logo-300x300.png)                           |
-| Small promo tile (440×280)    | [`promo-440x280-en.png`](promo-440x280-en.png)                | [`promo-440x280-fr.png`](promo-440x280-fr.png)                   |
-| Marquee promo tile (1400×560) | [`promo-1400x560-en.png`](promo-1400x560-en.png)              | [`promo-1400x560-fr.png`](promo-1400x560-fr.png)                 |
-| Screenshots (1280×800)        | `screenshot-1280x800-en-*.png` (options page, light and dark) | `screenshot-1280x800-fr-*.png` (page d'options, clair et sombre) |
+| Image                         | English                                                                                | Français                                                                                            |
+| ----------------------------- | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| Store icon (128×128)          | [`../public/icons/128.png`](../public/icons/128.png)                                   | [`../public/icons/128.png`](../public/icons/128.png)                                                |
+| Logo (300×300)                | [`logo-300x300.png`](logo-300x300.png)                                                 | [`logo-300x300.png`](logo-300x300.png)                                                              |
+| Small promo tile (440×280)    | [`promo-440x280-en.png`](promo-440x280-en.png)                                         | [`promo-440x280-fr.png`](promo-440x280-fr.png)                                                      |
+| Marquee promo tile (1400×560) | [`promo-1400x560-en.png`](promo-1400x560-en.png)                                       | [`promo-1400x560-fr.png`](promo-1400x560-fr.png)                                                    |
+| Screenshots (1280×800)        | `screenshot-1280x800-en-{1,2}.png` (link opened on your platform, supported platforms) | `screenshot-1280x800-fr-{1,2}.png` (lien ouvert sur votre plateforme, plateformes prises en charge) |
 
 Chrome Web Store: the English screenshots go to the international assets, the French ones to the French localized assets.
 
