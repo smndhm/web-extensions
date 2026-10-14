@@ -1,10 +1,10 @@
 {
-  "screenshot-1280x800-en-light.png": {
-    "en": "Pick your streaming platform, and whether to open the music in its desktop app.",
-    "fr": "Choisissez votre plateforme de streaming, et si la musique s'ouvre dans son application de bureau."
+  "screenshot-1280x800-en-1.png": {
+    "en": "A track or album link from another platform opens on yours.",
+    "fr": "Un lien de titre ou d'album d'une autre plateforme s'ouvre sur la vôtre."
   },
-  "screenshot-1280x800-en-dark.png": {
-    "en": "The options page follows the light or dark theme of your system.",
-    "fr": "La page d'options suit le thème clair ou sombre de votre système."
+  "screenshot-1280x800-en-2.png": {
+    "en": "Links from Amazon Music, Apple Music, Deezer, Pandora, Spotify, Tidal and YouTube Music open on any of them, or on SoundCloud and YouTube.",
+    "fr": "Les liens d'Amazon Music, Apple Music, Deezer, Pandora, Spotify, Tidal et YouTube Music s'ouvrent sur n'importe laquelle d'entre elles, ou sur SoundCloud et YouTube."
   }
 }
