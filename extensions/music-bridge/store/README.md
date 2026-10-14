@@ -55,6 +55,11 @@ Chrome Web Store: the English screenshots go to the international assets, the Fr
 
 In English, for the reviewers of every store: [`notes-for-reviewers.md`](notes-for-reviewers.md). The Publish workflow sends it to addons.mozilla.org with each version.
 
+## Single purpose (Chrome Web Store and Edge Add-ons)
+
+- English: Open track and album links from one streaming platform on the platform the user chose, such as a Spotify link on Deezer.
+- Français : Ouvrir les liens de titres et d'albums d'une plateforme de streaming sur la plateforme choisie par l'utilisateur, par exemple un lien Spotify sur Deezer.
+
 ## Permissions (Chrome Web Store privacy practices)
 
 ### English
