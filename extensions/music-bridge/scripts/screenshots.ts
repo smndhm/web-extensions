@@ -26,7 +26,8 @@ const VIEWPORT = { width: 1280, height: 800 };
 // Bricolage Grotesque (SIL Open Font License), as on the promotional tiles (scripts/store-assets.ts)
 const FONT = 'node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2';
 
-const PLATFORMS = ['Amazon Music', 'Apple Music', 'Deezer', 'Pandora', 'Spotify', 'Tidal', 'YouTube Music', 'SoundCloud', 'YouTube'];
+// Roughly by audience, largest first
+const PLATFORMS = ['Spotify', 'YouTube Music', 'Apple Music', 'Amazon Music', 'YouTube', 'SoundCloud', 'Deezer', 'Tidal', 'Pandora'];
 
 const TEXTS: Record<string, { question: string; answer: string; platforms: string }> = {
   en: { question: 'A Spotify link?', answer: 'Opened on Deezer.', platforms: 'All your tracks and albums,<br>on the platform you choose' },
