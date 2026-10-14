@@ -48,6 +48,11 @@ The long description, sent as is to addons.mozilla.org by `pnpm amo-listing` (so
 
 In English, for the reviewers of every store: [`notes-for-reviewers.md`](notes-for-reviewers.md). The Publish workflow sends it to addons.mozilla.org with each version.
 
+## Single purpose (Chrome Web Store and Edge Add-ons)
+
+- English: Open deezer.com links in the Deezer desktop app instead of the browser.
+- Français : Ouvrir les liens deezer.com dans l'application Deezer pour ordinateur plutôt que dans le navigateur.
+
 ## Permissions (Chrome Web Store privacy practices)
 
 ### English
