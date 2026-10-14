@@ -76,7 +76,7 @@ Each extension's `store/` folder holds its images and a `store/README.md` with e
 The [Store screenshots](.github/workflows/screenshots.yml) workflow (**Actions** tab) loads an extension in Chromium and uploads 1280×800 screenshots, the size the Chrome Web Store, addons.mozilla.org and Microsoft Edge Add-ons accept, as the `<extension>-screenshots` artifact:
 
 - **dzr-tab**: the new tab page with real Deezer tracks, one set per listing language: by default Top Worldwide for English (`screenshot-1280x800-en-*.png`) and Top France for French (`screenshot-1280x800-fr-*.png`), set in **playlists**; or the track IDs given in **tracks**, for every language;
-- **music-bridge**: the options page in English and French, light and dark.
+- **music-bridge**: composed visuals in English and French (a link opened on your platform, the supported platforms), with covers from the Deezer API.
 
 With **commit**, run on a branch other than `main`, the screenshots also replace the extension's `store/screenshot-1280x800-*.png` in a commit on that branch. The [AMO listing](#store-listings) workflow sends them to addons.mozilla.org; upload them to the Chrome Web Store and Microsoft Edge Add-ons by hand.
 
