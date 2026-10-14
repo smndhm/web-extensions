@@ -70,7 +70,7 @@ const style = `
   .link span { display: block; margin-top: 2px; color: #555; font-size: 17px; }
   .cover { width: 72px; height: 72px; flex: none; border-radius: 12px; background: #ddd center / cover; }
   .links img { width: 84px; height: 84px; }
-  .platforms { display: grid; grid-template-columns: repeat(3, auto); gap: 16px 18px; margin-top: 46px; }
+  .platforms { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 18px; max-width: 1000px; margin-top: 46px; }
   .platforms span { padding: 16px 30px; border: 1px solid #ffffff30; border-radius: 40px; background: #ffffff14; font-size: 26px; text-align: center; }
 `;
 
