@@ -26,7 +26,8 @@ const VIEWPORT = { width: 1280, height: 800 };
 // Bricolage Grotesque (SIL Open Font License), as on the promotional tiles (scripts/store-assets.ts)
 const FONT = 'node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2';
 
-const PLATFORMS = ['Amazon Music', 'Apple Music', 'Deezer', 'Pandora', 'Spotify', 'Tidal', 'YouTube Music', 'SoundCloud', 'YouTube'];
+// Deezer first, then roughly by audience
+const PLATFORMS = ['Deezer', 'Spotify', 'Apple Music', 'YouTube Music', 'Amazon Music', 'YouTube', 'SoundCloud', 'Tidal', 'Pandora'];
 
 const TEXTS: Record<string, { question: string; answer: string; platforms: string }> = {
   en: { question: 'A Spotify link?', answer: 'Opened on Deezer.', platforms: 'All your tracks and albums,<br>on the platform you choose' },
@@ -70,7 +71,7 @@ const style = `
   .link span { display: block; margin-top: 2px; color: #555; font-size: 17px; }
   .cover { width: 72px; height: 72px; flex: none; border-radius: 12px; background: #ddd center / cover; }
   .links img { width: 84px; height: 84px; }
-  .platforms { display: grid; grid-template-columns: repeat(3, auto); gap: 16px 18px; margin-top: 46px; }
+  .platforms { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 18px; max-width: 1000px; margin-top: 46px; }
   .platforms span { padding: 16px 30px; border: 1px solid #ffffff30; border-radius: 40px; background: #ffffff14; font-size: 26px; text-align: center; }
 `;
 
