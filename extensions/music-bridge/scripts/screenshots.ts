@@ -5,7 +5,7 @@
  * 2. the supported platforms.
  * They are 1280×800 PNGs, the size both the Chrome Web Store and addons.mozilla.org accept, saved to
  * .output/screenshots/. The track shown is a hit of the year in the screenshot's market (international for English,
- * France for French), with its cover from the public Deezer API (a gradient when Deezer cannot be reached); the platforms appear by name only, without their logos.
+ * France for French), with its cover from the public Deezer API (a gradient when there is none); the platforms appear by name only, without their logos.
  *
  * Usage: pnpm screenshots
  * CHROMIUM_PATH can point to a Chromium binary other than the one Playwright installs.
@@ -58,15 +58,24 @@ const style = `
   .platforms span { padding: 16px 30px; border: 1px solid #ffffff30; border-radius: 40px; background: #ffffff14; font-size: 26px; text-align: center; }
 `;
 
-/** The track's cover from the public Deezer API, as a data URL, or undefined when Deezer cannot be reached */
+/** Case and accent insensitive comparison */
+const same = (a: string, b: string) => a.localeCompare(b, undefined, { sensitivity: 'base' }) === 0;
+
+/** The track's cover from the public Deezer API, as a data URL, or undefined (with a warning) when there is none */
 async function cover(track: string, artist: string): Promise<string | undefined> {
   try {
-    const search = await fetch(`https://api.deezer.com/search?q=${encodeURIComponent(`artist:"${artist}" track:"${track}"`)}&limit=1`);
-    const url = ((await search.json()) as { data?: { album: { cover_big: string } }[] }).data?.[0]?.album.cover_big;
-    if (!url) return undefined;
-    const image = await fetch(url);
+    const search = await fetch(`https://api.deezer.com/search?q=${encodeURIComponent(`${artist} ${track}`)}&limit=25`);
+    const { data = [], error } = (await search.json()) as {
+      data?: { title: string; artist: { name: string }; album: { cover_big: string } }[];
+      error?: { message: string };
+    };
+    if (error) throw new Error(error.message);
+    const found = data.find(result => same(result.artist.name, artist) && same(result.title, track)) ?? data.find(result => same(result.artist.name, artist));
+    if (!found) throw new Error(`not found among ${data.length} results`);
+    const image = await fetch(found.album.cover_big);
     return `data:${image.headers.get('content-type') ?? 'image/jpeg'};base64,${Buffer.from(await image.arrayBuffer()).toString('base64')}`;
-  } catch {
+  } catch (error) {
+    console.warn(`No cover for ${track} (${artist}), a gradient instead: ${error instanceof Error ? error.message : error}`);
     return undefined;
   }
 }
@@ -89,7 +98,6 @@ try {
   const page = await browser.newPage({ viewport: VIEWPORT });
   for (const [locale, texts] of Object.entries(TEXTS)) {
     const image = await cover(texts.track, texts.artist);
-    if (!image) console.warn(`No cover for ${texts.track} (${texts.artist}): Deezer cannot be reached, a gradient instead`);
     for (const [index, body] of visuals(texts, image).entries()) {
       await page.setContent(`<!doctype html><html lang="${locale}"><style>${style}</style><body>${body}</body></html>`);
       await page.evaluate(() => document.fonts.ready);
