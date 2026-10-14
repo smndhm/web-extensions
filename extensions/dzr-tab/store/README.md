@@ -50,6 +50,11 @@ The Chrome Web Store takes up to 5 screenshots (leave out the 6th): the English 
 
 In English, for the reviewers of every store: [`notes-for-reviewers.md`](notes-for-reviewers.md). The Publish workflow sends it to addons.mozilla.org with each version.
 
+## Single purpose (Chrome Web Store and Edge Add-ons)
+
+- English: Replace the new tab page with a track from Deezer's top playlists, with its cover and a link to listen to it on Deezer.
+- Français : Remplacer la page du nouvel onglet par un titre des playlists phares de Deezer, avec sa pochette et un lien pour l'écouter sur Deezer.
+
 ## Permissions (Chrome Web Store privacy practices)
 
 ### English
