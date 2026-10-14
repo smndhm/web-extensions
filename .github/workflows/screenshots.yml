@@ -16,12 +16,12 @@ on:
         type: number
         default: 5
       playlists:
-        description: 'dzr-tab: one set of screenshots per listing language, as <locale>:<Deezer playlist ID> (deezer.com/playlist/<ID>), comma separated. 3155776842: Top Worldwide, 1109890291: Top France'
+        description: 'One set of screenshots per listing language, as <locale>:<Deezer playlist ID> (deezer.com/playlist/<ID>), comma separated: dzr-tab shows its first tracks, music-bridge its first one. 3155776842: Top Worldwide, 1109890291: Top France'
         required: false
         type: string
         default: 'en:3155776842,fr:1109890291'
       tracks:
-        description: 'dzr-tab: Deezer track IDs instead of the playlists, for every language, comma separated (deezer.com/track/<ID>)'
+        description: 'Deezer track IDs instead of the playlists, for every language, comma separated (deezer.com/track/<ID>); music-bridge takes the first one'
         required: false
         type: string
       commit:
@@ -51,8 +51,8 @@ jobs:
       - name: Build for Chrome
         run: pnpm build
 
-      # dzr-tab: the new tab page with real Deezer tracks; music-bridge: the options page in English and
-      # French, light and dark
+      # dzr-tab: the new tab page with real Deezer tracks; music-bridge: composed visuals in English and
+      # French, with the first track of the playlist
       - name: Take screenshots
         env:
           COUNT: ${{ inputs.count }}
