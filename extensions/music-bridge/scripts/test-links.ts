@@ -1,11 +1,12 @@
 /**
- * Writes the links of TESTING.md: for each platform Music Bridge redirects from, a track and its album on that
- * platform, a different song for each, to tell at a glance where a link came from.
+ * Writes the links of TESTING.md: for each platform Music Bridge redirects from, a track and an album on that platform,
+ * different for each, to tell at a glance where a link came from.
  *
- * The songs are the Deezer chart (Top Worldwide, from the public Deezer API), in order: the first to the first platform,
- * the second to the second, and so on; a platform without the song or its album gets the next one. Their links on the
- * platforms come from the Music Bridge redirect service, which asks the Odesli API (it needs a key, the service has
- * one). Odesli allows 10 requests a minute: the script waits between them, so it takes about two minutes.
+ * The tracks are the Deezer chart (Top Worldwide, from the public Deezer API), in order: the first to the first platform,
+ * the second to the second, and so on; a platform without the track gets the next one. The albums are the Deezer album
+ * chart, the same way. Their links on the platforms come from the Music Bridge redirect service, which asks the Odesli
+ * API (it needs a key, the service has one). Odesli allows 10 requests a minute: the script waits between them, so it
+ * takes about two minutes.
  *
  * Usage: pnpm test-links
  */
@@ -15,8 +16,9 @@ import { resolve } from 'node:path';
 
 const FILE = resolve(import.meta.dirname, '../TESTING.md');
 const REDIRECT_SERVICE_URL = 'https://music-bridge-redirect.smndhm.workers.dev/';
-// Top Worldwide, as on the store screenshots (scripts/screenshots.ts)
-const CHART = 'https://api.deezer.com/playlist/3155776842/tracks?limit=50';
+// Top Worldwide, as on the store screenshots (scripts/screenshots.ts), and the album chart
+const TRACKS = 'https://api.deezer.com/playlist/3155776842/tracks?limit=50';
+const ALBUMS = 'https://api.deezer.com/chart/0/albums?limit=50';
 const START = '<!-- test-links:start -->';
 const END = '<!-- test-links:end -->';
 
@@ -31,11 +33,11 @@ const PLATFORMS = [
   { platform: 'Pandora', key: 'pandora' },
 ] as const;
 
-interface DeezerTrack {
+/** A track or an album */
+interface DeezerItem {
   title: string;
   link: string;
   artist: { name: string };
-  album: { id: number; title: string };
 }
 
 const sleep = (ms: number) => new Promise(done => setTimeout(done, ms));
@@ -62,21 +64,20 @@ async function link(deezerUrl: string, platform: string): Promise<string | undef
   return location;
 }
 
-const cell = (label: string, url: string) => `[${label.replaceAll('|', '\\|')}](${url})`;
+/** The link on a platform of the first item of a chart it has, taken out of the chart, as a table cell */
+async function next(chart: DeezerItem[], platform: string, key: string): Promise<string> {
+  for (let item = chart.shift(); item; item = chart.shift()) {
+    const url = await link(item.link, key);
+    console.log(`${platform}: ${item.artist.name}, ${item.title}: ${url ?? 'not found'}`);
+    if (url) return `[${`${item.artist.name}, ${item.title}`.replaceAll('|', '\\|')}](${url})`;
+  }
+  return 'not found';
+}
 
-const chart = (await json<{ data: DeezerTrack[] }>(CHART)).data;
+const [tracks, albums] = await Promise.all([TRACKS, ALBUMS].map(async url => (await json<{ data: DeezerItem[] }>(url)).data));
 const rows: string[] = [];
 for (const { platform, key } of PLATFORMS) {
-  let row = `| ${platform} | not found | |`;
-  for (let track = chart.shift(); track; track = chart.shift()) {
-    const trackLink = await link(track.link, key);
-    const albumLink = trackLink && (await link(`https://www.deezer.com/album/${track.album.id}`, key));
-    console.log(`${platform}: ${track.artist.name}, ${track.title}: ${trackLink ?? 'no track link'}, ${albumLink ?? 'no album link'}`);
-    if (!trackLink || !albumLink) continue;
-    row = `| ${platform} | ${cell(`${track.artist.name}, ${track.title}`, trackLink)} | ${cell(`${track.artist.name}, ${track.album.title}`, albumLink)} |`;
-    break;
-  }
-  rows.push(row);
+  rows.push(`| ${platform} | ${await next(tracks!, platform, key)} | ${await next(albums!, platform, key)} |`);
 }
 
 const table = ['| Platform | Track | Album |', '| --- | --- | --- |', ...rows].join('\n');
