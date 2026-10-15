@@ -3,7 +3,7 @@
  *
  * The logo's 9 colors, in the order they first appear in the SVG, become 9 Tailwind CSS colors: one hue out of two of
  * Tailwind's 17, from a starting hue, in one shade or two alternating shades. Each release moves to the next combination
- * (the start moves 5 hues on, the shades to the next of SHADES), so 136 releases go by before a logo comes back.
+ * (the start moves 5 hues on, the shades to the next of SHADES), so 102 releases go by before a logo comes back.
  * The release count comes from CHANGELOG.md: the versions released since FIRST, which keeps the original colors.
  *
  * The SVG is cropped to a square around the drawing, as the icons fill their whole size.
@@ -39,7 +39,7 @@ const TAILWIND: Record<string, Record<number, string>> = {
 };
 const HUES = Object.keys(TAILWIND);
 // The shades of the logo's colors, alternating when two
-const SHADES = [[400], [400, 600], [500], [300, 500], [400, 500], [600, 400], [500, 300], [500, 400]];
+const SHADES = [[400], [500], [300, 500], [400, 500], [500, 300], [500, 400]];
 
 /** The versions released since FIRST, from CHANGELOG.md */
 async function releaseCount(): Promise<number> {
