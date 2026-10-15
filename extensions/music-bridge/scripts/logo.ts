@@ -2,8 +2,8 @@
  * The Music Bridge logo of the current version: assets/icon.svg, whose colors change with each release.
  *
  * The logo's 9 colors, in the order they first appear in the SVG, become 9 Tailwind CSS colors: one hue out of two of
- * Tailwind's 17, from a starting hue, in one shade or two alternating shades. Each release moves to the next combination
- * (the start moves 5 hues on, the shades to the next of SHADES), so 102 releases go by before a logo comes back.
+ * Tailwind's 17, from a starting hue, in one lightness or two alternating ones. Each release moves to the next combination
+ * (the start moves 5 hues on, the lightness to the next of LIGHTNESS), so 68 releases go by before a logo comes back.
  * The release count comes from CHANGELOG.md: the versions released since FIRST, which keeps the original colors.
  *
  * The SVG is cropped to a square around the drawing, as the icons fill their whole size.
@@ -19,27 +19,46 @@ const FIRST = '1.7.1';
 
 // Tailwind CSS v3 colors (MIT), the hues in color wheel order
 const TAILWIND: Record<string, Record<number, string>> = {
-  red: { 300: '#fca5a5', 400: '#f87171', 500: '#ef4444', 600: '#dc2626' },
-  orange: { 300: '#fdba74', 400: '#fb923c', 500: '#f97316', 600: '#ea580c' },
-  amber: { 300: '#fcd34d', 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' },
-  yellow: { 300: '#fde047', 400: '#facc15', 500: '#eab308', 600: '#ca8a04' },
-  lime: { 300: '#bef264', 400: '#a3e635', 500: '#84cc16', 600: '#65a30d' },
-  green: { 300: '#86efac', 400: '#4ade80', 500: '#22c55e', 600: '#16a34a' },
-  emerald: { 300: '#6ee7b7', 400: '#34d399', 500: '#10b981', 600: '#059669' },
-  teal: { 300: '#5eead4', 400: '#2dd4bf', 500: '#14b8a6', 600: '#0d9488' },
-  cyan: { 300: '#67e8f9', 400: '#22d3ee', 500: '#06b6d4', 600: '#0891b2' },
-  sky: { 300: '#7dd3fc', 400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7' },
-  blue: { 300: '#93c5fd', 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb' },
-  indigo: { 300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5' },
-  violet: { 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6', 600: '#7c3aed' },
-  purple: { 300: '#d8b4fe', 400: '#c084fc', 500: '#a855f7', 600: '#9333ea' },
-  fuchsia: { 300: '#f0abfc', 400: '#e879f9', 500: '#d946ef', 600: '#c026d3' },
-  pink: { 300: '#f9a8d4', 400: '#f472b6', 500: '#ec4899', 600: '#db2777' },
-  rose: { 300: '#fda4af', 400: '#fb7185', 500: '#f43f5e', 600: '#e11d48' },
+  red: { 200: '#fecaca', 300: '#fca5a5', 400: '#f87171', 500: '#ef4444' },
+  orange: { 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c', 500: '#f97316' },
+  amber: { 200: '#fde68a', 300: '#fcd34d', 400: '#fbbf24', 500: '#f59e0b' },
+  yellow: { 200: '#fef08a', 300: '#fde047', 400: '#facc15', 500: '#eab308' },
+  lime: { 200: '#d9f99d', 300: '#bef264', 400: '#a3e635', 500: '#84cc16' },
+  green: { 200: '#bbf7d0', 300: '#86efac', 400: '#4ade80', 500: '#22c55e' },
+  emerald: { 200: '#a7f3d0', 300: '#6ee7b7', 400: '#34d399', 500: '#10b981' },
+  teal: { 200: '#99f6e4', 300: '#5eead4', 400: '#2dd4bf', 500: '#14b8a6' },
+  cyan: { 200: '#a5f3fc', 300: '#67e8f9', 400: '#22d3ee', 500: '#06b6d4' },
+  sky: { 200: '#bae6fd', 300: '#7dd3fc', 400: '#38bdf8', 500: '#0ea5e9' },
+  blue: { 200: '#bfdbfe', 300: '#93c5fd', 400: '#60a5fa', 500: '#3b82f6' },
+  indigo: { 200: '#c7d2fe', 300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1' },
+  violet: { 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6' },
+  purple: { 200: '#e9d5ff', 300: '#d8b4fe', 400: '#c084fc', 500: '#a855f7' },
+  fuchsia: { 200: '#f5d0fe', 300: '#f0abfc', 400: '#e879f9', 500: '#d946ef' },
+  pink: { 200: '#fbcfe8', 300: '#f9a8d4', 400: '#f472b6', 500: '#ec4899' },
+  rose: { 200: '#fecdd3', 300: '#fda4af', 400: '#fb7185', 500: '#f43f5e' },
 };
 const HUES = Object.keys(TAILWIND);
-// The shades of the logo's colors, alternating when two
-const SHADES = [[400], [500], [300, 500], [400, 500], [500, 300], [500, 400]];
+// The lightness of the logo's colors, alternating when two: each color is the shade of its hue closest to it,
+// as the same shade is lighter in yellow than in blue
+const LIGHTNESS = [[0.76], [0.84, 0.71], [0.78, 0.71], [0.71, 0.84]];
+
+/** OKLCH lightness of a #rrggbb color */
+function lightness(hex: string): number {
+  const [r, g, b] = [1, 3, 5].map(i => {
+    const c = parseInt(hex.slice(i, i + 2), 16) / 255;
+    return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  }) as [number, number, number];
+  const [l, m, s] = [
+    0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b,
+    0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b,
+    0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b,
+  ].map(Math.cbrt) as [number, number, number];
+  return 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s;
+}
+
+/** The shade of a hue closest to a lightness */
+const shade = (hue: Record<number, string>, target: number): string =>
+  Object.values(hue).reduce((best, color) => (Math.abs(lightness(color) - target) < Math.abs(lightness(best) - target) ? color : best));
 
 /** The versions released since FIRST, from CHANGELOG.md */
 async function releaseCount(): Promise<number> {
@@ -52,8 +71,8 @@ async function releaseCount(): Promise<number> {
 export function colors(release: number, original: string[]): string[] {
   if (release === 0) return original;
   const start = (release * 5) % HUES.length;
-  const shades = SHADES[release % SHADES.length]!;
-  return original.map((_, i) => TAILWIND[HUES[(start + 2 * i) % HUES.length]!]![shades[i % shades.length]!]!);
+  const targets = LIGHTNESS[release % LIGHTNESS.length]!;
+  return original.map((_, i) => shade(TAILWIND[HUES[(start + 2 * i) % HUES.length]!]!, targets[i % targets.length]!));
 }
 
 /** A square viewBox around the paths (M, L, H, V and Z commands, absolute coordinates) */
