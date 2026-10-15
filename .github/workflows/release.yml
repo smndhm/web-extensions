@@ -29,8 +29,7 @@ jobs:
 
       - uses: ./.github/actions/setup
 
-      # The version script renders Music Bridge's images when its version changes: its logo changes colors
-      # with each release
+      # The version script draws Music Bridge's logo colors and renders its images when its version changes
       - name: Pending changesets
         id: pending
         run: echo "changesets=$(find .changeset -name '*.md' ! -name README.md | wc -l)" >> "$GITHUB_OUTPUT"

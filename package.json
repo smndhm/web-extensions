@@ -17,7 +17,7 @@
     "store-assets": "node scripts/store-assets.ts",
     "amo-listing": "node scripts/amo-listing.ts",
     "changeset": "changeset",
-    "changeset:version": "changeset version && (git diff --quiet extensions/music-bridge/package.json || node scripts/store-assets.ts music-bridge)",
+    "changeset:version": "changeset version && (git diff --quiet extensions/music-bridge/package.json || (node extensions/music-bridge/scripts/logo.ts --draw && node scripts/store-assets.ts music-bridge))",
     "changeset:publish": "changeset publish",
     "changeset:renovate": "changesets-renovate"
   },
