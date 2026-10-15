@@ -42,27 +42,20 @@ jobs:
         run: pnpm lint:firefox
 
   a11y:
-    name: Accessibility (${{ matrix.extension }})
+    name: Accessibility
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        # The extensions with a page: dzr-tab's new tab, music-bridge's options
-        extension: [dzr-tab, music-bridge]
-    defaults:
-      run:
-        working-directory: extensions/${{ matrix.extension }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - uses: ./.github/actions/setup
 
       - name: Install Chromium
-        run: pnpm exec playwright install --with-deps --no-shell chromium
+        run: pnpm --filter dzr-tab exec playwright install --with-deps --no-shell chromium
 
       - name: Build for Chrome
         run: pnpm build
 
+      # Every extension with an a11y script (dzr-tab's new tab, music-bridge's options), one after the other
       - name: Check accessibility
         run: pnpm a11y
 
