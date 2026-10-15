@@ -8,7 +8,7 @@ Available for:
 
 - [Chrome](https://chromewebstore.google.com/detail/music-bridge/mbebbcaajfmockkcflajghbambbimpck)
 - [Firefox](https://addons.mozilla.org/firefox/addon/music-bridge/), also on Android
-- [Edge](https://microsoftedge.microsoft.com/addons/detail/music-bridge/kfbedaeciahfjnknbjkcnjknkbdlcnld)
+- [Edge](https://microsoftedge.microsoft.com/addons/detail/kfbedaeciahfjnknbjkcnjknkbdlcnld)
 
 Made with the [Odesli](https://odesli.co/) API, through the [music-bridge-redirect](https://github.com/smndhm/music-bridge-redirect) service.
 
