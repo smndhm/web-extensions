@@ -54,7 +54,7 @@ interface DeezerTrack {
 
 const dataUrl = async (file: string, type: string) => `data:${type};base64,${(await readFile(resolve(ROOT, file))).toString('base64')}`;
 const font = await dataUrl(FONT, 'font/woff2');
-const icon = `data:image/svg+xml;base64,${Buffer.from(await logo()).toString('base64')}`;
+const icon = `data:image/svg+xml;base64,${Buffer.from(await logo({ original: true })).toString('base64')}`;
 
 const style = `
   @font-face { font-family: 'Bricolage Grotesque'; font-weight: 200 800; src: url(${font}); }
