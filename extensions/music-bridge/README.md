@@ -33,7 +33,7 @@ The content script runs on the track and album pages of the supported platforms.
 
 With **Close the tab once the app opens**, a tab opened for the link is closed 5 seconds after opening the app. Tick "Always allow" in the browser prompt the first time, or the tab closes before you answer it.
 
-There are no desktop apps on ChromeOS: the app options are hidden there.
+There are no desktop apps on ChromeOS and Android: the app options are hidden there. On Android, Firefox itself offers to open the platform's links in its app (Settings, Open links in apps).
 
 ## Development
 
