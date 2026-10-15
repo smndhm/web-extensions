@@ -5,8 +5,8 @@
  * The tracks are the Deezer chart (Top Worldwide, from the public Deezer API), in order: the first to the first platform,
  * the second to the second, and so on; a platform without the track gets the next one. The albums are the Deezer album
  * chart, the same way. Their links on the platforms come from the Music Bridge redirect service, which asks the Odesli
- * API (it needs a key, the service has one), for France (Pandora: the United States, where it only exists). Odesli allows 10 requests a minute: the script waits between them, so it
- * takes about two minutes.
+ * API (it needs a key, the service has one), for France (Pandora: the United States, where it only exists). Odesli
+ * allows 10 requests a minute: the script waits between them, so it takes about two minutes.
  *
  * With --check, it writes nothing: it asks the redirect service where each link of TESTING.md goes on every other
  * platform, and fails when the service answers anything but a redirect or "not on this platform" (404).
