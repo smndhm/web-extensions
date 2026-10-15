@@ -1,6 +1,14 @@
 import { getDeezerPath } from '~shared/deezer';
 
-export { isChromeOS } from '~shared/deezer';
+import { isChromeOS } from '~shared/deezer';
+
+export { isChromeOS };
+
+/**
+ * Whether the system has desktop apps to open links in: not ChromeOS, nor Android, where the browser itself offers
+ * to open a platform's links in its app
+ */
+export const hasDesktopApps = (userAgent: string): boolean => !isChromeOS(userAgent) && !/\bAndroid\b/.test(userAgent);
 
 export const getDeezerDesktopUri = (url: string): string | undefined => {
   const match = /^(track|album)\/(\d+)/.exec(getDeezerPath(url) ?? '');

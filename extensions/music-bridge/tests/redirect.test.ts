@@ -4,6 +4,7 @@ import { getRedirectUrl, REDIRECT_SERVICE_URL, shouldCloseTab } from '@/utils/re
 
 const WINDOWS = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0';
 const CHROMEOS = 'Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+const ANDROID = 'Mozilla/5.0 (Android 14; Mobile; rv:142.0) Gecko/142.0 Firefox/142.0';
 
 const SPOTIFY_TRACK = 'https://open.spotify.com/intl-fr/track/4uLU6hMCjMI75M1A2tKUQC';
 const DEEZER_TRACK = 'https://www.deezer.com/fr/track/3135556';
@@ -58,6 +59,14 @@ describe('getRedirectUrl', () => {
     it('ignores the setting on ChromeOS, which has no desktop apps', () => {
       expect(getRedirectUrl(DEEZER_TRACK, { platform: 'deezer', openInApp: true }, CHROMEOS)).toBeUndefined();
       expect(serviceParams(getRedirectUrl(SPOTIFY_TRACK, { platform: 'deezer', openInApp: true }, CHROMEOS))).toEqual({
+        url: SPOTIFY_TRACK,
+        platform: 'deezer',
+      });
+    });
+
+    it('ignores the setting on Android, where Firefox offers to open the link in the app', () => {
+      expect(getRedirectUrl(DEEZER_TRACK, { platform: 'deezer', openInApp: true }, ANDROID)).toBeUndefined();
+      expect(serviceParams(getRedirectUrl(SPOTIFY_TRACK, { platform: 'deezer', openInApp: true }, ANDROID))).toEqual({
         url: SPOTIFY_TRACK,
         platform: 'deezer',
       });

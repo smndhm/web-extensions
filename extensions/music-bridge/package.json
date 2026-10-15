@@ -15,6 +15,7 @@
     "test": "vitest run",
     "screenshots": "node scripts/screenshots.ts",
     "a11y": "node scripts/a11y.ts",
+    "test-links": "node scripts/test-links.ts",
     "postinstall": "wxt prepare"
   },
   "devDependencies": {
