@@ -1,30 +1,35 @@
 /**
  * Renders each extension's images from one source icon, the same way for all extensions:
  * - public/icons/{16,32,48,128}.png, the manifest icons;
- * - store/logo-300x300.png, and store/promo-440x280-<locale>.png and store/promo-1400x560-<locale>.png
+ * - store/icon-128x128.png, store/logo-300x300.png, and store/promo-440x280-<locale>.png and store/promo-1400x560-<locale>.png
  *   (promotional tiles) for each locale, named after their type and size, for the store listings: the icon, the name and
  *   the description of the extension (public/_locales/<locale>/messages.json) on a dark background.
- * A PNG source only gives the icons it is at least as large as.
+ * Music Bridge's manifest icons are its logo in the colors of the current version, drawn at random for each release
+ * (extensions/music-bridge/scripts/logo.ts); its store images keep the logo's own colors.
  *
- * Usage: pnpm store-assets
+ * Usage: pnpm store-assets [extension…], all extensions by default
  * CHROMIUM_PATH can point to a Chromium binary other than the one Playwright installs.
  */
 
 import { mkdir, readdir, readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
-import { extname, resolve } from 'node:path';
+import { resolve } from 'node:path';
+import { logo } from '../extensions/music-bridge/scripts/logo.ts';
 
 const ROOT = resolve(import.meta.dirname, '..');
 // Playwright is a dependency of the extensions with browser scripts
 const { chromium } = createRequire(resolve(ROOT, 'extensions/dzr-tab/package.json'))('playwright') as typeof import('playwright');
 
-const DEEZER_HEART = 'shared/assets/deezer-heart.svg';
-const SOURCES: Record<string, { source: string; size: number }> = {
-  'dzr-link': { source: DEEZER_HEART, size: Infinity },
-  'dzr-tab': { source: DEEZER_HEART, size: Infinity },
-  // No vector source for Music Bridge: its original 128 px icon is the largest one
-  'music-bridge': { source: 'extensions/music-bridge/assets/icon.png', size: 128 },
+const svgDataUrl = (svg: string) => `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`;
+const deezerHeart = async () => svgDataUrl(await readFile(resolve(ROOT, 'shared/assets/deezer-heart.svg'), 'utf8'));
+/** Each extension's icon for the manifest and for the store images, as SVG data URLs */
+const SOURCES: Record<string, () => Promise<{ icon: string; store: string }>> = {
+  'dzr-link': async () => ({ icon: await deezerHeart(), store: await deezerHeart() }),
+  'dzr-tab': async () => ({ icon: await deezerHeart(), store: await deezerHeart() }),
+  'music-bridge': async () => ({ icon: svgDataUrl(await logo()), store: svgDataUrl(await logo({ original: true })) }),
 };
+const extensions = process.argv.slice(2);
+for (const extension of extensions) if (!SOURCES[extension]) throw new Error(`Usage: pnpm store-assets [${Object.keys(SOURCES).join('|')}…]`);
 const ICON_SIZES = [16, 32, 48, 128];
 // Chrome Web Store image guidelines: the 128 px icon is 96 px of artwork with 16 px of transparent padding
 // per side. The smaller toolbar icons use their whole size.
@@ -73,24 +78,26 @@ async function shoot(html: string, width: number, height: number, file: string, 
 }
 
 try {
-  for (const [extension, { source, size }] of Object.entries(SOURCES)) {
+  for (const [extension, source] of Object.entries(SOURCES).filter(([name]) => !extensions.length || extensions.includes(name))) {
     const dir = resolve(ROOT, 'extensions', extension);
-    const icon = await dataUrl(source, extname(source) === '.svg' ? 'image/svg+xml' : 'image/png');
+    const { icon, store } = await source();
     await mkdir(resolve(dir, 'public/icons'), { recursive: true });
     await mkdir(resolve(dir, 'store'), { recursive: true });
 
-    for (const iconSize of ICON_SIZES.filter(candidate => candidate <= size)) {
+    for (const iconSize of ICON_SIZES) {
       await shoot(iconOnly(icon, iconSize, iconPadding(iconSize)), iconSize, iconSize, resolve(dir, `public/icons/${iconSize}.png`), true);
     }
-    await shoot(iconOnly(icon, 300), 300, 300, resolve(dir, 'store/logo-300x300.png'), true);
+    // The store icon, in the store images' colors: the same as the manifest's for every extension but Music Bridge
+    await shoot(iconOnly(store, 128, iconPadding(128)), 128, 128, resolve(dir, 'store/icon-128x128.png'), true);
+    await shoot(iconOnly(store, 300), 300, 300, resolve(dir, 'store/logo-300x300.png'), true);
     // One set of promo tiles per locale, for the store listing in that language
     for (const locale of await readdir(resolve(dir, 'public/_locales'))) {
       const messages = JSON.parse(await readFile(resolve(dir, `public/_locales/${locale}/messages.json`), 'utf8')) as Record<string, { message: string }>;
       const [name, description] = [messages.name!.message, messages.description!.message];
       const small = { iconSize: 104, nameSize: 30, textSize: 15, gap: 24 };
       const marquee = { iconSize: 300, nameSize: 84, textSize: 36, gap: 80 };
-      await shoot(tile(icon, name, description, small), 440, 280, resolve(dir, `store/promo-440x280-${locale}.png`));
-      await shoot(tile(icon, name, description, marquee), 1400, 560, resolve(dir, `store/promo-1400x560-${locale}.png`));
+      await shoot(tile(store, name, description, small), 440, 280, resolve(dir, `store/promo-440x280-${locale}.png`));
+      await shoot(tile(store, name, description, marquee), 1400, 560, resolve(dir, `store/promo-1400x560-${locale}.png`));
     }
   }
 } finally {
