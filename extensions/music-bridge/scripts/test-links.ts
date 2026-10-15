@@ -46,10 +46,14 @@ async function json<T>(url: string): Promise<T> {
 /** Case and accent insensitive comparison */
 const same = (a: string, b: string) => a.localeCompare(b, undefined, { sensitivity: 'base' }) === 0;
 
-/** The song on Deezer: among the results of a search for its artist and title, the first by that artist, or undefined */
+/**
+ * The song on Deezer: among the results of a search for its artist and title, the first by that artist with that exact
+ * title (not a remix or a live version), else the first by that artist, else the first, or undefined
+ */
 async function deezerTrack(artist: string, title: string): Promise<DeezerTrack | undefined> {
-  const { data } = await json<{ data: DeezerTrack[] }>(`https://api.deezer.com/search?q=${encodeURIComponent(`${artist} ${title}`)}&limit=25`);
-  return data.find(track => same(track.artist.name, artist)) ?? data[0];
+  const { data } = await json<{ data: DeezerTrack[] }>(`https://api.deezer.com/search?q=${encodeURIComponent(`${artist} ${title}`)}&limit=50`);
+  const byArtist = data.filter(track => same(track.artist.name, artist));
+  return byArtist.find(track => same(track.title, title)) ?? byArtist[0] ?? data[0];
 }
 
 let lastCall = 0;
