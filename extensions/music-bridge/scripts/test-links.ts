@@ -5,7 +5,7 @@
  * The tracks are the Deezer chart (Top Worldwide, from the public Deezer API), in order: the first to the first platform,
  * the second to the second, and so on; a platform without the track gets the next one. The albums are the Deezer album
  * chart, the same way. Their links on the platforms come from the Music Bridge redirect service, which asks the Odesli
- * API (it needs a key, the service has one). Odesli allows 10 requests a minute: the script waits between them, so it
+ * API (it needs a key, the service has one), for France (Pandora: the United States, where it only exists). Odesli allows 10 requests a minute: the script waits between them, so it
  * takes about two minutes.
  *
  * With --check, it writes nothing: it asks the redirect service where each link of TESTING.md goes on every other
@@ -58,15 +58,17 @@ async function json<T>(url: string): Promise<T> {
 let lastCall = 0;
 const asked = new Set<string>();
 
-/** The redirect service's answer for a link and a platform: its status, and where it redirects */
+/** The redirect service's answer for a link and a platform, in France (Pandora: the United States) */
 async function redirect(source: string, platform: string): Promise<{ status: number; location?: string }> {
-  // The service asks Odesli once per link, which allows 10 requests a minute, and keeps its answer
-  if (!asked.has(source)) {
+  // The service runs where it is called from, in the United States for GitHub's runners: ask for France's links
+  const country = platform === 'pandora' || source.includes('pandora.com') ? 'US' : 'FR';
+  // The service asks Odesli once per link and country, which allows 10 requests a minute, and keeps its answer
+  if (!asked.has(`${source} ${country}`)) {
     await sleep(Math.max(0, lastCall + 6500 - Date.now()));
     lastCall = Date.now();
-    asked.add(source);
+    asked.add(`${source} ${country}`);
   }
-  const url = `${REDIRECT_SERVICE_URL}?${new URLSearchParams({ url: source, platform })}`;
+  const url = `${REDIRECT_SERVICE_URL}?${new URLSearchParams({ url: source, platform, country })}`;
   let response = await fetch(url, { redirect: 'manual' });
   if (response.status === 429) {
     await sleep(60_000);
