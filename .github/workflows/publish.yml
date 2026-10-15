@@ -140,9 +140,8 @@ jobs:
           fi
           pnpm exec wxt submit "${args[@]}"
 
-      # The listing texts (name, summary, description, categories) follow the released version, and so does
-      # Music Bridge's icon, whose colors change with each release. The other images change less often: the
-      # AMO listing workflow replaces them on demand.
+      # The listing texts (name, summary, description, categories) follow the released version.
+      # The images change less often: the AMO listing workflow replaces them on demand.
       # Also when another store refused the version (a Chrome review still pending, for example)
       - name: Update the addons.mozilla.org listing
         if: ${{ !cancelled() && contains(inputs.stores, 'firefox') }}
@@ -153,6 +152,5 @@ jobs:
           FIREFOX_JWT_SECRET: ${{ secrets.FIREFOX_JWT_SECRET }}
         run: |
           args=("$EXTENSION")
-          if [[ "$EXTENSION" == "music-bridge" ]]; then args+=(--icon); fi
           if [[ "$DRY_RUN" == "true" ]]; then args+=(--dry-run); fi
           node ../../scripts/amo-listing.ts "${args[@]}"
