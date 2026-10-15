@@ -50,4 +50,4 @@ pnpm --filter music-bridge build && pnpm --filter music-bridge a11y          # a
 
 Store listing texts, search terms, notes for reviewers and images: [store/README.md](store/README.md).
 
-Links to check by hand that Music Bridge still redirects, platform by platform: [TESTING.md](TESTING.md).
+Links to check by hand that Music Bridge still redirects, platform by platform: [TESTING.md](TESTING.md) (`pnpm --filter music-bridge test-links`, or the Test links workflow, finds them again).

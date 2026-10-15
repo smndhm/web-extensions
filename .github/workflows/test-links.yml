@@ -1,0 +1,32 @@
+name: Test links
+
+# Finds Music Bridge's manual test links (extensions/music-bridge/TESTING.md) with the Deezer and Odesli APIs, and
+# commits them to the branch (not main)
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write # Commit TESTING.md
+
+jobs:
+  test-links:
+    name: Music Bridge test links
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: extensions/music-bridge
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - uses: ./.github/actions/setup
+
+      - name: Find the links
+        run: pnpm test-links && pnpm exec prettier --write TESTING.md
+
+      - name: Commit the links
+        if: github.ref_name != github.event.repository.default_branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add TESTING.md
+          git commit -m "docs(music-bridge): new test links" && git push || echo "No change"
