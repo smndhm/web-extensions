@@ -4,7 +4,7 @@ Links to open after each release, or after a change to the content script or the
 
 ## Links from every platform
 
-Pick a platform in the options (Deezer, for example), then open each link of the other platforms: each should land on the same music on the chosen platform. Each platform has its own song, named after it, so the landing page tells where the link came from.
+Pick a platform in the options (Deezer, for example), then open each link of the other platforms: each should land on the same music on the chosen platform. Each platform has its own track and album, so the landing page tells where the link came from.
 
 The links come from `pnpm test-links` (the Deezer charts give a track and an album to each platform, the Music Bridge redirect service their links), run by the [Test links](../../.github/workflows/test-links.yml) workflow, which commits them here. Run it again when a link no longer works.
 
