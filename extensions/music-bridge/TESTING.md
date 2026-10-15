@@ -6,7 +6,7 @@ Links to open after each release, or after a change to the content script or the
 
 Pick a platform in the options (Deezer, for example), then open each link of the other platforms: each should land on the same music on the chosen platform. Each platform has its own song, named after it, so the landing page tells where the link came from.
 
-The links come from `pnpm test-links` (the iTunes Search API finds each song, the Music Bridge redirect service its links on the other platforms), run by the [Test links](../../.github/workflows/test-links.yml) workflow, which commits them here. Run it again when a link no longer works.
+The links come from `pnpm test-links` (the Deezer chart gives a song to each platform, the Music Bridge redirect service its links), run by the [Test links](../../.github/workflows/test-links.yml) workflow, which commits them here. Run it again when a link no longer works.
 
 <!-- test-links:start -->
 

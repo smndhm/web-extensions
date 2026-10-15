@@ -1,11 +1,11 @@
 /**
  * Writes the links of TESTING.md: for each platform Music Bridge redirects from, a track and its album on that
- * platform, a different song for each (named after the platform, to tell at a glance where a link came from).
+ * platform, a different song for each, to tell at a glance where a link came from.
  *
- * Each song is found with the public iTunes Search API (the Deezer API hides much of its catalog from the United States,
- * where the workflow runs), then its links on the other platforms with the Music Bridge redirect
- * service, which asks the Odesli API (it needs a key, the service has one). A platform without the song keeps
- * "not found". Odesli allows 10 requests a minute: the script waits between them, so it takes about two minutes.
+ * The songs are the Deezer chart (Top Worldwide, from the public Deezer API), in order: the first to the first platform,
+ * the second to the second, and so on; a platform without the song or its album gets the next one. Their links on the
+ * platforms come from the Music Bridge redirect service, which asks the Odesli API (it needs a key, the service has
+ * one). Odesli allows 10 requests a minute: the script waits between them, so it takes about two minutes.
  *
  * Usage: pnpm test-links
  */
@@ -15,26 +15,27 @@ import { resolve } from 'node:path';
 
 const FILE = resolve(import.meta.dirname, '../TESTING.md');
 const REDIRECT_SERVICE_URL = 'https://music-bridge-redirect.smndhm.workers.dev/';
+// Top Worldwide, as on the store screenshots (scripts/screenshots.ts)
+const CHART = 'https://api.deezer.com/playlist/3155776842/tracks?limit=50';
 const START = '<!-- test-links:start -->';
 const END = '<!-- test-links:end -->';
 
-// The platforms Music Bridge redirects from, with their key in the redirect service (Odesli's), and a song named after each
-const SONGS = [
-  { platform: 'Spotify', key: 'spotify', artist: 'Jennifer Hudson', title: 'Spotlight' },
-  { platform: 'Deezer', key: 'deezer', artist: 'The Goo Goo Dolls', title: 'Dizzy' },
-  { platform: 'Apple Music', key: 'appleMusic', artist: 'Charli xcx', title: 'Apple' },
-  { platform: 'YouTube Music', key: 'youtubeMusic', artist: 'The Buggles', title: 'Video Killed the Radio Star' },
-  { platform: 'Tidal', key: 'tidal', artist: 'Portugal. The Man', title: 'Tidal Wave' },
-  { platform: 'Amazon Music', key: 'amazonMusic', artist: 'Gojira', title: 'Amazonia' },
-  { platform: 'Pandora', key: 'pandora', artist: 'Orchestral Manoeuvres In The Dark', title: "Pandora's Box" },
+// The platforms Music Bridge redirects from, with their key in the redirect service (Odesli's)
+const PLATFORMS = [
+  { platform: 'Spotify', key: 'spotify' },
+  { platform: 'Deezer', key: 'deezer' },
+  { platform: 'Apple Music', key: 'appleMusic' },
+  { platform: 'YouTube Music', key: 'youtubeMusic' },
+  { platform: 'Tidal', key: 'tidal' },
+  { platform: 'Amazon Music', key: 'amazonMusic' },
+  { platform: 'Pandora', key: 'pandora' },
 ] as const;
 
-interface ITunesTrack {
-  artistName: string;
-  trackName: string;
-  collectionName: string;
-  trackViewUrl: string;
-  collectionViewUrl: string;
+interface DeezerTrack {
+  title: string;
+  link: string;
+  artist: { name: string };
+  album: { id: number; title: string };
 }
 
 const sleep = (ms: number) => new Promise(done => setTimeout(done, ms));
@@ -45,34 +46,15 @@ async function json<T>(url: string): Promise<T> {
   return (await response.json()) as T;
 }
 
-/** Case and accent insensitive comparison */
-const same = (a: string, b: string) => a.localeCompare(b, undefined, { sensitivity: 'base' }) === 0;
-
-/**
- * The song on Apple Music: among the results of a search for its artist and title, its editions by that artist with that
- * exact title (not a remix or a live version), at most 4, else the first by that artist, else the first
- */
-async function appleTracks(artist: string, title: string): Promise<ITunesTrack[]> {
-  const { results } = await json<{ results: ITunesTrack[] }>(
-    `https://itunes.apple.com/search?${new URLSearchParams({ term: `${artist} ${title}`, entity: 'song', country: 'us', limit: '50' })}`,
-  );
-  const byArtist = results.filter(track => same(track.artistName, artist));
-  const exact = byArtist.filter(track => same(track.trackName, title)).slice(0, 4);
-  const fallback = byArtist[0] ?? results[0];
-  return exact.length ? exact : fallback ? [fallback] : [];
-}
-
-/** The album page, without the track iTunes adds to it */
-const albumUrl = (track: ITunesTrack) => track.collectionViewUrl.split('?')[0]!;
-
 let lastCall = 0;
 
-/** The link of an Apple Music page on another platform, where the redirect service sends it, or undefined when it has none */
-async function link(appleUrl: string, platform: string): Promise<string | undefined> {
+/** The link of a Deezer page on a platform, where the redirect service sends it, or undefined when it has none */
+async function link(deezerUrl: string, platform: string): Promise<string | undefined> {
+  if (platform === 'deezer') return deezerUrl;
   // Odesli allows 10 requests a minute
   await sleep(Math.max(0, lastCall + 6500 - Date.now()));
   lastCall = Date.now();
-  const url = `${REDIRECT_SERVICE_URL}?${new URLSearchParams({ url: appleUrl, platform })}`;
+  const url = `${REDIRECT_SERVICE_URL}?${new URLSearchParams({ url: deezerUrl, platform })}`;
   const response = await fetch(url, { redirect: 'manual' });
   if (response.status === 404) return undefined;
   const location = response.headers.get('location');
@@ -80,30 +62,21 @@ async function link(appleUrl: string, platform: string): Promise<string | undefi
   return location;
 }
 
-const cell = (label: string, url: string | undefined) => {
-  const text = label.replaceAll('|', '\\|');
-  return url ? `[${text}](${url})` : `${text}: not found`;
-};
+const cell = (label: string, url: string) => `[${label.replaceAll('|', '\\|')}](${url})`;
 
+const chart = (await json<{ data: DeezerTrack[] }>(CHART)).data;
 const rows: string[] = [];
-for (const { platform, key, artist, title } of SONGS) {
-  const tracks = await appleTracks(artist, title);
-  if (!tracks.length) {
-    console.log(`${platform}: ${artist}, ${title} not found on Apple Music`);
-    rows.push(`| ${platform} | ${cell(`${artist}, ${title}`, undefined)} | |`);
-    continue;
+for (const { platform, key } of PLATFORMS) {
+  let row = `| ${platform} | not found | |`;
+  for (let track = chart.shift(); track; track = chart.shift()) {
+    const trackLink = await link(track.link, key);
+    const albumLink = trackLink && (await link(`https://www.deezer.com/album/${track.album.id}`, key));
+    console.log(`${platform}: ${track.artist.name}, ${track.title}: ${trackLink ?? 'no track link'}, ${albumLink ?? 'no album link'}`);
+    if (!trackLink || !albumLink) continue;
+    row = `| ${platform} | ${cell(`${track.artist.name}, ${track.title}`, trackLink)} | ${cell(`${track.artist.name}, ${track.album.title}`, albumLink)} |`;
+    break;
   }
-  // The first edition the platform has
-  let [track] = tracks as [ITunesTrack];
-  let trackLink: string | undefined;
-  for (const edition of tracks) {
-    trackLink = key === 'appleMusic' ? edition.trackViewUrl : await link(edition.trackViewUrl, key);
-    track = edition;
-    if (trackLink) break;
-  }
-  const albumLink = key === 'appleMusic' ? albumUrl(track) : await link(albumUrl(track), key);
-  console.log(`${platform}: ${track.artistName}, ${track.trackName}: ${trackLink ?? 'no track link'}, ${albumLink ?? 'no album link'}`);
-  rows.push(`| ${platform} | ${cell(`${track.artistName}, ${track.trackName}`, trackLink)} | ${cell(`${track.artistName}, ${track.collectionName}`, albumLink)} |`);
+  rows.push(row);
 }
 
 const table = ['| Platform | Track | Album |', '| --- | --- | --- |', ...rows].join('\n');
