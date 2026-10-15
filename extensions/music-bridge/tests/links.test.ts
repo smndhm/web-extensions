@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getDeezerDesktopUri, getSpotifyDesktopUri, isChromeOS } from '@/utils/links';
+import { getDeezerDesktopUri, getSpotifyDesktopUri, hasDesktopApps, isChromeOS } from '@/utils/links';
 
 describe('isChromeOS', () => {
   it.each([
@@ -8,6 +8,17 @@ describe('isChromeOS', () => {
     ['Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gecko/20100101 Firefox/58.0', false],
   ])('%s → %s', (userAgent, expected) => {
     expect(isChromeOS(userAgent)).toBe(expected);
+  });
+});
+
+describe('hasDesktopApps', () => {
+  it.each([
+    ['Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0', true],
+    ['Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', true],
+    ['Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', false],
+    ['Mozilla/5.0 (Android 14; Mobile; rv:142.0) Gecko/142.0 Firefox/142.0', false],
+  ])('%s → %s', (userAgent, expected) => {
+    expect(hasDesktopApps(userAgent)).toBe(expected);
   });
 });
 
