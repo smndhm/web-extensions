@@ -58,7 +58,7 @@ Every extension has the same images, rendered from one source icon by `pnpm stor
 - `public/icons/{16,32,48,128}.png`: the manifest icons. The 128 px one, also the store icon, has 96 px of artwork and 16 px of transparent padding, as the Chrome Web Store asks;
 - `store/logo-300x300.png`, and `store/promo-440x280-<locale>.png` and `store/promo-1400x560-<locale>.png` for each locale of `public/_locales`: the store listing images, named after their type and size, with the extension's name and description in that language.
 
-The Deezer extensions use the Deezer heart, [`shared/assets/deezer-heart.svg`](shared/assets/deezer-heart.svg). Music Bridge has no vector icon yet: its images come from its original 128 px icon, [`extensions/music-bridge/assets/icon.png`](extensions/music-bridge/assets/icon.png), so its 300 px logo and large tile are blurry.
+The Deezer extensions use the Deezer heart, [`shared/assets/deezer-heart.svg`](shared/assets/deezer-heart.svg). Music Bridge uses its logo, [`extensions/music-bridge/assets/icon.svg`](extensions/music-bridge/assets/icon.svg), in new colors with each release ([`extensions/music-bridge/scripts/logo.ts`](extensions/music-bridge/scripts/logo.ts)): its 9 colors become one hue out of two of the Tailwind CSS colors, in one shade or two alternating shades, the combination moving on with each version released since 1.7.1. The "Version Packages" pull request renders Music Bridge's images again when its version changes (`pnpm changeset:version`), so the new logo shows there before the release; its addons.mozilla.org icon follows when the version is published. The Chrome Web Store and Microsoft Edge Add-ons take the package icon too, but their listing images are uploaded by hand.
 
 ### Store formats
 

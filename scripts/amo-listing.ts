@@ -9,7 +9,9 @@
  *   the English ones when they differ by language): they replace the listing's previews, with their captions
  *   from store/captions.json ({ "<file>": { "<locale>": "<caption>" } }).
  *
- * Usage: node scripts/amo-listing.ts <extension> [--images] [--dry-run]
+ * --icon sends only the icon, for Music Bridge whose logo changes colors with each release.
+ *
+ * Usage: node scripts/amo-listing.ts <extension> [--images | --icon] [--dry-run]
  *        node scripts/amo-listing.ts <extension> --version-metadata <file>
  * --version-metadata writes, instead, the metadata of the version to submit for wxt submit's
  * --firefox-amo-metadata-file: the notes for reviewers (store/notes-for-reviewers.md) and the release
@@ -38,10 +40,15 @@ const AMO_CATEGORIES: Record<string, string[]> = {
 
 const {
   positionals: [extension],
-  values: { images, 'dry-run': dryRun, 'version-metadata': versionMetadata },
+  values: { images, 'icon': iconOnly, 'dry-run': dryRun, 'version-metadata': versionMetadata },
 } = parseArgs({
   allowPositionals: true,
-  options: { 'images': { type: 'boolean', default: false }, 'dry-run': { type: 'boolean', default: false }, 'version-metadata': { type: 'string' } },
+  options: {
+    'images': { type: 'boolean', default: false },
+    'icon': { type: 'boolean', default: false },
+    'dry-run': { type: 'boolean', default: false },
+    'version-metadata': { type: 'string' },
+  },
 });
 
 if (!extension || !AMO_CATEGORIES[extension]) {
@@ -117,6 +124,7 @@ for (const file of screenshots) if (!captionOf(file)) console.warn(`${extension}
 if (dryRun) {
   console.log(JSON.stringify(listing, null, 2));
   if (Object.keys(privacyPolicy).length) console.log(JSON.stringify({ privacy_policy: privacyPolicy }, null, 2));
+  if (iconOnly && !images) console.log(`Icon: ${icon}`);
   if (images)
     console.log(`Icon: ${icon}\nPreviews (replacing the current ones):\n${screenshots.map(file => `- ${file} ${JSON.stringify(captionOf(file) ?? {})}`).join('\n') || '- none'}`);
   process.exit(0);
@@ -175,10 +183,12 @@ if (Object.keys(privacyPolicy).length) {
   console.log(`${extension}: privacy policy updated`);
 }
 
-if (images) {
+if (images || iconOnly) {
   await amo('PATCH', addonUrl, await imageForm('icon', icon));
   console.log(`${extension}: icon updated`);
+}
 
+if (images) {
   if (!screenshots.length) {
     console.log(`${extension}: no screenshots, previews left as they are`);
     process.exit(0);

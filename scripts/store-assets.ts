@@ -4,27 +4,32 @@
  * - store/logo-300x300.png, and store/promo-440x280-<locale>.png and store/promo-1400x560-<locale>.png
  *   (promotional tiles) for each locale, named after their type and size, for the store listings: the icon, the name and
  *   the description of the extension (public/_locales/<locale>/messages.json) on a dark background.
- * A PNG source only gives the icons it is at least as large as.
+ * Music Bridge's icon is its logo of the current version, whose colors change with each release
+ * (extensions/music-bridge/scripts/logo.ts).
  *
- * Usage: pnpm store-assets
+ * Usage: pnpm store-assets [extension…], all extensions by default
  * CHROMIUM_PATH can point to a Chromium binary other than the one Playwright installs.
  */
 
 import { mkdir, readdir, readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
-import { extname, resolve } from 'node:path';
+import { resolve } from 'node:path';
+import { logo } from '../extensions/music-bridge/scripts/logo.ts';
 
 const ROOT = resolve(import.meta.dirname, '..');
 // Playwright is a dependency of the extensions with browser scripts
 const { chromium } = createRequire(resolve(ROOT, 'extensions/dzr-tab/package.json'))('playwright') as typeof import('playwright');
 
-const DEEZER_HEART = 'shared/assets/deezer-heart.svg';
-const SOURCES: Record<string, { source: string; size: number }> = {
-  'dzr-link': { source: DEEZER_HEART, size: Infinity },
-  'dzr-tab': { source: DEEZER_HEART, size: Infinity },
-  // No vector source for Music Bridge: its original 128 px icon is the largest one
-  'music-bridge': { source: 'extensions/music-bridge/assets/icon.png', size: 128 },
+const svgDataUrl = (svg: string) => `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`;
+const deezerHeart = async () => svgDataUrl(await readFile(resolve(ROOT, 'shared/assets/deezer-heart.svg'), 'utf8'));
+/** Each extension's icon, as an SVG data URL */
+const SOURCES: Record<string, () => Promise<string>> = {
+  'dzr-link': deezerHeart,
+  'dzr-tab': deezerHeart,
+  'music-bridge': async () => svgDataUrl(await logo()),
 };
+const extensions = process.argv.slice(2);
+for (const extension of extensions) if (!SOURCES[extension]) throw new Error(`Usage: pnpm store-assets [${Object.keys(SOURCES).join('|')}…]`);
 const ICON_SIZES = [16, 32, 48, 128];
 // Chrome Web Store image guidelines: the 128 px icon is 96 px of artwork with 16 px of transparent padding
 // per side. The smaller toolbar icons use their whole size.
@@ -73,13 +78,13 @@ async function shoot(html: string, width: number, height: number, file: string, 
 }
 
 try {
-  for (const [extension, { source, size }] of Object.entries(SOURCES)) {
+  for (const [extension, source] of Object.entries(SOURCES).filter(([name]) => !extensions.length || extensions.includes(name))) {
     const dir = resolve(ROOT, 'extensions', extension);
-    const icon = await dataUrl(source, extname(source) === '.svg' ? 'image/svg+xml' : 'image/png');
+    const icon = await source();
     await mkdir(resolve(dir, 'public/icons'), { recursive: true });
     await mkdir(resolve(dir, 'store'), { recursive: true });
 
-    for (const iconSize of ICON_SIZES.filter(candidate => candidate <= size)) {
+    for (const iconSize of ICON_SIZES) {
       await shoot(iconOnly(icon, iconSize, iconPadding(iconSize)), iconSize, iconSize, resolve(dir, `public/icons/${iconSize}.png`), true);
     }
     await shoot(iconOnly(icon, 300), 300, 300, resolve(dir, 'store/logo-300x300.png'), true);
