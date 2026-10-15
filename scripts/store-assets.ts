@@ -63,7 +63,7 @@ function tile(icon: string, name: string, description: string, { iconSize, nameS
     <img src="${icon}"><div><h1>${escape(name)}</h1><p>${escape(description)}</p></div>`;
 }
 
-const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH });
+const browser = await chromium.launch({ channel: 'chromium', executablePath: process.env.CHROMIUM_PATH });
 const page = await browser.newPage();
 
 async function shoot(html: string, width: number, height: number, file: string, transparent = false) {
