@@ -1,4 +1,4 @@
-import { getDeezerDesktopUri, getSpotifyDesktopUri, isChromeOS } from './links';
+import { getDeezerDesktopUri, getSpotifyDesktopUri, hasDesktopApps } from './links';
 import { isOnPlatform, platforms } from './platforms';
 import type { Settings } from './settings';
 
@@ -13,8 +13,8 @@ export const REDIRECT_SERVICE_URL = 'https://music-bridge-redirect.smndhm.worker
  * (already on the chosen platform's website, or no app link to build).
  */
 export function getRedirectUrl(href: string, { platform, openInApp }: Pick<Settings, 'platform' | 'openInApp'>, userAgent: string): string | undefined {
-  // There are no desktop apps on ChromeOS
-  const inApp = openInApp && platforms[platform].hasNativeAppLink === true && !isChromeOS(userAgent);
+  // There are no desktop apps on ChromeOS and Android
+  const inApp = openInApp && platforms[platform].hasNativeAppLink === true && hasDesktopApps(userAgent);
   const onPlatform = isOnPlatform(href, platforms[platform]);
 
   if (onPlatform) {

@@ -1,5 +1,5 @@
 import { browser } from 'wxt/browser';
-import { isChromeOS } from './links';
+import { hasDesktopApps } from './links';
 import { isPlatformId, platforms, PLATFORM_IDS } from './platforms';
 import { getSettings, saveSettings } from './settings';
 
@@ -55,10 +55,10 @@ export async function initOptionsPage(doc: Document, userAgent: string): Promise
   checkbox.checked = settings.openInApp;
   closeTab.checked = settings.closeTab;
 
-  // Opening in the app only makes sense for platforms with app links, and not on ChromeOS
+  // Opening in the app only makes sense for platforms with app links, and not on ChromeOS or Android
   const updateOpenAppOption = () => {
     const available = isPlatformId(select.value) && platforms[select.value].hasNativeAppLink === true;
-    openAppOption.hidden = !available || isChromeOS(userAgent);
+    openAppOption.hidden = !available || !hasDesktopApps(userAgent);
     if (openAppOption.hidden) checkbox.checked = false;
     // Closing the tab only applies when links open in the app
     closeTabOption.hidden = !checkbox.checked;

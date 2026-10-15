@@ -4,5 +4,6 @@ Pick your platform once in the extension options. From then on, every track or a
 
 - Links from Amazon Music, Apple Music, Deezer, Pandora, Spotify, Tidal and YouTube Music open on any of them, or on SoundCloud and YouTube.
 - Open the music in your platform's desktop app (Apple Music, Deezer, Spotify), and close the tab left behind if you like.
+- On Android, if another platform's app is installed, its links open straight in that app without going through the browser, so Music Bridge cannot redirect them.
 
 Privacy: the address of the music page you open is sent to Music Bridge's redirect service, which finds the same music with the Odesli (song.link) API. Nothing else is collected, and your settings stay in your browser.

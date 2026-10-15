@@ -8,7 +8,7 @@ Available for:
 
 - [Chrome](https://chromewebstore.google.com/detail/music-bridge/mbebbcaajfmockkcflajghbambbimpck)
 - [Firefox](https://addons.mozilla.org/firefox/addon/music-bridge/), also on Android
-- [Edge](https://microsoftedge.microsoft.com/addons/detail/music-bridge/kfbedaeciahfjnknbjkcnjknkbdlcnld)
+- [Edge](https://microsoftedge.microsoft.com/addons/detail/kfbedaeciahfjnknbjkcnjknkbdlcnld)
 
 Made with the [Odesli](https://odesli.co/) API, through the [music-bridge-redirect](https://github.com/smndhm/music-bridge-redirect) service.
 
@@ -33,7 +33,7 @@ The content script runs on the track and album pages of the supported platforms.
 
 With **Close the tab once the app opens**, a tab opened for the link is closed 5 seconds after opening the app. Tick "Always allow" in the browser prompt the first time, or the tab closes before you answer it.
 
-There are no desktop apps on ChromeOS: the app options are hidden there.
+There are no desktop apps on ChromeOS and Android: the app options are hidden there. On Android, Firefox itself offers to open the platform's links in its app (Settings, Open links in apps).
 
 ## Development
 
@@ -49,3 +49,5 @@ pnpm --filter music-bridge build && pnpm --filter music-bridge a11y          # a
 ```
 
 Store listing texts, search terms, notes for reviewers and images: [store/README.md](store/README.md).
+
+Links to check by hand that Music Bridge still redirects, platform by platform: [TESTING.md](TESTING.md) (`pnpm --filter music-bridge test-links`, or the Test links workflow, finds them again).
