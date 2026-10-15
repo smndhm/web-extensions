@@ -19,6 +19,7 @@
 import { mkdir, readFile, rm } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { chromium } from 'playwright';
+import { logo } from './logo.ts';
 
 const ROOT = resolve(import.meta.dirname, '../../..');
 const OUTPUT_DIR = resolve(import.meta.dirname, '../.output/screenshots');
@@ -53,7 +54,7 @@ interface DeezerTrack {
 
 const dataUrl = async (file: string, type: string) => `data:${type};base64,${(await readFile(resolve(ROOT, file))).toString('base64')}`;
 const font = await dataUrl(FONT, 'font/woff2');
-const icon = await dataUrl('extensions/music-bridge/assets/icon.png', 'image/png');
+const icon = `data:image/svg+xml;base64,${Buffer.from(await logo()).toString('base64')}`;
 
 const style = `
   @font-face { font-family: 'Bricolage Grotesque'; font-weight: 200 800; src: url(${font}); }
