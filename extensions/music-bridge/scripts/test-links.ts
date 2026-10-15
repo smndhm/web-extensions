@@ -21,7 +21,7 @@ const END = '<!-- test-links:end -->';
 // The platforms Music Bridge redirects from, with their key in the redirect service (Odesli's), and a song named after each
 const SONGS = [
   { platform: 'Spotify', key: 'spotify', artist: 'Jennifer Hudson', title: 'Spotlight' },
-  { platform: 'Deezer', key: 'deezer', artist: 'Goo Goo Dolls', title: 'Dizzy' },
+  { platform: 'Deezer', key: 'deezer', artist: 'The Goo Goo Dolls', title: 'Dizzy' },
   { platform: 'Apple Music', key: 'appleMusic', artist: 'Charli xcx', title: 'Apple' },
   { platform: 'YouTube Music', key: 'youtubeMusic', artist: 'The Buggles', title: 'Video Killed the Radio Star' },
   { platform: 'Tidal', key: 'tidal', artist: 'Portugal. The Man', title: 'Tidal Wave' },
@@ -49,16 +49,21 @@ async function json<T>(url: string): Promise<T> {
 const same = (a: string, b: string) => a.localeCompare(b, undefined, { sensitivity: 'base' }) === 0;
 
 /**
- * The song on Apple Music: among the results of a search for its artist and title, the first by that artist with that
- * exact title (not a remix or a live version), else the first by that artist, else the first, or undefined
+ * The song on Apple Music: among the results of a search for its artist and title, its editions by that artist with that
+ * exact title (not a remix or a live version), at most 4, else the first by that artist, else the first
  */
-async function appleTrack(artist: string, title: string): Promise<ITunesTrack | undefined> {
+async function appleTracks(artist: string, title: string): Promise<ITunesTrack[]> {
   const { results } = await json<{ results: ITunesTrack[] }>(
     `https://itunes.apple.com/search?${new URLSearchParams({ term: `${artist} ${title}`, entity: 'song', country: 'us', limit: '50' })}`,
   );
   const byArtist = results.filter(track => same(track.artistName, artist));
-  return byArtist.find(track => same(track.trackName, title)) ?? byArtist[0] ?? results[0];
+  const exact = byArtist.filter(track => same(track.trackName, title)).slice(0, 4);
+  const fallback = byArtist[0] ?? results[0];
+  return exact.length ? exact : fallback ? [fallback] : [];
 }
+
+/** The album page, without the track iTunes adds to it */
+const albumUrl = (track: ITunesTrack) => track.collectionViewUrl.split('?')[0]!;
 
 let lastCall = 0;
 
@@ -82,14 +87,21 @@ const cell = (label: string, url: string | undefined) => {
 
 const rows: string[] = [];
 for (const { platform, key, artist, title } of SONGS) {
-  const track = await appleTrack(artist, title);
-  if (!track) {
+  const tracks = await appleTracks(artist, title);
+  if (!tracks.length) {
     console.log(`${platform}: ${artist}, ${title} not found on Apple Music`);
     rows.push(`| ${platform} | ${cell(`${artist}, ${title}`, undefined)} | |`);
     continue;
   }
-  const [trackLink, albumLink] =
-    key === 'appleMusic' ? [track.trackViewUrl, track.collectionViewUrl] : [await link(track.trackViewUrl, key), await link(track.collectionViewUrl, key)];
+  // The first edition the platform has
+  let [track] = tracks as [ITunesTrack];
+  let trackLink: string | undefined;
+  for (const edition of tracks) {
+    trackLink = key === 'appleMusic' ? edition.trackViewUrl : await link(edition.trackViewUrl, key);
+    track = edition;
+    if (trackLink) break;
+  }
+  const albumLink = key === 'appleMusic' ? albumUrl(track) : await link(albumUrl(track), key);
   console.log(`${platform}: ${track.artistName}, ${track.trackName}: ${trackLink ?? 'no track link'}, ${albumLink ?? 'no album link'}`);
   rows.push(`| ${platform} | ${cell(`${track.artistName}, ${track.trackName}`, trackLink)} | ${cell(`${track.artistName}, ${track.collectionName}`, albumLink)} |`);
 }
