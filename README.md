@@ -58,18 +58,18 @@ Every extension has the same images, rendered from one source icon by `pnpm stor
 - `public/icons/{16,32,48,128}.png`: the manifest icons. The 128 px one, also the store icon, has 96 px of artwork and 16 px of transparent padding, as the Chrome Web Store asks;
 - `store/logo-300x300.png`, and `store/promo-440x280-<locale>.png` and `store/promo-1400x560-<locale>.png` for each locale of `public/_locales`: the store listing images, named after their type and size, with the extension's name and description in that language.
 
-The Deezer extensions use the Deezer heart, [`shared/assets/deezer-heart.svg`](shared/assets/deezer-heart.svg). Music Bridge has no vector icon yet: its images come from its original 128 px icon, [`extensions/music-bridge/assets/icon.png`](extensions/music-bridge/assets/icon.png), so its 300 px logo and large tile are blurry.
+The Deezer extensions use the Deezer heart, [`shared/assets/deezer-heart.svg`](shared/assets/deezer-heart.svg). Music Bridge uses its logo, [`extensions/music-bridge/assets/icon.svg`](extensions/music-bridge/assets/icon.svg). Its manifest icons take new colors drawn at random for each release ([`extensions/music-bridge/scripts/logo.ts`](extensions/music-bridge/scripts/logo.ts)): a RampenSau color ramp (a hue turning over a random part of the color wheel), never dark, no two colors too close, and two triangles that share a side always in clearly different colors. Its store images (logo, promo tiles, screenshots) keep the logo's own colors. When the "Version Packages" pull request changes Music Bridge's version, `pnpm changeset:version` draws its colors, keeps them in `extensions/music-bridge/assets/colors.json` and renders its icons again, so the new icon shows there before the release. To draw again, run `node extensions/music-bridge/scripts/logo.ts --redraw` then `pnpm store-assets music-bridge` on that pull request's branch. The store listings keep the logo's own colors, store icon included (`store/icon-128x128.png`): the new colors are only a nod to the people who use the extension.
 
 ### Store formats
 
 Each extension's `store/` folder holds its images and a `store/README.md` with everything the listings ask for, in every language of the extension: texts, category, search terms, notes for reviewers, permission justifications, privacy answers and images. The stores ask for these images, all PNG; the Chrome Web Store wants screenshots and tiles without alpha (24-bit), as `pnpm store-assets` and the screenshots workflow render them:
 
-|                    |     Chrome Web Store      | addons.mozilla.org | Microsoft Edge Add-ons | File                                |
-| ------------------ | :-----------------------: | :----------------: | :--------------------: | ----------------------------------- |
-| Icon / logo        | 128×128 (96 + 16 padding) |      128×128       |        300×300         | `logo-300x300.png`, `icons/128.png` |
-| Screenshots        |    1280×800 (up to 5)     |      1280×800      |   1280×800 (up to 6)   | `screenshot-1280x800-*.png`         |
-| Small promo tile   |          440×280          |         –          |        440×280         | `promo-440x280-<locale>.png`        |
-| Marquee promo tile |         1400×560          |         –          |        1400×560        | `promo-1400x560-<locale>.png`       |
+|                    |     Chrome Web Store      | addons.mozilla.org | Microsoft Edge Add-ons | File                                   |
+| ------------------ | :-----------------------: | :----------------: | :--------------------: | -------------------------------------- |
+| Icon / logo        | 128×128 (96 + 16 padding) |      128×128       |        300×300         | `logo-300x300.png`, `icon-128x128.png` |
+| Screenshots        |    1280×800 (up to 5)     |      1280×800      |   1280×800 (up to 6)   | `screenshot-1280x800-*.png`            |
+| Small promo tile   |          440×280          |         –          |        440×280         | `promo-440x280-<locale>.png`           |
+| Marquee promo tile |         1400×560          |         –          |        1400×560        | `promo-1400x560-<locale>.png`          |
 
 ## Store screenshots
 

@@ -5,7 +5,7 @@
  * - description: store/description-<locale>.md;
  * - categories: AMO_CATEGORIES below; homepage: the extension's folder on GitHub;
  * - privacy policy: store/privacy-<locale>.md, when the extension has one;
- * - with --images, also the icon (public/icons/128.png) and the screenshots (store/screenshot-*.png,
+ * - with --images, also the icon (store/icon-128x128.png, or else public/icons/128.png) and the screenshots (store/screenshot-*.png,
  *   the English ones when they differ by language): they replace the listing's previews, with their captions
  *   from store/captions.json ({ "<file>": { "<locale>": "<caption>" } }).
  *
@@ -96,7 +96,8 @@ for (const locale of await readdir(resolve(dir, 'public/_locales'))) {
 }
 const listing = { name, summary, description, categories: AMO_CATEGORIES[extension], homepage: { 'en-US': `${REPO}/tree/main/extensions/${extension}` } };
 
-const icon = resolve(dir, 'public/icons/128.png');
+// The store icon, when the extension has one: Music Bridge's manifest icons change colors with each release
+const icon = resolve(dir, existsSync(resolve(dir, 'store/icon-128x128.png')) ? 'store/icon-128x128.png' : 'public/icons/128.png');
 const allScreenshots = (await readdir(resolve(dir, 'store'))).filter(file => /^screenshot-.*\.png$/.test(file)).toSorted();
 // Previews are the same for every language: keep the default locale's when they differ by language
 const localized = allScreenshots.filter(file => file.includes(`-${DEFAULT_LOCALE}-`));

@@ -248,6 +248,9 @@ importers:
       playwright:
         specifier: 1.64.0
         version: 1.64.0
+      rampensau:
+        specifier: 2.4.0
+        version: 2.4.0
       sass:
         specifier: 1.105.1
         version: 1.105.1
@@ -2436,6 +2439,9 @@ packages:
 
   quick-format-unescaped@4.0.4:
     resolution: {integrity: sha512-tYC1Q1hgyRuHgloV/YXs2w15unPVh8qfu/qCTfhTYamaw7fyhumKa2yGpdSo87vY32rIclj+4fWYQXUMs9EHvg==}
+
+  rampensau@2.4.0:
+    resolution: {integrity: sha512-EV0/4I649+XZueSSj3RwMS38gwFPHvovupmw6CpeemZSeeGoeiDKM2sialEeuiBzs3CAortNZlZoZIPeXbyY3g==}
 
   rc9@3.1.0:
     resolution: {integrity: sha512-ufjkNVzbRHKcCOmTahZkmVsyc3W+MSk3jY03m+a7tGHkIsdVMG9l10/3HvFbWkkKzY5VFp3pkRsIo/UYgmFL7Q==}
@@ -5095,6 +5101,8 @@ snapshots:
   quansync@0.2.11: {}
 
   quick-format-unescaped@4.0.4: {}
+
+  rampensau@2.4.0: {}
 
   rc9@3.1.0:
     dependencies:
