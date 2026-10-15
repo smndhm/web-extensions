@@ -5,8 +5,9 @@
  * it; a version without colors (1.7.1 and before) keeps the SVG's. The colors are drawn in OKLCH:
  * - hues: 9 hues spread at random over a part of the color wheel drawn at random, from a third to all of it;
  * - lightness: one of LIGHTNESS, never dark; chroma: as vivid as the screen allows, up to CHROMA;
- * - two triangles that share a side always get clearly different colors (sharing a point is fine): the colors go
- *   to the SVG's colors in a random order that keeps them apart, or are drawn again.
+ * - no two colors too close, and two triangles that share a side always get clearly different colors (sharing a point
+ *   is fine): the colors go to the SVG's colors in a random order that keeps them apart, or are drawn again.
+ * Only the extension's icon changes: the store images keep the SVG's colors (logo({ original: true }).
  *
  * Usage: node scripts/logo.ts --draw   draws the colors of the current version, unless it has some already
  *        node scripts/logo.ts --redraw draws them again
@@ -24,7 +25,8 @@ const COLORS_FILE = resolve(DIR, 'assets/colors.json');
 // The lightness of the 9 colors, alternating when two: from the shades of the original logo, none dark
 const LIGHTNESS = [[0.76], [0.84, 0.71], [0.78, 0.71], [0.71, 0.84]];
 const CHROMA = 0.17;
-// Smallest OKLab distance between the colors of two triangles that share a side
+// Smallest OKLab distance between any two of the 9 colors, and between the colors of two triangles that share a side
+const MIN_DISTANCE = 0.05;
 const MIN_CONTRAST = 0.09;
 
 type Oklch = { l: number; c: number; h: number };
@@ -126,6 +128,7 @@ export function draw(sides: [number, number][]): string[] {
     while (hues.toSorted((a, b) => a - b).some((hue, i, sorted) => i > 0 && hue - sorted[i - 1]! < span / 24));
     const lightness = LIGHTNESS[Math.floor(Math.random() * LIGHTNESS.length)]!;
     const colors = hues.map((h, i) => hex({ l: lightness[i % lightness.length]!, c: CHROMA, h: h % 360 }));
+    if (colors.some((a, i) => colors.slice(i + 1).some(b => distance(a, b) < MIN_DISTANCE))) continue;
     for (let attempt = 0; attempt < 200; attempt++) {
       const order = shuffle(colors);
       if (sides.every(([a, b]) => distance(order[a]!, order[b]!) >= MIN_CONTRAST)) return order;
@@ -136,11 +139,11 @@ export function draw(sides: [number, number][]): string[] {
 const readColors = async (): Promise<Record<string, string[]>> => JSON.parse(await readFile(COLORS_FILE, 'utf8').catch(() => '{}')) as Record<string, string[]>;
 const currentVersion = async () => (JSON.parse(await readFile(resolve(DIR, 'package.json'), 'utf8')) as { version: string }).version;
 
-/** The logo's SVG in a version's colors, by default the current version's */
-export async function logo(version?: string): Promise<string> {
+/** The logo's SVG in a version's colors, by default the current version's, or in the SVG's own colors */
+export async function logo({ version, original: keep = false }: { version?: string; original?: boolean } = {}): Promise<string> {
   const svg = await readFile(resolve(DIR, 'assets/icon.svg'), 'utf8');
   const { original } = layout(svg);
-  const palette = (await readColors())[version ?? (await currentVersion())] ?? original;
+  const palette = (keep ? undefined : (await readColors())[version ?? (await currentVersion())]) ?? original;
   const fill = /fill="(#[0-9a-f]{6})"/gi;
   return (
     svg
@@ -178,6 +181,6 @@ if (import.meta.main) {
       console.log(`music-bridge ${current}: new colors ${colors[current].join(' ')}`);
     }
   } else {
-    console.log(await logo(version));
+    console.log(await logo({ version }));
   }
 }
