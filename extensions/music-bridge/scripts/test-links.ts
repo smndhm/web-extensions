@@ -42,11 +42,13 @@ async function json<T>(url: string): Promise<T> {
   return (await response.json()) as T;
 }
 
-/** The song on Deezer: the first result of a search for its artist and title */
-async function deezerTrack(artist: string, title: string): Promise<DeezerTrack> {
-  const { data } = await json<{ data: DeezerTrack[] }>(`https://api.deezer.com/search?q=${encodeURIComponent(`artist:"${artist}" track:"${title}"`)}&limit=1`);
-  if (!data[0]) throw new Error(`Deezer: ${artist}, ${title} not found`);
-  return data[0];
+/** Case and accent insensitive comparison */
+const same = (a: string, b: string) => a.localeCompare(b, undefined, { sensitivity: 'base' }) === 0;
+
+/** The song on Deezer: among the results of a search for its artist and title, the first by that artist, or undefined */
+async function deezerTrack(artist: string, title: string): Promise<DeezerTrack | undefined> {
+  const { data } = await json<{ data: DeezerTrack[] }>(`https://api.deezer.com/search?q=${encodeURIComponent(`${artist} ${title}`)}&limit=25`);
+  return data.find(track => same(track.artist.name, artist)) ?? data[0];
 }
 
 let lastOdesliCall = 0;
@@ -72,6 +74,11 @@ const cell = (label: string, url: string | undefined) => {
 const rows: string[] = [];
 for (const { platform, key, artist, title } of SONGS) {
   const track = await deezerTrack(artist, title);
+  if (!track) {
+    console.log(`${platform}: ${artist}, ${title} not found on Deezer`);
+    rows.push(`| ${platform} | ${cell(`${artist}, ${title}`, undefined)} | |`);
+    continue;
+  }
   const albumUrl = `https://www.deezer.com/album/${track.album.id}`;
   const [trackLink, albumLink] = key === 'deezer' ? [track.link, albumUrl] : [await odesliLink(track.link, key), await odesliLink(albumUrl, key)];
   console.log(`${platform}: ${track.artist.name}, ${track.title}: ${trackLink ?? 'no track link'}, ${albumLink ?? 'no album link'}`);
