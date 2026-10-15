@@ -1,5 +1,16 @@
 # music-bridge
 
+## 1.8.0
+
+### Minor Changes
+
+- 5527bac: The logo changes colors with each release.
+
+### Patch Changes
+
+- 9c1d9ea: On Android, the "Open in desktop app" options are hidden: Firefox itself offers to open the links in the platform's app.
+- 9089125: Updated dependency `vitest` to `5.0.4`.
+
 ## 1.7.1
 
 ### Patch Changes
