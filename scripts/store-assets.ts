@@ -4,7 +4,7 @@
  * - store/logo-300x300.png, and store/promo-440x280-<locale>.png and store/promo-1400x560-<locale>.png
  *   (promotional tiles) for each locale, named after their type and size, for the store listings: the icon, the name and
  *   the description of the extension (public/_locales/<locale>/messages.json) on a dark background.
- * Music Bridge's icon is its logo of the current version, whose colors change with each release
+ * Music Bridge's icon is its logo in the colors of the current version, drawn at random for each release
  * (extensions/music-bridge/scripts/logo.ts).
  *
  * Usage: pnpm store-assets [extension…], all extensions by default

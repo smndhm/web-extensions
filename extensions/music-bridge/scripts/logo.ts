@@ -1,107 +1,147 @@
 /**
- * The Music Bridge logo of the current version: assets/icon.svg, whose colors change with each release.
+ * The Music Bridge logo: assets/icon.svg, in new colors drawn at random for each release.
  *
- * The logo's 9 colors, in the order they first appear in the SVG, become 9 Tailwind CSS colors: one hue out of two of
- * Tailwind's 17, from a starting hue, in one lightness or two alternating ones. Each release moves to the next combination
- * (the start moves 5 hues on, the lightness to the next of LIGHTNESS), so 68 releases go by before a logo comes back.
- * The release count comes from CHANGELOG.md: the versions released since FIRST, which keeps the original colors.
+ * assets/colors.json keeps each version's 9 colors, which replace the SVG's colors in the order they first appear in
+ * it; a version without colors (1.7.1 and before) keeps the SVG's. The colors are drawn in OKLCH:
+ * - hues: 9 hues spread at random over a part of the color wheel drawn at random, from a third to all of it;
+ * - lightness: one of LIGHTNESS, never dark; chroma: as vivid as the screen allows, up to CHROMA;
+ * - two triangles that share a side always get clearly different colors (sharing a point is fine): the colors go
+ *   to the SVG's colors in a random order that keeps them apart, or are drawn again.
  *
+ * Usage: node scripts/logo.ts --draw   draws the colors of the current version, unless it has some already
+ *        node scripts/logo.ts --redraw draws them again
+ *        node scripts/logo.ts [version] prints the SVG of a version, the current one by default
  * The SVG is cropped to a square around the drawing, as the icons fill their whole size.
- *
- * Usage: node scripts/logo.ts [release count], prints the SVG
  */
 
-import { readFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { parseArgs } from 'node:util';
 
 const DIR = resolve(import.meta.dirname, '..');
-const FIRST = '1.7.1';
+const COLORS_FILE = resolve(DIR, 'assets/colors.json');
 
-// Tailwind CSS v3 colors (MIT), the hues in color wheel order
-const TAILWIND: Record<string, Record<number, string>> = {
-  red: { 200: '#fecaca', 300: '#fca5a5', 400: '#f87171', 500: '#ef4444' },
-  orange: { 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c', 500: '#f97316' },
-  amber: { 200: '#fde68a', 300: '#fcd34d', 400: '#fbbf24', 500: '#f59e0b' },
-  yellow: { 200: '#fef08a', 300: '#fde047', 400: '#facc15', 500: '#eab308' },
-  lime: { 200: '#d9f99d', 300: '#bef264', 400: '#a3e635', 500: '#84cc16' },
-  green: { 200: '#bbf7d0', 300: '#86efac', 400: '#4ade80', 500: '#22c55e' },
-  emerald: { 200: '#a7f3d0', 300: '#6ee7b7', 400: '#34d399', 500: '#10b981' },
-  teal: { 200: '#99f6e4', 300: '#5eead4', 400: '#2dd4bf', 500: '#14b8a6' },
-  cyan: { 200: '#a5f3fc', 300: '#67e8f9', 400: '#22d3ee', 500: '#06b6d4' },
-  sky: { 200: '#bae6fd', 300: '#7dd3fc', 400: '#38bdf8', 500: '#0ea5e9' },
-  blue: { 200: '#bfdbfe', 300: '#93c5fd', 400: '#60a5fa', 500: '#3b82f6' },
-  indigo: { 200: '#c7d2fe', 300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1' },
-  violet: { 200: '#ddd6fe', 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6' },
-  purple: { 200: '#e9d5ff', 300: '#d8b4fe', 400: '#c084fc', 500: '#a855f7' },
-  fuchsia: { 200: '#f5d0fe', 300: '#f0abfc', 400: '#e879f9', 500: '#d946ef' },
-  pink: { 200: '#fbcfe8', 300: '#f9a8d4', 400: '#f472b6', 500: '#ec4899' },
-  rose: { 200: '#fecdd3', 300: '#fda4af', 400: '#fb7185', 500: '#f43f5e' },
-};
-const HUES = Object.keys(TAILWIND);
-// The lightness of the logo's colors, alternating when two: each color is the shade of its hue closest to it,
-// as the same shade is lighter in yellow than in blue
+// The lightness of the 9 colors, alternating when two: from the shades of the original logo, none dark
 const LIGHTNESS = [[0.76], [0.84, 0.71], [0.78, 0.71], [0.71, 0.84]];
+const CHROMA = 0.17;
+// Smallest OKLab distance between the colors of two triangles that share a side
+const MIN_CONTRAST = 0.09;
 
-/** OKLCH lightness of a #rrggbb color */
-function lightness(hex: string): number {
+type Oklch = { l: number; c: number; h: number };
+type Rgb = [number, number, number];
+
+/** sRGB (0–1, may be out of gamut) of an OKLCH color */
+function rgb({ l, c, h }: Oklch): Rgb {
+  const [a, b] = [c * Math.cos((h * Math.PI) / 180), c * Math.sin((h * Math.PI) / 180)];
+  const [lms1, lms2, lms3] = [l + 0.3963377774 * a + 0.2158037573 * b, l - 0.1055613458 * a - 0.0638541728 * b, l - 0.0894841775 * a - 1.291485548 * b].map(v => v ** 3) as Rgb;
+  const linear: Rgb = [
+    4.0767416621 * lms1 - 3.3077115913 * lms2 + 0.2309699292 * lms3,
+    -1.2684380046 * lms1 + 2.6097574011 * lms2 - 0.3413193965 * lms3,
+    -0.0041960863 * lms1 - 0.7034186147 * lms2 + 1.707614701 * lms3,
+  ];
+  return linear.map(v => (v <= 0.0031308 ? 12.92 * v : 1.055 * Math.abs(v) ** (1 / 2.4) * Math.sign(v) - 0.055)) as Rgb;
+}
+
+const inGamut = (color: Rgb) => color.every(v => v >= -1e-4 && v <= 1 + 1e-4);
+
+/** #rrggbb of an OKLCH color, its chroma reduced until the screen can show it */
+function hex(color: Oklch): string {
+  let c = color.c;
+  while (c > 0 && !inGamut(rgb({ ...color, c }))) c -= 0.005;
+  return `#${rgb({ ...color, c: Math.max(c, 0) })
+    .map(v =>
+      Math.round(Math.min(1, Math.max(0, v)) * 255)
+        .toString(16)
+        .padStart(2, '0'),
+    )
+    .join('')}`;
+}
+
+/** OKLab coordinates of a #rrggbb color */
+function oklab(color: string): Rgb {
   const [r, g, b] = [1, 3, 5].map(i => {
-    const c = parseInt(hex.slice(i, i + 2), 16) / 255;
-    return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
-  }) as [number, number, number];
+    const v = parseInt(color.slice(i, i + 2), 16) / 255;
+    return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+  }) as Rgb;
   const [l, m, s] = [
     0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b,
     0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b,
     0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b,
-  ].map(Math.cbrt) as [number, number, number];
-  return 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s;
+  ].map(Math.cbrt) as Rgb;
+  return [0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s, 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s, 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s];
 }
 
-/** The shade of a hue closest to a lightness */
-const shade = (hue: Record<number, string>, target: number): string =>
-  Object.values(hue).reduce((best, color) => (Math.abs(lightness(color) - target) < Math.abs(lightness(best) - target) ? color : best));
+const distance = (a: string, b: string) => Math.hypot(...oklab(a).map((v, i) => v - oklab(b)[i]!));
 
-/** The versions released since FIRST, from CHANGELOG.md */
-async function releaseCount(): Promise<number> {
-  const versions = [...(await readFile(resolve(DIR, 'CHANGELOG.md'), 'utf8')).matchAll(/^## (\S+)$/gm)].map(match => match[1]);
-  const index = versions.indexOf(FIRST);
-  return index === -1 ? versions.length : index;
-}
+const random = (min: number, max: number) => min + Math.random() * (max - min);
+const shuffle = <T>(items: T[]): T[] =>
+  items
+    .map(item => [Math.random(), item] as const)
+    .toSorted(([a], [b]) => a - b)
+    .map(([, item]) => item);
 
-/** The logo's 9 colors for a release count: the original ones at 0 */
-export function colors(release: number, original: string[]): string[] {
-  if (release === 0) return original;
-  const start = (release * 5) % HUES.length;
-  const targets = LIGHTNESS[release % LIGHTNESS.length]!;
-  return original.map((_, i) => shade(TAILWIND[HUES[(start + 2 * i) % HUES.length]!]!, targets[i % targets.length]!));
-}
-
-/** A square viewBox around the paths (M, L, H, V and Z commands, absolute coordinates) */
-function squareViewBox(svg: string): string {
-  const xs: number[] = [];
-  const ys: number[] = [];
-  for (const [, d] of svg.matchAll(/ d="([^"]+)"/g)) {
-    for (const [, command, args] of d!.matchAll(/([MLHVZ])([^MLHVZ]*)/gi)) {
+/** The SVG's triangles, as their color and their corners */
+function triangles(svg: string): { color: string; corners: string[] }[] {
+  return [...svg.matchAll(/ d="([^"]+)" fill="(#[0-9a-f]{6})"/gi)].map(([, d, color]) => {
+    const corners: string[] = [];
+    let [x, y] = [0, 0];
+    for (const [, command, args] of d!.matchAll(/([MLHV])([^MLHVZ]*)/gi)) {
       const numbers = args!
         .trim()
         .split(/[\s,]+/)
-        .filter(Boolean)
         .map(Number);
-      if (command === 'H') xs.push(...numbers);
-      else if (command === 'V') ys.push(...numbers);
-      else numbers.forEach((n, i) => (i % 2 ? ys : xs).push(n));
+      if (command === 'H') x = numbers[0]!;
+      else if (command === 'V') y = numbers[0]!;
+      else [x, y] = numbers as [number, number];
+      corners.push(`${x.toFixed(2)},${y.toFixed(2)}`);
     }
-  }
-  const [minX, maxX, minY, maxY] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
-  const size = Math.max(maxX - minX, maxY - minY);
-  return [(minX + maxX - size) / 2, (minY + maxY - size) / 2, size, size].map(n => Number(n.toFixed(4))).join(' ');
+    return { color: color!.toLowerCase(), corners };
+  });
 }
 
-/** The logo's SVG, in the colors of the given release count, by default the current one */
-export async function logo(release?: number): Promise<string> {
+/** The SVG's colors, in the order they first appear, and the pairs of them whose triangles share a side */
+function layout(svg: string): { original: string[]; sides: [number, number][] } {
+  const shapes = triangles(svg);
+  const original = [...new Set(shapes.map(shape => shape.color))];
+  const sides = new Set<string>();
+  for (const [i, a] of shapes.entries()) {
+    for (const b of shapes.slice(i + 1)) {
+      if (a.corners.filter(corner => b.corners.includes(corner)).length < 2) continue;
+      const pair = [original.indexOf(a.color), original.indexOf(b.color)].toSorted((x, y) => x - y);
+      if (pair[0] === pair[1]) throw new Error(`assets/icon.svg: two ${a.color} triangles share a side`);
+      sides.add(pair.join());
+    }
+  }
+  return { original, sides: [...sides].map(pair => pair.split(',').map(Number) as [number, number]) };
+}
+
+/** 9 new colors at random, in an order where the triangles that share a side get clearly different colors */
+export function draw(sides: [number, number][]): string[] {
+  for (;;) {
+    const span = random(120, 360);
+    const start = random(0, 360);
+    // 9 hues over the span, at least a 24th of it apart
+    let hues: number[];
+    do hues = Array.from({ length: 9 }, () => start + random(0, span));
+    while (hues.toSorted((a, b) => a - b).some((hue, i, sorted) => i > 0 && hue - sorted[i - 1]! < span / 24));
+    const lightness = LIGHTNESS[Math.floor(Math.random() * LIGHTNESS.length)]!;
+    const colors = hues.map((h, i) => hex({ l: lightness[i % lightness.length]!, c: CHROMA, h: h % 360 }));
+    for (let attempt = 0; attempt < 200; attempt++) {
+      const order = shuffle(colors);
+      if (sides.every(([a, b]) => distance(order[a]!, order[b]!) >= MIN_CONTRAST)) return order;
+    }
+  }
+}
+
+const readColors = async (): Promise<Record<string, string[]>> => JSON.parse(await readFile(COLORS_FILE, 'utf8').catch(() => '{}')) as Record<string, string[]>;
+const currentVersion = async () => (JSON.parse(await readFile(resolve(DIR, 'package.json'), 'utf8')) as { version: string }).version;
+
+/** The logo's SVG in a version's colors, by default the current version's */
+export async function logo(version?: string): Promise<string> {
   const svg = await readFile(resolve(DIR, 'assets/icon.svg'), 'utf8');
+  const { original } = layout(svg);
+  const palette = (await readColors())[version ?? (await currentVersion())] ?? original;
   const fill = /fill="(#[0-9a-f]{6})"/gi;
-  const original = [...new Set([...svg.matchAll(fill)].map(match => match[1]!.toLowerCase()))];
-  const palette = colors(release ?? (await releaseCount()), original);
   return (
     svg
       // A stroke of the same color closes the hairline gaps antialiasing leaves between the triangles
@@ -113,4 +153,31 @@ export async function logo(release?: number): Promise<string> {
   );
 }
 
-if (import.meta.main) console.log(await logo(process.argv[2] === undefined ? undefined : Number(process.argv[2])));
+/** A square viewBox around the triangles */
+function squareViewBox(svg: string): string {
+  const corners = triangles(svg).flatMap(shape => shape.corners.map(corner => corner.split(',').map(Number) as [number, number]));
+  const [xs, ys] = [corners.map(([x]) => x), corners.map(([, y]) => y)];
+  const [minX, maxX, minY, maxY] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
+  const size = Math.max(maxX - minX, maxY - minY);
+  return [(minX + maxX - size) / 2, (minY + maxY - size) / 2, size, size].map(n => Number(n.toFixed(4))).join(' ');
+}
+
+if (import.meta.main) {
+  const {
+    values,
+    positionals: [version],
+  } = parseArgs({ allowPositionals: true, options: { draw: { type: 'boolean' }, redraw: { type: 'boolean' } } });
+  if (values.draw || values.redraw) {
+    const current = await currentVersion();
+    const colors = await readColors();
+    if (colors[current] && !values.redraw) {
+      console.log(`music-bridge ${current}: colors already drawn, ${colors[current].join(' ')}`);
+    } else {
+      colors[current] = draw(layout(await readFile(resolve(DIR, 'assets/icon.svg'), 'utf8')).sides);
+      await writeFile(COLORS_FILE, `${JSON.stringify(colors, null, 2)}\n`);
+      console.log(`music-bridge ${current}: new colors ${colors[current].join(' ')}`);
+    }
+  } else {
+    console.log(await logo(version));
+  }
+}
