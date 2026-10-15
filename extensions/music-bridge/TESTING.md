@@ -6,9 +6,19 @@ Links to open after each release, or after a change to the content script or the
 
 Pick a platform in the options (Deezer, for example), then open each link of the other platforms: each should land on the same music on the chosen platform. Each platform has its own song, named after it, so the landing page tells where the link came from.
 
-The links come from `pnpm test-links` (the Deezer API finds each song, the Odesli API its links on the other platforms), run by the [Test links](../../.github/workflows/test-links.yml) workflow, which commits them here. Run it again when a link no longer works.
+The links come from `pnpm test-links` (the Deezer charts give a track and an album to each platform, the Music Bridge redirect service their links), run by the [Test links](../../.github/workflows/test-links.yml) workflow, which commits them here. Run it again when a link no longer works.
 
 <!-- test-links:start -->
+
+| Platform      | Track                                                                                                                                                             | Album                                                                                                                                         |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Spotify       | [STELLA LEFTY, Boston](https://open.spotify.com/track/36idurZmYRjJ56KQ8JD9bN)                                                                                     | [Tinashe, Popstar](https://open.spotify.com/album/06CjF89lLSSiVWXujVVtQs)                                                                     |
+| Deezer        | [Ella Langley, Choosin' Texas](https://www.deezer.com/track/3602074142)                                                                                           | [Slowdive, Souvlaki](https://www.deezer.com/album/224401)                                                                                     |
+| Apple Music   | [Morgan Wallen, Been By Now](https://geo.music.apple.com/us/album/_/6792676858?i=6792676860&mt=1&app=music&ls=1&at=1000lHKX&ct=api_http&itscg=30200&itsct=odsl_m) | [Korn, Life Is Peachy](https://geo.music.apple.com/us/album/_/967389561?mt=1&app=music&ls=1&at=1000lHKX&ct=api_http&itscg=30200&itsct=odsl_m) |
+| YouTube Music | [Ella Langley, Be Her](https://music.youtube.com/watch?v=Dg47eNL_Usw)                                                                                             | [Bruno Mars, An Evening With Silk Sonic](https://music.youtube.com/playlist?list=PL7tBPYQzCjeLCUZbgWnpFRpJIjDIlmW4l)                          |
+| Tidal         | [KAROL G, BbY WOW](https://listen.tidal.com/track/549980035)                                                                                                      | [TOOL, Ænima](https://listen.tidal.com/album/114331551)                                                                                       |
+| Amazon Music  | [Tame Impala, Dracula (with JENNIE)](https://music.amazon.com/albums/B0GL4VXFS2?trackAsin=B0GL4CTPCJ)                                                             | [NCT WISH, I SPY - The 4th Mini Album](https://music.amazon.com/albums/B0HL8Z71N2)                                                            |
+| Pandora       | [Olivia Rodrigo, stupid song](https://www.pandora.com/TR:207049157)                                                                                               | [Xdinary Heroes, IMPULSE](https://www.pandora.com/AL:69811020)                                                                                |
 
 <!-- test-links:end -->
 

@@ -1,10 +1,12 @@
 /**
- * Writes the links of TESTING.md: for each platform Music Bridge redirects from, a track and its album on that
- * platform, a different song for each (named after the platform, to tell at a glance where a link came from).
+ * Writes the links of TESTING.md: for each platform Music Bridge redirects from, a track and an album on that platform,
+ * different for each, to tell at a glance where a link came from.
  *
- * Each song is found with the public Deezer API, then its links on the other platforms with the Odesli API, the one the
- * redirect service uses. A platform without the song keeps "not found". Odesli allows 10 requests a minute: the script
- * waits between them, so it takes about two minutes.
+ * The tracks are the Deezer chart (Top Worldwide, from the public Deezer API), in order: the first to the first platform,
+ * the second to the second, and so on; a platform without the track gets the next one. The albums are the Deezer album
+ * chart, the same way. Their links on the platforms come from the Music Bridge redirect service, which asks the Odesli
+ * API (it needs a key, the service has one). Odesli allows 10 requests a minute: the script waits between them, so it
+ * takes about two minutes.
  *
  * Usage: pnpm test-links
  */
@@ -13,25 +15,29 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
 const FILE = resolve(import.meta.dirname, '../TESTING.md');
+const REDIRECT_SERVICE_URL = 'https://music-bridge-redirect.smndhm.workers.dev/';
+// Top Worldwide, as on the store screenshots (scripts/screenshots.ts), and the album chart
+const TRACKS = 'https://api.deezer.com/playlist/3155776842/tracks?limit=50';
+const ALBUMS = 'https://api.deezer.com/chart/0/albums?limit=50';
 const START = '<!-- test-links:start -->';
 const END = '<!-- test-links:end -->';
 
-// The platforms Music Bridge redirects from, with their Odesli key, and a song named after each
-const SONGS = [
-  { platform: 'Spotify', key: 'spotify', artist: 'Jennifer Hudson', title: 'Spotlight' },
-  { platform: 'Deezer', key: 'deezer', artist: 'Goo Goo Dolls', title: 'Dizzy' },
-  { platform: 'Apple Music', key: 'appleMusic', artist: 'Charli xcx', title: 'Apple' },
-  { platform: 'YouTube Music', key: 'youtubeMusic', artist: 'The Buggles', title: 'Video Killed the Radio Star' },
-  { platform: 'Tidal', key: 'tidal', artist: 'Portugal. The Man', title: 'Tidal Wave' },
-  { platform: 'Amazon Music', key: 'amazonMusic', artist: 'Gojira', title: 'Amazonia' },
-  { platform: 'Pandora', key: 'pandora', artist: 'Orchestral Manoeuvres In The Dark', title: "Pandora's Box" },
+// The platforms Music Bridge redirects from, with their key in the redirect service (Odesli's)
+const PLATFORMS = [
+  { platform: 'Spotify', key: 'spotify' },
+  { platform: 'Deezer', key: 'deezer' },
+  { platform: 'Apple Music', key: 'appleMusic' },
+  { platform: 'YouTube Music', key: 'youtubeMusic' },
+  { platform: 'Tidal', key: 'tidal' },
+  { platform: 'Amazon Music', key: 'amazonMusic' },
+  { platform: 'Pandora', key: 'pandora' },
 ] as const;
 
-interface DeezerTrack {
+/** A track or an album */
+interface DeezerItem {
   title: string;
   link: string;
   artist: { name: string };
-  album: { id: number; title: string };
 }
 
 const sleep = (ms: number) => new Promise(done => setTimeout(done, ms));
@@ -42,40 +48,36 @@ async function json<T>(url: string): Promise<T> {
   return (await response.json()) as T;
 }
 
-/** The song on Deezer: the first result of a search for its artist and title */
-async function deezerTrack(artist: string, title: string): Promise<DeezerTrack> {
-  const { data } = await json<{ data: DeezerTrack[] }>(`https://api.deezer.com/search?q=${encodeURIComponent(`artist:"${artist}" track:"${title}"`)}&limit=1`);
-  if (!data[0]) throw new Error(`Deezer: ${artist}, ${title} not found`);
-  return data[0];
+let lastCall = 0;
+
+/** The link of a Deezer page on a platform, where the redirect service sends it, or undefined when it has none */
+async function link(deezerUrl: string, platform: string): Promise<string | undefined> {
+  if (platform === 'deezer') return deezerUrl;
+  // Odesli allows 10 requests a minute
+  await sleep(Math.max(0, lastCall + 6500 - Date.now()));
+  lastCall = Date.now();
+  const url = `${REDIRECT_SERVICE_URL}?${new URLSearchParams({ url: deezerUrl, platform })}`;
+  const response = await fetch(url, { redirect: 'manual' });
+  if (response.status === 404) return undefined;
+  const location = response.headers.get('location');
+  if (response.status !== 302 || !location) throw new Error(`${url}: ${response.status}`);
+  return location;
 }
 
-let lastOdesliCall = 0;
-
-/** The link of a Deezer page on another platform, from Odesli, or undefined when Odesli has none */
-async function odesliLink(deezerUrl: string, key: string): Promise<string | undefined> {
-  // 10 requests a minute
-  await sleep(Math.max(0, lastOdesliCall + 6500 - Date.now()));
-  lastOdesliCall = Date.now();
-  // Pandora is only in the United States
-  const country = key === 'pandora' ? 'US' : 'FR';
-  const { linksByPlatform } = await json<{ linksByPlatform: Record<string, { url: string }> }>(
-    `https://api.song.link/v1-alpha.1/links?url=${encodeURIComponent(deezerUrl)}&userCountry=${country}`,
-  );
-  return linksByPlatform[key]?.url;
+/** The link on a platform of the first item of a chart it has, taken out of the chart, as a table cell */
+async function next(chart: DeezerItem[], platform: string, key: string): Promise<string> {
+  for (let item = chart.shift(); item; item = chart.shift()) {
+    const url = await link(item.link, key);
+    console.log(`${platform}: ${item.artist.name}, ${item.title}: ${url ?? 'not found'}`);
+    if (url) return `[${`${item.artist.name}, ${item.title}`.replaceAll('|', '\\|')}](${url})`;
+  }
+  return 'not found';
 }
 
-const cell = (label: string, url: string | undefined) => {
-  const text = label.replaceAll('|', '\\|');
-  return url ? `[${text}](${url})` : `${text}: not found`;
-};
-
+const [tracks, albums] = await Promise.all([TRACKS, ALBUMS].map(async url => (await json<{ data: DeezerItem[] }>(url)).data));
 const rows: string[] = [];
-for (const { platform, key, artist, title } of SONGS) {
-  const track = await deezerTrack(artist, title);
-  const albumUrl = `https://www.deezer.com/album/${track.album.id}`;
-  const [trackLink, albumLink] = key === 'deezer' ? [track.link, albumUrl] : [await odesliLink(track.link, key), await odesliLink(albumUrl, key)];
-  console.log(`${platform}: ${track.artist.name}, ${track.title}: ${trackLink ?? 'no track link'}, ${albumLink ?? 'no album link'}`);
-  rows.push(`| ${platform} | ${cell(`${track.artist.name}, ${track.title}`, trackLink)} | ${cell(`${track.artist.name}, ${track.album.title}`, albumLink)} |`);
+for (const { platform, key } of PLATFORMS) {
+  rows.push(`| ${platform} | ${await next(tracks!, platform, key)} | ${await next(albums!, platform, key)} |`);
 }
 
 const table = ['| Platform | Track | Album |', '| --- | --- | --- |', ...rows].join('\n');
