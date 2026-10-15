@@ -1,9 +1,15 @@
 name: Test links
 
 # Finds Music Bridge's manual test links (extensions/music-bridge/TESTING.md) with the Deezer charts and the Music Bridge redirect service, and
-# commits them to the branch (not main)
+# commits them to the branch (not main). With "Check", checks instead that the redirect service handles the links of
+# TESTING.md, on any branch, main included
 on:
   workflow_dispatch:
+    inputs:
+      check:
+        description: Check the links of TESTING.md with the redirect service, instead of finding new ones
+        type: boolean
+        default: false
 
 permissions:
   contents: write # Commit TESTING.md
@@ -20,11 +26,16 @@ jobs:
 
       - uses: ./.github/actions/setup
 
+      - name: Check the links
+        if: inputs.check
+        run: pnpm test-links --check
+
       - name: Find the links
+        if: ${{ !inputs.check }}
         run: pnpm test-links && pnpm exec prettier --write TESTING.md
 
       - name: Commit the links
-        if: github.ref_name != github.event.repository.default_branch
+        if: ${{ !inputs.check && github.ref_name != github.event.repository.default_branch }}
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
