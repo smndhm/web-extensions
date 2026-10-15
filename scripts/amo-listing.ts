@@ -5,13 +5,11 @@
  * - description: store/description-<locale>.md;
  * - categories: AMO_CATEGORIES below; homepage: the extension's folder on GitHub;
  * - privacy policy: store/privacy-<locale>.md, when the extension has one;
- * - with --images, also the icon (public/icons/128.png) and the screenshots (store/screenshot-*.png,
+ * - with --images, also the icon (store/icon-128x128.png, or else public/icons/128.png) and the screenshots (store/screenshot-*.png,
  *   the English ones when they differ by language): they replace the listing's previews, with their captions
  *   from store/captions.json ({ "<file>": { "<locale>": "<caption>" } }).
  *
- * --icon sends only the icon, for Music Bridge whose logo changes colors with each release.
- *
- * Usage: node scripts/amo-listing.ts <extension> [--images | --icon] [--dry-run]
+ * Usage: node scripts/amo-listing.ts <extension> [--images] [--dry-run]
  *        node scripts/amo-listing.ts <extension> --version-metadata <file>
  * --version-metadata writes, instead, the metadata of the version to submit for wxt submit's
  * --firefox-amo-metadata-file: the notes for reviewers (store/notes-for-reviewers.md) and the release
@@ -40,15 +38,10 @@ const AMO_CATEGORIES: Record<string, string[]> = {
 
 const {
   positionals: [extension],
-  values: { images, 'icon': iconOnly, 'dry-run': dryRun, 'version-metadata': versionMetadata },
+  values: { images, 'dry-run': dryRun, 'version-metadata': versionMetadata },
 } = parseArgs({
   allowPositionals: true,
-  options: {
-    'images': { type: 'boolean', default: false },
-    'icon': { type: 'boolean', default: false },
-    'dry-run': { type: 'boolean', default: false },
-    'version-metadata': { type: 'string' },
-  },
+  options: { 'images': { type: 'boolean', default: false }, 'dry-run': { type: 'boolean', default: false }, 'version-metadata': { type: 'string' } },
 });
 
 if (!extension || !AMO_CATEGORIES[extension]) {
@@ -103,7 +96,8 @@ for (const locale of await readdir(resolve(dir, 'public/_locales'))) {
 }
 const listing = { name, summary, description, categories: AMO_CATEGORIES[extension], homepage: { 'en-US': `${REPO}/tree/main/extensions/${extension}` } };
 
-const icon = resolve(dir, 'public/icons/128.png');
+// The store icon, when the extension has one: Music Bridge's manifest icons change colors with each release
+const icon = resolve(dir, existsSync(resolve(dir, 'store/icon-128x128.png')) ? 'store/icon-128x128.png' : 'public/icons/128.png');
 const allScreenshots = (await readdir(resolve(dir, 'store'))).filter(file => /^screenshot-.*\.png$/.test(file)).toSorted();
 // Previews are the same for every language: keep the default locale's when they differ by language
 const localized = allScreenshots.filter(file => file.includes(`-${DEFAULT_LOCALE}-`));
@@ -124,7 +118,6 @@ for (const file of screenshots) if (!captionOf(file)) console.warn(`${extension}
 if (dryRun) {
   console.log(JSON.stringify(listing, null, 2));
   if (Object.keys(privacyPolicy).length) console.log(JSON.stringify({ privacy_policy: privacyPolicy }, null, 2));
-  if (iconOnly && !images) console.log(`Icon: ${icon}`);
   if (images)
     console.log(`Icon: ${icon}\nPreviews (replacing the current ones):\n${screenshots.map(file => `- ${file} ${JSON.stringify(captionOf(file) ?? {})}`).join('\n') || '- none'}`);
   process.exit(0);
@@ -183,12 +176,10 @@ if (Object.keys(privacyPolicy).length) {
   console.log(`${extension}: privacy policy updated`);
 }
 
-if (images || iconOnly) {
+if (images) {
   await amo('PATCH', addonUrl, await imageForm('icon', icon));
   console.log(`${extension}: icon updated`);
-}
 
-if (images) {
   if (!screenshots.length) {
     console.log(`${extension}: no screenshots, previews left as they are`);
     process.exit(0);

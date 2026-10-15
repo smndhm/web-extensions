@@ -1,7 +1,7 @@
 /**
  * Renders each extension's images from one source icon, the same way for all extensions:
  * - public/icons/{16,32,48,128}.png, the manifest icons;
- * - store/logo-300x300.png, and store/promo-440x280-<locale>.png and store/promo-1400x560-<locale>.png
+ * - store/icon-128x128.png, store/logo-300x300.png, and store/promo-440x280-<locale>.png and store/promo-1400x560-<locale>.png
  *   (promotional tiles) for each locale, named after their type and size, for the store listings: the icon, the name and
  *   the description of the extension (public/_locales/<locale>/messages.json) on a dark background.
  * Music Bridge's manifest icons are its logo in the colors of the current version, drawn at random for each release
@@ -87,6 +87,8 @@ try {
     for (const iconSize of ICON_SIZES) {
       await shoot(iconOnly(icon, iconSize, iconPadding(iconSize)), iconSize, iconSize, resolve(dir, `public/icons/${iconSize}.png`), true);
     }
+    // The store icon, in the store images' colors: the same as the manifest's for every extension but Music Bridge
+    await shoot(iconOnly(store, 128, iconPadding(128)), 128, 128, resolve(dir, 'store/icon-128x128.png'), true);
     await shoot(iconOnly(store, 300), 300, 300, resolve(dir, 'store/logo-300x300.png'), true);
     // One set of promo tiles per locale, for the store listing in that language
     for (const locale of await readdir(resolve(dir, 'public/_locales'))) {
