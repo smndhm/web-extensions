@@ -1,6 +1,6 @@
 name: Test links
 
-# Finds Music Bridge's manual test links (extensions/music-bridge/TESTING.md) with the Deezer API and the Music Bridge redirect service, and
+# Finds Music Bridge's manual test links (extensions/music-bridge/TESTING.md) with the iTunes Search API and the Music Bridge redirect service, and
 # commits them to the branch (not main)
 on:
   workflow_dispatch:
