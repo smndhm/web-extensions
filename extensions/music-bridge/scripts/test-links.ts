@@ -2,7 +2,8 @@
  * Writes the links of TESTING.md: for each platform Music Bridge redirects from, a track and its album on that
  * platform, a different song for each (named after the platform, to tell at a glance where a link came from).
  *
- * Each song is found with the public Deezer API, then its links on the other platforms with the Music Bridge redirect
+ * Each song is found with the public iTunes Search API (the Deezer API hides much of its catalog from the United States,
+ * where the workflow runs), then its links on the other platforms with the Music Bridge redirect
  * service, which asks the Odesli API (it needs a key, the service has one). A platform without the song keeps
  * "not found". Odesli allows 10 requests a minute: the script waits between them, so it takes about two minutes.
  *
@@ -28,11 +29,12 @@ const SONGS = [
   { platform: 'Pandora', key: 'pandora', artist: 'Orchestral Manoeuvres In The Dark', title: "Pandora's Box" },
 ] as const;
 
-interface DeezerTrack {
-  title: string;
-  link: string;
-  artist: { name: string };
-  album: { id: number; title: string };
+interface ITunesTrack {
+  artistName: string;
+  trackName: string;
+  collectionName: string;
+  trackViewUrl: string;
+  collectionViewUrl: string;
 }
 
 const sleep = (ms: number) => new Promise(done => setTimeout(done, ms));
@@ -47,23 +49,25 @@ async function json<T>(url: string): Promise<T> {
 const same = (a: string, b: string) => a.localeCompare(b, undefined, { sensitivity: 'base' }) === 0;
 
 /**
- * The song on Deezer: among the results of a search for its artist and title, the first by that artist with that exact
- * title (not a remix or a live version), else the first by that artist, else the first, or undefined
+ * The song on Apple Music: among the results of a search for its artist and title, the first by that artist with that
+ * exact title (not a remix or a live version), else the first by that artist, else the first, or undefined
  */
-async function deezerTrack(artist: string, title: string): Promise<DeezerTrack | undefined> {
-  const { data } = await json<{ data: DeezerTrack[] }>(`https://api.deezer.com/search?q=${encodeURIComponent(`${artist} ${title}`)}&limit=50`);
-  const byArtist = data.filter(track => same(track.artist.name, artist));
-  return byArtist.find(track => same(track.title, title)) ?? byArtist[0] ?? data[0];
+async function appleTrack(artist: string, title: string): Promise<ITunesTrack | undefined> {
+  const { results } = await json<{ results: ITunesTrack[] }>(
+    `https://itunes.apple.com/search?${new URLSearchParams({ term: `${artist} ${title}`, entity: 'song', country: 'us', limit: '50' })}`,
+  );
+  const byArtist = results.filter(track => same(track.artistName, artist));
+  return byArtist.find(track => same(track.trackName, title)) ?? byArtist[0] ?? results[0];
 }
 
 let lastCall = 0;
 
-/** The link of a Deezer page on another platform, where the redirect service sends it, or undefined when it has none */
-async function link(deezerUrl: string, platform: string): Promise<string | undefined> {
+/** The link of an Apple Music page on another platform, where the redirect service sends it, or undefined when it has none */
+async function link(appleUrl: string, platform: string): Promise<string | undefined> {
   // Odesli allows 10 requests a minute
   await sleep(Math.max(0, lastCall + 6500 - Date.now()));
   lastCall = Date.now();
-  const url = `${REDIRECT_SERVICE_URL}?${new URLSearchParams({ url: deezerUrl, platform })}`;
+  const url = `${REDIRECT_SERVICE_URL}?${new URLSearchParams({ url: appleUrl, platform })}`;
   const response = await fetch(url, { redirect: 'manual' });
   if (response.status === 404) return undefined;
   const location = response.headers.get('location');
@@ -78,16 +82,16 @@ const cell = (label: string, url: string | undefined) => {
 
 const rows: string[] = [];
 for (const { platform, key, artist, title } of SONGS) {
-  const track = await deezerTrack(artist, title);
+  const track = await appleTrack(artist, title);
   if (!track) {
-    console.log(`${platform}: ${artist}, ${title} not found on Deezer`);
+    console.log(`${platform}: ${artist}, ${title} not found on Apple Music`);
     rows.push(`| ${platform} | ${cell(`${artist}, ${title}`, undefined)} | |`);
     continue;
   }
-  const albumUrl = `https://www.deezer.com/album/${track.album.id}`;
-  const [trackLink, albumLink] = key === 'deezer' ? [track.link, albumUrl] : [await link(track.link, key), await link(albumUrl, key)];
-  console.log(`${platform}: ${track.artist.name}, ${track.title}: ${trackLink ?? 'no track link'}, ${albumLink ?? 'no album link'}`);
-  rows.push(`| ${platform} | ${cell(`${track.artist.name}, ${track.title}`, trackLink)} | ${cell(`${track.artist.name}, ${track.album.title}`, albumLink)} |`);
+  const [trackLink, albumLink] =
+    key === 'appleMusic' ? [track.trackViewUrl, track.collectionViewUrl] : [await link(track.trackViewUrl, key), await link(track.collectionViewUrl, key)];
+  console.log(`${platform}: ${track.artistName}, ${track.trackName}: ${trackLink ?? 'no track link'}, ${albumLink ?? 'no album link'}`);
+  rows.push(`| ${platform} | ${cell(`${track.artistName}, ${track.trackName}`, trackLink)} | ${cell(`${track.artistName}, ${track.collectionName}`, albumLink)} |`);
 }
 
 const table = ['| Platform | Track | Album |', '| --- | --- | --- |', ...rows].join('\n');
