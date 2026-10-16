@@ -14,6 +14,7 @@ const HTML = readFileSync(resolve(import.meta.dirname, '../entrypoints/options/i
 const WINDOWS = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0';
 const CHROMEOS = 'Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 const ANDROID = 'Mozilla/5.0 (Android 14; Mobile; rv:142.0) Gecko/142.0 Firefox/142.0';
+const LINUX = 'Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0';
 
 const MESSAGES: Record<string, string> = {
   '@@ui_locale': 'fr_FR',
@@ -117,6 +118,17 @@ describe('options page', () => {
     await open(ANDROID);
     expect(openAppOption().hidden).toBe(true);
     expect(checkbox().checked).toBe(false);
+  });
+
+  it('only offers the app for Spotify on Linux, the only one with a Linux app', async () => {
+    await browser.storage.local.set({ platform: 'deezer', openInApp: true });
+    await open(LINUX);
+    expect(openAppOption().hidden).toBe(true);
+    expect(checkbox().checked).toBe(false);
+
+    select().value = 'spotify';
+    select().dispatchEvent(new Event('change'));
+    expect(openAppOption().hidden).toBe(false);
   });
 
   it('saves the settings and announces it for two seconds', async () => {
