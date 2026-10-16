@@ -10,17 +10,18 @@
     <main>
       <!-- The browser shows the options in its own settings page, under the extension name: keep the heading for assistive technologies only -->
       <h1 class="visually-hidden" data-i18n="optionsTitle"></h1>
+      <p class="intro" data-i18n="optionsIntro"></p>
       <form>
         <div class="field">
           <label for="streaming-platforms" data-i18n="optionsStreamingPlatformLabel"></label>
           <select id="streaming-platforms" name="platform"></select>
         </div>
-        <div class="field" id="open-app-option">
+        <div class="field check" id="open-app-option">
           <input type="checkbox" id="open-app" name="openInApp" aria-describedby="open-app-help" />
           <label for="open-app" data-i18n="optionsOpenAppLabel"></label>
           <p id="open-app-help" class="help" data-i18n="optionsOpenAppHelp"></p>
         </div>
-        <div class="field" id="close-tab-option">
+        <div class="field check" id="close-tab-option">
           <input type="checkbox" id="close-tab" name="closeTab" aria-describedby="close-tab-help" />
           <label for="close-tab" data-i18n="optionsCloseTabLabel"></label>
           <p id="close-tab-help" class="help" data-i18n="optionsCloseTabHelp"></p>
