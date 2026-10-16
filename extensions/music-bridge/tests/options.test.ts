@@ -27,7 +27,7 @@ const MESSAGES: Record<string, string> = {
   'optionsCloseTabHelp': 'Tick “Always allow” in the browser prompt the first time.',
   'optionsSaveButton': 'Save',
   'optionsSaveConfirmation': 'Preferences saved.',
-  'optionsCredits': 'Made with the %LINK% API.',
+  'optionsCredits': 'Uses the %LINK% API.',
   'optionsNewTab': '(opens in a new tab)',
 };
 
@@ -66,7 +66,7 @@ describe('options page', () => {
 
   it('credits Odesli with a link that tells it opens a new tab', async () => {
     await open();
-    expect($('footer').textContent).toBe('Made with the Odesli (opens in a new tab) API.');
+    expect($('footer').textContent).toBe('Uses the Odesli (opens in a new tab) API.');
     const link = $<HTMLAnchorElement>('footer a');
     expect(link.href).toBe('https://odesli.co/');
     expect(link.target).toBe('_blank');
