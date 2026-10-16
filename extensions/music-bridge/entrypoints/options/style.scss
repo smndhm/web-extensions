@@ -84,9 +84,10 @@ body {
   margin: auto;
   padding: 2.4rem 0;
 
+  // What the extension does: the first thing to read, in the main text color
   &__intro {
     margin: 0 0 2.4rem;
-    color: var(--muted);
+    font-size: 1.7rem;
   }
 
   &__form {
