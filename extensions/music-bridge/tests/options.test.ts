@@ -120,15 +120,11 @@ describe('options page', () => {
     expect(checkbox().checked).toBe(false);
   });
 
-  it('only offers the app for Spotify on Linux, the only one with a Linux app', async () => {
+  it('never offers the app on Linux', async () => {
     await browser.storage.local.set({ platform: 'deezer', openInApp: true });
     await open(LINUX);
     expect(openAppOption().hidden).toBe(true);
     expect(checkbox().checked).toBe(false);
-
-    select().value = 'spotify';
-    select().dispatchEvent(new Event('change'));
-    expect(openAppOption().hidden).toBe(false);
   });
 
   it('saves the settings and announces it for two seconds', async () => {

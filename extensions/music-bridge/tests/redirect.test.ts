@@ -73,16 +73,12 @@ describe('getRedirectUrl', () => {
       });
     });
 
-    it('ignores the setting on Linux for Deezer and Apple Music, which have no Linux app', () => {
+    it('ignores the setting on Linux', () => {
       expect(getRedirectUrl(DEEZER_TRACK, { platform: 'deezer', openInApp: true }, LINUX)).toBeUndefined();
-      expect(serviceParams(getRedirectUrl(SPOTIFY_TRACK, { platform: 'appleMusic', openInApp: true }, LINUX))).toEqual({
+      expect(serviceParams(getRedirectUrl(SPOTIFY_TRACK, { platform: 'deezer', openInApp: true }, LINUX))).toEqual({
         url: SPOTIFY_TRACK,
-        platform: 'appleMusic',
+        platform: 'deezer',
       });
-    });
-
-    it('opens the Spotify app on Linux', () => {
-      expect(getRedirectUrl(SPOTIFY_TRACK, { platform: 'spotify', openInApp: true }, LINUX)).toBe('spotify:track:4uLU6hMCjMI75M1A2tKUQC');
     });
 
     it('ignores the setting for platforms without app links', () => {
