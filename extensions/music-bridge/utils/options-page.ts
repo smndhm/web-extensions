@@ -55,7 +55,7 @@ export async function initOptionsPage(doc: Document, userAgent: string): Promise
   checkbox.checked = settings.openInApp;
   closeTab.checked = settings.closeTab;
 
-  // Opening in the app only makes sense for platforms with app links, and not on ChromeOS, Android or Linux
+  // Opening in the app only makes sense for platforms with app links, and not on ChromeOS, Android, iOS or Linux
   const updateOpenAppOption = () => {
     const available = isPlatformId(select.value) && platforms[select.value].hasNativeAppLink === true;
     openAppOption.hidden = !available || !hasDesktopApps(userAgent);
