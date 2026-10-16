@@ -7,30 +7,32 @@
     <title>Music Bridge</title>
   </head>
   <body>
-    <main>
+    <main class="options">
       <!-- The browser shows the options in its own settings page, under the extension name: keep the heading for assistive technologies only -->
       <h1 class="visually-hidden" data-i18n="optionsTitle"></h1>
-      <form>
+      <p class="options__intro" data-i18n="optionsIntro"></p>
+      <form class="options__form">
         <div class="field">
-          <label for="streaming-platforms" data-i18n="optionsStreamingPlatformLabel"></label>
-          <select id="streaming-platforms" name="platform"></select>
+          <label class="field__label" for="streaming-platforms" data-i18n="optionsStreamingPlatformLabel"></label>
+          <select class="field__select" id="streaming-platforms" name="platform"></select>
         </div>
-        <div class="field" id="open-app-option">
-          <input type="checkbox" id="open-app" name="openInApp" />
-          <label for="open-app" data-i18n="optionsOpenAppLabel"></label>
+        <div class="field field--check" id="open-app-option">
+          <input class="field__checkbox" type="checkbox" id="open-app" name="openInApp" aria-describedby="open-app-help" />
+          <label class="field__label" for="open-app" data-i18n="optionsOpenAppLabel"></label>
+          <p class="field__help" id="open-app-help" data-i18n="optionsOpenAppHelp"></p>
         </div>
-        <div class="field" id="close-tab-option">
-          <input type="checkbox" id="close-tab" name="closeTab" aria-describedby="close-tab-help" />
-          <label for="close-tab" data-i18n="optionsCloseTabLabel"></label>
-          <p id="close-tab-help" class="help" data-i18n="optionsCloseTabHelp"></p>
+        <div class="field field--check" id="close-tab-option">
+          <input class="field__checkbox" type="checkbox" id="close-tab" name="closeTab" aria-describedby="close-tab-help" />
+          <label class="field__label" for="close-tab" data-i18n="optionsCloseTabLabel"></label>
+          <p class="field__help" id="close-tab-help" data-i18n="optionsCloseTabHelp"></p>
         </div>
-        <div id="save-options">
-          <p role="status" id="save-status"></p>
-          <button type="submit" data-i18n="optionsSaveButton"></button>
+        <div class="save" id="save-options">
+          <p class="save__status" role="status" id="save-status"></p>
+          <button class="save__button" type="submit" data-i18n="optionsSaveButton"></button>
         </div>
       </form>
     </main>
-    <footer></footer>
+    <footer class="credits"></footer>
     <script type="module" src="./main.ts"></script>
   </body>
 </html>

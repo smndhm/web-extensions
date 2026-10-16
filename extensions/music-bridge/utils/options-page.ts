@@ -10,11 +10,12 @@ const LINK_TOKEN = '%LINK%';
 type MessageKey = Parameters<typeof browser.i18n.getMessage>[0];
 const t = (key: MessageKey) => browser.i18n.getMessage(key);
 
-/** "Made with the Odesli API": the link goes where the message has the %LINK% token */
+/** "Uses the Odesli API": the link goes where the message has the %LINK% token */
 function renderCredits(footer: HTMLElement) {
   const doc = footer.ownerDocument;
   const [before = '', after = ''] = t('optionsCredits').split(LINK_TOKEN);
   const link = doc.createElement('a');
+  link.className = 'credits__link';
   link.href = 'https://odesli.co/';
   link.target = '_blank';
   link.rel = 'noopener';
@@ -55,7 +56,7 @@ export async function initOptionsPage(doc: Document, userAgent: string): Promise
   checkbox.checked = settings.openInApp;
   closeTab.checked = settings.closeTab;
 
-  // Opening in the app only makes sense for platforms with app links, and not on ChromeOS or Android
+  // Opening in the app only makes sense for platforms with app links, and not on ChromeOS, Android, iOS or Linux
   const updateOpenAppOption = () => {
     const available = isPlatformId(select.value) && platforms[select.value].hasNativeAppLink === true;
     openAppOption.hidden = !available || !hasDesktopApps(userAgent);

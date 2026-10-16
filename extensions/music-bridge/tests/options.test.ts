@@ -14,17 +14,20 @@ const HTML = readFileSync(resolve(import.meta.dirname, '../entrypoints/options/i
 const WINDOWS = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0';
 const CHROMEOS = 'Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 const ANDROID = 'Mozilla/5.0 (Android 14; Mobile; rv:142.0) Gecko/142.0 Firefox/142.0';
+const LINUX = 'Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0';
 
 const MESSAGES: Record<string, string> = {
   '@@ui_locale': 'fr_FR',
   'optionsTitle': 'Music Bridge - Options',
+  'optionsIntro': 'Links to a track or an album on another streaming platform open on yours.',
   'optionsStreamingPlatformLabel': 'Select your streaming platform:',
-  'optionsOpenAppLabel': 'Open in desktop app.',
-  'optionsCloseTabLabel': 'Close the tab once the app opens.',
+  'optionsOpenAppLabel': 'Open links in the desktop app',
+  'optionsOpenAppHelp': "The platform's app must be installed on this computer.",
+  'optionsCloseTabLabel': 'Close the tab once the app opens',
   'optionsCloseTabHelp': 'Tick “Always allow” in the browser prompt the first time.',
   'optionsSaveButton': 'Save',
   'optionsSaveConfirmation': 'Preferences saved.',
-  'optionsCredits': 'Made with the %LINK% API.',
+  'optionsCredits': 'Uses the %LINK% API.',
   'optionsNewTab': '(opens in a new tab)',
 };
 
@@ -57,13 +60,13 @@ describe('options page', () => {
     expect(document.title).toBe('Music Bridge - Options');
     expect($('h1').textContent).toBe('Music Bridge - Options');
     expect($('label[for="streaming-platforms"]').textContent).toBe('Select your streaming platform:');
-    expect($('label[for="open-app"]').textContent).toBe('Open in desktop app.');
+    expect($('label[for="open-app"]').textContent).toBe('Open links in the desktop app');
     expect($('button').textContent).toBe('Save');
   });
 
   it('credits Odesli with a link that tells it opens a new tab', async () => {
     await open();
-    expect($('footer').textContent).toBe('Made with the Odesli (opens in a new tab) API.');
+    expect($('footer').textContent).toBe('Uses the Odesli (opens in a new tab) API.');
     const link = $<HTMLAnchorElement>('footer a');
     expect(link.href).toBe('https://odesli.co/');
     expect(link.target).toBe('_blank');
@@ -105,6 +108,13 @@ describe('options page', () => {
     expect(checkbox().checked).toBe(false);
   });
 
+  it('says the app must be installed', async () => {
+    await browser.storage.local.set({ platform: 'deezer' });
+    await open();
+    expect($('#open-app-help').textContent).toBe("The platform's app must be installed on this computer.");
+    expect(checkbox().getAttribute('aria-describedby')).toBe('open-app-help');
+  });
+
   it('never offers the app on ChromeOS', async () => {
     await browser.storage.local.set({ platform: 'deezer', openInApp: true });
     await open(CHROMEOS);
@@ -115,6 +125,13 @@ describe('options page', () => {
   it('never offers the app on Android', async () => {
     await browser.storage.local.set({ platform: 'deezer', openInApp: true });
     await open(ANDROID);
+    expect(openAppOption().hidden).toBe(true);
+    expect(checkbox().checked).toBe(false);
+  });
+
+  it('never offers the app on Linux', async () => {
+    await browser.storage.local.set({ platform: 'deezer', openInApp: true });
+    await open(LINUX);
     expect(openAppOption().hidden).toBe(true);
     expect(checkbox().checked).toBe(false);
   });

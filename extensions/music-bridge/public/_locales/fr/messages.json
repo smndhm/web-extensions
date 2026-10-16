@@ -11,16 +11,24 @@
     "message": "Music Bridge - Options",
     "description": "Options page title."
   },
+  "optionsIntro": {
+    "message": "Les liens vers un titre ou un album d'une autre plateforme de streaming s'ouvrent sur la vôtre.",
+    "description": "Options page introduction: what the extension does."
+  },
   "optionsStreamingPlatformLabel": {
     "message": "Sélectionnez votre plateforme de streaming :",
     "description": "Options page label for the streaming platforms list."
   },
   "optionsOpenAppLabel": {
-    "message": "Ouvrir les liens dans l'application.",
+    "message": "Ouvrir les liens dans l'application de bureau",
     "description": "Options page label to open links in desktop app."
   },
+  "optionsOpenAppHelp": {
+    "message": "L'application de la plateforme doit être installée sur cet ordinateur.",
+    "description": "Options page help under the open in desktop app option."
+  },
   "optionsCloseTabLabel": {
-    "message": "Fermer l'onglet une fois l'application ouverte.",
+    "message": "Fermer l'onglet une fois l'application ouverte",
     "description": "Options page label to close the tab after opening the desktop app."
   },
   "optionsCloseTabHelp": {
@@ -36,7 +44,7 @@
     "description": "Save options button confirmation"
   },
   "optionsCredits": {
-    "message": "Fait avec l'API d'%LINK%.",
+    "message": "Utilise l'API d'%LINK%.",
     "description": "Options page credits. %LINK% is replaced by a link to Odesli."
   },
   "optionsNewTab": {
