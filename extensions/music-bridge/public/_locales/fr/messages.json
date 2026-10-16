@@ -47,6 +47,21 @@
     "message": "Utilise l'API d'%LINK%.",
     "description": "Options page credits. %LINK% is replaced by a link to Odesli."
   },
+  "noticeNotFound": {
+    "message": "Music Bridge n'a pas trouvé cette musique sur $PLATFORM$.",
+    "description": "Message on the music page when the music is not on the chosen platform.",
+    "placeholders": {
+      "platform": { "content": "$1", "example": "Deezer" }
+    }
+  },
+  "noticeUnavailable": {
+    "message": "Music Bridge n'a pas pu rediriger ce lien pour l'instant. Réessayez plus tard.",
+    "description": "Message on the music page when the redirect service fails."
+  },
+  "noticeClose": {
+    "message": "Fermer",
+    "description": "Label of the button that closes the message on the music page."
+  },
   "optionsNewTab": {
     "message": "(ouvre un nouvel onglet)",
     "description": "Read by screen readers after a link that opens in a new tab."
