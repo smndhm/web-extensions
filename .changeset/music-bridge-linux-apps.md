@@ -7,3 +7,5 @@ On Linux and iOS, the "Open links in the desktop app" options are hidden, as on 
 The "Open links in the desktop app" option now says the platform's app must be installed on the computer.
 
 A cleaner options page: a sentence saying what the extension does, the options in boxes with their help aligned, a clearer Save button, and visible keyboard focus. The credits read "Uses the Odesli API".
+
+Deezer first in the platforms list of the options, and in the store texts.
