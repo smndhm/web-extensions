@@ -42,6 +42,7 @@ export default defineContentScript({
         showNotice(
           document,
           notFound ? browser.i18n.getMessage('noticeNotFound', platforms[settings.platform].name) : browser.i18n.getMessage('noticeUnavailable'),
+          browser.i18n.getMessage('@@ui_locale').replace('_', '-'),
           browser.i18n.getMessage('noticeClose'),
           iconUrl,
         );
