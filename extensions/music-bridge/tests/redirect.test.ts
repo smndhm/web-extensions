@@ -5,6 +5,7 @@ import { getRedirectUrl, REDIRECT_SERVICE_URL, shouldCloseTab } from '@/utils/re
 const WINDOWS = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0';
 const CHROMEOS = 'Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 const ANDROID = 'Mozilla/5.0 (Android 14; Mobile; rv:142.0) Gecko/142.0 Firefox/142.0';
+const LINUX = 'Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0';
 
 const SPOTIFY_TRACK = 'https://open.spotify.com/intl-fr/track/4uLU6hMCjMI75M1A2tKUQC';
 const DEEZER_TRACK = 'https://www.deezer.com/fr/track/3135556';
@@ -70,6 +71,18 @@ describe('getRedirectUrl', () => {
         url: SPOTIFY_TRACK,
         platform: 'deezer',
       });
+    });
+
+    it('ignores the setting on Linux for Deezer and Apple Music, which have no Linux app', () => {
+      expect(getRedirectUrl(DEEZER_TRACK, { platform: 'deezer', openInApp: true }, LINUX)).toBeUndefined();
+      expect(serviceParams(getRedirectUrl(SPOTIFY_TRACK, { platform: 'appleMusic', openInApp: true }, LINUX))).toEqual({
+        url: SPOTIFY_TRACK,
+        platform: 'appleMusic',
+      });
+    });
+
+    it('opens the Spotify app on Linux', () => {
+      expect(getRedirectUrl(SPOTIFY_TRACK, { platform: 'spotify', openInApp: true }, LINUX)).toBe('spotify:track:4uLU6hMCjMI75M1A2tKUQC');
     });
 
     it('ignores the setting for platforms without app links', () => {

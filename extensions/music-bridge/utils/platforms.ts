@@ -10,6 +10,8 @@ export interface Platform {
   aliases?: string[];
   /** Odesli knows a desktop app link for this platform */
   hasNativeAppLink?: boolean;
+  /** The desktop app also exists on Linux (Apple Music and Deezer only have Windows and macOS apps) */
+  linuxApp?: boolean;
 }
 
 export const platforms: Record<PlatformId, Platform> = {
@@ -39,6 +41,7 @@ export const platforms: Record<PlatformId, Platform> = {
     name: 'Spotify',
     url: 'https://open.spotify.com',
     hasNativeAppLink: true,
+    linuxApp: true,
   },
   tidal: {
     name: 'Tidal',
