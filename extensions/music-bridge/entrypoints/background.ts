@@ -1,4 +1,5 @@
 import { listenForCloseTab } from '@/utils/close-tab';
+import { listenForResolve } from '@/utils/resolve';
 
 export default defineBackground({
   persistent: false,
@@ -8,5 +9,6 @@ export default defineBackground({
       if (reason === 'install') void browser.runtime.openOptionsPage();
     });
     listenForCloseTab();
+    listenForResolve();
   },
 });
