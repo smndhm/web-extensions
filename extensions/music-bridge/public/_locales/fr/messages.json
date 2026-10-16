@@ -20,7 +20,7 @@
     "description": "Options page label for the streaming platforms list."
   },
   "optionsOpenAppLabel": {
-    "message": "Ouvrir les liens dans l'application.",
+    "message": "Ouvrir les liens dans l'application de bureau",
     "description": "Options page label to open links in desktop app."
   },
   "optionsOpenAppHelp": {
@@ -28,7 +28,7 @@
     "description": "Options page help under the open in desktop app option."
   },
   "optionsCloseTabLabel": {
-    "message": "Fermer l'onglet une fois l'application ouverte.",
+    "message": "Fermer l'onglet une fois l'application ouverte",
     "description": "Options page label to close the tab after opening the desktop app."
   },
   "optionsCloseTabHelp": {
