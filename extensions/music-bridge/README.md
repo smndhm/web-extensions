@@ -14,15 +14,15 @@ Made with the [Odesli](https://odesli.co/) API, through the [music-bridge-redire
 
 ## Supported platforms
 
-- Amazon Music
-- Apple Music
 - Deezer
-- Pandora
-- SoundCloud (as a destination only)
 - Spotify
-- Tidal
-- YouTube (as a destination only)
+- Apple Music
 - YouTube Music
+- Amazon Music
+- YouTube (as a destination only)
+- SoundCloud (as a destination only)
+- Tidal
+- Pandora
 
 ## How it works
 

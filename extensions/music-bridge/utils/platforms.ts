@@ -1,4 +1,5 @@
-export const PLATFORM_IDS = ['amazonMusic', 'appleMusic', 'deezer', 'pandora', 'soundcloud', 'spotify', 'tidal', 'youtube', 'youtubeMusic'] as const;
+// In the options list order: Deezer first, then roughly by audience
+export const PLATFORM_IDS = ['deezer', 'spotify', 'appleMusic', 'youtubeMusic', 'amazonMusic', 'youtube', 'soundcloud', 'tidal', 'pandora'] as const;
 
 /** Platform IDs, as the Odesli API names them */
 export type PlatformId = (typeof PLATFORM_IDS)[number];
