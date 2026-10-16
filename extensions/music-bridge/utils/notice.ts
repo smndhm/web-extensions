@@ -10,8 +10,8 @@ export function showNotice(doc: Document, text: string, closeLabel: string): HTM
     <style>
       :host { all: initial; position: fixed; z-index: 2147483647; inset: 12px 12px auto; display: flex; justify-content: center; pointer-events: none; }
       div {
-        display: flex; align-items: center; gap: 12px; max-width: 560px; padding: 10px 10px 10px 16px; pointer-events: auto;
-        border-radius: 8px; background: #222; color: #fafafa; box-shadow: 0 4px 16px #0005;
+        display: flex; align-items: center; gap: 12px; max-width: 680px; padding: 10px 10px 10px 16px; pointer-events: auto;
+        border: 1px solid #ffffff40; border-radius: 8px; background: #222; color: #fafafa; box-shadow: 0 4px 16px #0005;
         font: 500 15px/1.4 system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       }
       button {
