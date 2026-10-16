@@ -68,6 +68,9 @@ jobs:
       DRY_RUN: ${{ inputs.dry-run }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          # The tags of the previous releases, to tell whether the listing texts changed
+          fetch-depth: 0
 
       - uses: ./.github/actions/setup
 
@@ -140,11 +143,27 @@ jobs:
           fi
           pnpm exec wxt submit "${args[@]}"
 
+      # Each AMO API call counts toward its rate limit, and a version upload uses much of it: update the
+      # listing only when its texts changed since the previous release of the extension
+      - name: Did the listing texts change?
+        id: listing
+        if: ${{ !cancelled() && contains(inputs.stores, 'firefox') }}
+        env:
+          EXTENSION: ${{ inputs.extension }}
+        run: |
+          version=$(node -p "require('./package.json').version")
+          previous=$(git tag --list "$EXTENSION@*" --sort=-v:refname | grep -vxF "$EXTENSION@$version" | head -n 1)
+          if [[ -z "$previous" ]] || ! git diff --quiet "$previous" HEAD -- public/_locales 'store/description-*.md' 'store/privacy-*.md' ../../scripts/amo-listing.ts; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::The addons.mozilla.org listing texts did not change since $previous: listing left as it is"
+          fi
+
       # The listing texts (name, summary, description, categories) follow the released version.
       # The images change less often: the AMO listing workflow replaces them on demand.
       # Also when another store refused the version (a Chrome review still pending, for example)
       - name: Update the addons.mozilla.org listing
-        if: ${{ !cancelled() && contains(inputs.stores, 'firefox') }}
+        if: ${{ !cancelled() && contains(inputs.stores, 'firefox') && steps.listing.outputs.changed == 'true' }}
         env:
           EXTENSION: ${{ inputs.extension }}
           FIREFOX_EXTENSION_ID: ${{ vars.FIREFOX_EXTENSION_ID }}
