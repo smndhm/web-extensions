@@ -1,10 +1,24 @@
+/** The time between adding the status region and its text, for screen readers to notice it first */
+export const ANNOUNCE_DELAY = 100;
+
+export interface Notice {
+  text: string;
+  lang: string;
+  closeLabel: string;
+  /** The logo, as a data URL: a page cannot load the extension's files */
+  iconUrl?: string;
+}
+
 /**
  * A message at the top of the music page, when Music Bridge could not redirect it. It sits in a
  * shadow root, so the page's styles neither change it nor are changed by it, and it is a status
  * region, so screen readers announce it. Its colors are those of the options page, light or dark
  * as the system. Sizes are in px: the page's root font size is not ours.
+ *
+ * `lang` is the language of the text, the extension's, not always the page's: screen readers read
+ * it with the right voice. The button, or Escape while the focus is in the message, closes it.
  */
-export function showNotice(doc: Document, text: string, closeLabel: string, iconUrl = ''): HTMLElement {
+export function showNotice(doc: Document, { text, lang, closeLabel, iconUrl = '' }: Notice): HTMLElement {
   const host = doc.createElement('music-bridge-notice');
   const shadow = host.attachShadow({ mode: 'open' });
   shadow.innerHTML = `
@@ -30,13 +44,22 @@ export function showNotice(doc: Document, text: string, closeLabel: string, icon
       button:hover { background: var(--hover); }
       button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
     </style>
-    <div role="status"><img alt=""><span></span><button type="button">×</button></div>
+    <div><img alt=""><span role="status"></span><button type="button">×</button></div>
   `;
+  const notice = shadow.querySelector('div')!;
+  notice.lang = lang;
   if (iconUrl) shadow.querySelector('img')!.src = iconUrl;
-  shadow.querySelector('span')!.textContent = text;
   const button = shadow.querySelector('button')!;
   button.setAttribute('aria-label', closeLabel);
   button.addEventListener('click', () => host.remove());
+  notice.addEventListener('keydown', event => {
+    if (event.key === 'Escape') host.remove();
+  });
   doc.documentElement.append(host);
+  // Screen readers announce the changes of a status region already there, not always one added with its text
+  const status = shadow.querySelector('span')!;
+  setTimeout(() => {
+    status.textContent = text;
+  }, ANNOUNCE_DELAY);
   return host;
 }

@@ -39,12 +39,12 @@ export default defineContentScript({
       const resolution = (await browser.runtime.sendMessage({ type: RESOLVE_MESSAGE_TYPE, url: redirect })) as Resolution | undefined;
       if (!resolution || !('url' in resolution)) {
         const notFound = resolution?.status === 404;
-        showNotice(
-          document,
-          notFound ? browser.i18n.getMessage('noticeNotFound', platforms[settings.platform].name) : browser.i18n.getMessage('noticeUnavailable'),
-          browser.i18n.getMessage('noticeClose'),
+        showNotice(document, {
+          text: notFound ? browser.i18n.getMessage('noticeNotFound', platforms[settings.platform].name) : browser.i18n.getMessage('noticeUnavailable'),
+          lang: browser.i18n.getMessage('@@ui_locale').replace('_', '-'),
+          closeLabel: browser.i18n.getMessage('noticeClose'),
           iconUrl,
-        );
+        });
         return;
       }
       target = resolution.url;
