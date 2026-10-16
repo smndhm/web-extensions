@@ -41,7 +41,7 @@ export default defineContentScript({
         const notFound = resolution?.status === 404;
         showNotice(document, {
           text: notFound ? browser.i18n.getMessage('noticeNotFound', platforms[settings.platform].name) : browser.i18n.getMessage('noticeUnavailable'),
-          lang: browser.i18n.getMessage('@@ui_locale').replace('_', '-'),
+          lang: browser.i18n.getMessage('lang'),
           closeLabel: browser.i18n.getMessage('noticeClose'),
           iconUrl,
         });

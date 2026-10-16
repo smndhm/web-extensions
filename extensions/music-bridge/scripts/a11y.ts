@@ -8,6 +8,10 @@
  * - the keyboard order is platform → open in app → close the tab → Save → the Odesli link;
  * - the save confirmation is in a status live region, so screen readers announce it.
  *
+ * Then, on a music page (served by the script, as the redirect service's "not on this platform" answer), it checks
+ * the message Music Bridge shows when it cannot redirect: axe-core again, its text in a status live region, in the
+ * extension's language, and its close button, reached with Tab, and Escape, which closes it.
+ *
  * Usage: pnpm build && pnpm a11y
  * CHROMIUM_PATH can point to a Chromium binary other than the one Playwright installs.
  */
@@ -15,12 +19,16 @@
 import { readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { resolve } from 'node:path';
-import { chromium, type Page } from 'playwright';
+import { chromium, type BrowserContext, type Page } from 'playwright';
 
 const EXTENSION_DIR = resolve(import.meta.dirname, '../.output/chrome-mv3');
 const AXE_SOURCE = await readFile(createRequire(import.meta.url).resolve('axe-core/axe.min.js'), 'utf8');
 
 const EXPECTED_TAB_ORDER = ['#streaming-platforms', '#open-app', '#close-tab', 'button[type=submit]', 'footer a'];
+const REDIRECT_SERVICE_URL = 'https://music-bridge-redirect.smndhm.workers.dev/';
+// A Spotify page in English, whatever the extension's language: the message must say its own
+const MUSIC_PAGE_URL = 'https://open.spotify.com/intl-en/track/0000000000000000000000';
+const MUSIC_PAGE = '<!doctype html><html lang="en"><head><title>Spotify</title></head><body><main><h1>A track</h1></main></body></html>';
 
 async function axe(page: Page, state: string): Promise<string[]> {
   // evaluate() runs in the page through the DevTools protocol, so the extension CSP does not block it
@@ -55,6 +63,32 @@ async function tabOrder(page: Page): Promise<string[]> {
   return order;
 }
 
+/** The message on a music page Music Bridge cannot redirect, the platform chosen being another one */
+async function checkNotice(context: BrowserContext, locale: string): Promise<string[]> {
+  const errors: string[] = [];
+  // The redirect service has no link for this music, and the music page is ours: the check needs no network
+  await context.route(`${REDIRECT_SERVICE_URL}**`, route => route.fulfill({ status: 404, json: { error: 'Not found' } }));
+  await context.route(MUSIC_PAGE_URL, route => route.fulfill({ contentType: 'text/html', body: MUSIC_PAGE }));
+  const page = await context.newPage();
+  page.on('pageerror', error => errors.push(`music page error: ${error.message}`));
+  await page.goto(MUSIC_PAGE_URL);
+  const status = page.locator('music-bridge-notice [role="status"]');
+  await status.filter({ hasText: /\S/ }).waitFor({ timeout: 10_000 });
+  errors.push(...(await axe(page, 'message')));
+  const lang = await status.evaluate(element => element.closest('[lang]')?.getAttribute('lang'));
+  if (lang !== locale) errors.push(`the message "${await status.textContent()}" is in ${lang}, expected ${locale}`);
+
+  // Its close button is in the keyboard order, and Escape there closes the message
+  await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
+  await page.keyboard.press('Tab');
+  const focused = await page.evaluate(() => document.querySelector('music-bridge-notice')?.shadowRoot?.activeElement?.tagName);
+  if (focused !== 'BUTTON') errors.push(`Tab on the music page lands on ${focused ?? 'the page'}, expected the message's close button`);
+  await page.keyboard.press('Escape');
+  if (await page.locator('music-bridge-notice').count()) errors.push('Escape on the close button does not close the message');
+  await page.close();
+  return errors;
+}
+
 async function check(locale: string, colorScheme: 'light' | 'dark'): Promise<string[]> {
   const name = `${locale} ${colorScheme}`;
   const errors: string[] = [];
@@ -72,7 +106,9 @@ async function check(locale: string, colorScheme: 'light' | 'dark'): Promise<str
     const extensionId = new URL(worker.url()).host;
     const page = await context.newPage();
     page.on('pageerror', error => errors.push(`page error: ${error.message}`));
-    await page.goto(`chrome-extension://${extensionId}/options.html`);
+    // On install, the extension opens its options page in chrome://extensions, which can interrupt this navigation
+    const optionsUrl = `chrome-extension://${extensionId}/options.html`;
+    await page.goto(optionsUrl).catch(() => page.goto(optionsUrl));
     await page.waitForFunction(() => document.querySelector('#streaming-platforms option') !== null);
 
     // As it opens: the default platform, "Open links in the desktop app" unticked
@@ -97,6 +133,9 @@ async function check(locale: string, colorScheme: 'light' | 'dark'): Promise<str
     });
     if (status.role !== 'status') errors.push(`the save confirmation "${status.text}" is not in a status live region`);
     errors.push(...(await axe(page, 'saved')));
+
+    // Deezer is now the platform: a Spotify page it has no link for shows the message
+    errors.push(...(await checkNotice(context, locale)));
   } finally {
     await context.close();
   }

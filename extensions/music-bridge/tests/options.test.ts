@@ -17,18 +17,18 @@ const ANDROID = 'Mozilla/5.0 (Android 14; Mobile; rv:142.0) Gecko/142.0 Firefox/
 const LINUX = 'Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0';
 
 const MESSAGES: Record<string, string> = {
-  '@@ui_locale': 'fr_FR',
-  'optionsTitle': 'Music Bridge - Options',
-  'optionsIntro': 'Links to a track or an album on another streaming platform open on yours.',
-  'optionsStreamingPlatformLabel': 'Select your streaming platform:',
-  'optionsOpenAppLabel': 'Open links in the desktop app',
-  'optionsOpenAppHelp': "The platform's app must be installed on this computer.",
-  'optionsCloseTabLabel': 'Close the tab once the app opens',
-  'optionsCloseTabHelp': 'Tick “Always allow” in the browser prompt the first time.',
-  'optionsSaveButton': 'Save',
-  'optionsSaveConfirmation': 'Preferences saved.',
-  'optionsCredits': 'Uses the %LINK% API.',
-  'optionsNewTab': '(opens in a new tab)',
+  lang: 'fr',
+  optionsTitle: 'Music Bridge - Options',
+  optionsIntro: 'Links to a track or an album on another streaming platform open on yours.',
+  optionsStreamingPlatformLabel: 'Select your streaming platform:',
+  optionsOpenAppLabel: 'Open links in the desktop app',
+  optionsOpenAppHelp: "The platform's app must be installed on this computer.",
+  optionsCloseTabLabel: 'Close the tab once the app opens',
+  optionsCloseTabHelp: 'Tick “Always allow” in the browser prompt the first time.',
+  optionsSaveButton: 'Save',
+  optionsSaveConfirmation: 'Preferences saved.',
+  optionsCredits: 'Uses the %LINK% API.',
+  optionsNewTab: '(opens in a new tab)',
 };
 
 const $ = <T extends Element>(selector: string) => document.querySelector<T>(selector)!;
@@ -56,7 +56,7 @@ beforeEach(() => {
 describe('options page', () => {
   it('is translated', async () => {
     await open();
-    expect(document.documentElement.lang).toBe('fr-FR');
+    expect(document.documentElement.lang).toBe('fr');
     expect(document.title).toBe('Music Bridge - Options');
     expect($('h1').textContent).toBe('Music Bridge - Options');
     expect($('label[for="streaming-platforms"]').textContent).toBe('Select your streaming platform:');
