@@ -19,6 +19,7 @@ const LINUX = 'Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/
 const MESSAGES: Record<string, string> = {
   '@@ui_locale': 'fr_FR',
   'optionsTitle': 'Music Bridge - Options',
+  'optionsIntro': 'Links to a track or an album on another streaming platform open on yours.',
   'optionsStreamingPlatformLabel': 'Select your streaming platform:',
   'optionsOpenAppLabel': 'Open in desktop app.',
   'optionsOpenAppHelp': "The platform's app must be installed on this computer.",

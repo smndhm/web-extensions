@@ -11,6 +11,10 @@
     "message": "Music Bridge - Options",
     "description": "Options page title."
   },
+  "optionsIntro": {
+    "message": "Links to a track or an album on another streaming platform open on yours.",
+    "description": "Options page introduction: what the extension does."
+  },
   "optionsStreamingPlatformLabel": {
     "message": "Select your streaming platform:",
     "description": "Options page label for the streaming platforms list."
