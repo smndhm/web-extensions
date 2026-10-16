@@ -7,27 +7,25 @@
   --font-size: 1.6rem;
   --line-height: 1.5;
   --radius: 0.8rem;
-  --text: #202124;
-  --muted: #5f6368;
-  --background: #fff;
-  --surface: #f6f5fb;
-  --border: #858196; // 3.7:1 on the background, above the 3:1 asked of input borders
-  // Violet of the logo, dark enough for white text (contrast 7:1)
-  --accent: #5b3fd0;
+  // The colors of simon.duhem.fr (smndhm/blu), plus a box and an input border of our own
+  --text: #222;
+  --muted: #555;
+  --background: #fafafa;
+  --surface: #f1edf7;
+  --border: #8a8a8a; // 3.3:1 on the background, above the 3:1 asked of input borders
+  --accent: #4b0195;
   --on-accent: #fff;
-  --focus: #5b3fd0;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #e8eaed;
-    --muted: #b1b3b8;
-    --background: #202124;
-    --surface: #2b2a33;
-    --border: #86829a; // 4.3:1
-    --accent: #b9a8ff;
-    --on-accent: #1b1530;
-    --focus: #b9a8ff;
+    --text: #fafafa;
+    --muted: #bbb;
+    --background: #222;
+    --surface: #2e2a35;
+    --border: #8a8a8a; // 4.6:1
+    --accent: #c9a2ff;
+    --on-accent: #222;
   }
 }
 
@@ -60,7 +58,7 @@ body {
 
 // Keyboard focus: a visible ring, never removed
 :focus-visible {
-  outline: 0.2rem solid var(--focus);
+  outline: 0.3rem solid var(--accent);
   outline-offset: 0.2rem;
 }
 
