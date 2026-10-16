@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getDeezerDesktopUri, getSpotifyDesktopUri, hasDesktopApp, hasDesktopApps, isChromeOS, isLinux } from '@/utils/links';
-import { platforms } from '@/utils/platforms';
+import { getDeezerDesktopUri, getSpotifyDesktopUri, hasDesktopApps, isChromeOS } from '@/utils/links';
 
 describe('isChromeOS', () => {
   it.each([
@@ -18,36 +17,10 @@ describe('hasDesktopApps', () => {
     ['Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', true],
     ['Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', false],
     ['Mozilla/5.0 (Android 14; Mobile; rv:142.0) Gecko/142.0 Firefox/142.0', false],
+    ['Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0', false],
+    ['Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0', false],
   ])('%s → %s', (userAgent, expected) => {
     expect(hasDesktopApps(userAgent)).toBe(expected);
-  });
-});
-
-describe('isLinux', () => {
-  it.each([
-    ['Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0', true],
-    ['Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0', true],
-    ['Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0', false],
-    ['Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36', false],
-    ['Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', false],
-  ])('%s → %s', (userAgent, expected) => {
-    expect(isLinux(userAgent)).toBe(expected);
-  });
-});
-
-describe('hasDesktopApp', () => {
-  const WINDOWS = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0';
-  const LINUX = 'Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0';
-  it.each([
-    ['spotify', WINDOWS, true],
-    ['deezer', WINDOWS, true],
-    ['appleMusic', WINDOWS, true],
-    ['tidal', WINDOWS, false],
-    ['spotify', LINUX, true],
-    ['deezer', LINUX, false],
-    ['appleMusic', LINUX, false],
-  ] as const)('%s on %s → %s', (platform, userAgent, expected) => {
-    expect(hasDesktopApp(platforms[platform], userAgent)).toBe(expected);
   });
 });
 
