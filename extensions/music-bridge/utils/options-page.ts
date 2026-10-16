@@ -10,7 +10,7 @@ const LINK_TOKEN = '%LINK%';
 type MessageKey = Parameters<typeof browser.i18n.getMessage>[0];
 const t = (key: MessageKey) => browser.i18n.getMessage(key);
 
-/** "Made with the Odesli API": the link goes where the message has the %LINK% token */
+/** "Uses the Odesli API": the link goes where the message has the %LINK% token */
 function renderCredits(footer: HTMLElement) {
   const doc = footer.ownerDocument;
   const [before = '', after = ''] = t('optionsCredits').split(LINK_TOKEN);

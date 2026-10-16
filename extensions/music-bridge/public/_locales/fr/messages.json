@@ -44,7 +44,7 @@
     "description": "Save options button confirmation"
   },
   "optionsCredits": {
-    "message": "Fait avec l'API d'%LINK%.",
+    "message": "Utilise l'API d'%LINK%.",
     "description": "Options page credits. %LINK% is replaced by a link to Odesli."
   },
   "optionsNewTab": {
