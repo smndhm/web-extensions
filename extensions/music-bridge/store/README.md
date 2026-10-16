@@ -17,8 +17,8 @@ Everything the store listings ask for, in one place, in every language of the ex
 
 ## Search terms
 
-- **EN**: music link, Spotify, Deezer, Apple Music, YouTube Music, Tidal, song link
-- **FR**: lien musique, Spotify, Deezer, Apple Music, YouTube Music, Tidal, lien chanson
+- **EN**: music link, Deezer, Spotify, Apple Music, YouTube Music, Tidal, song link
+- **FR**: lien musique, Deezer, Spotify, Apple Music, YouTube Music, Tidal, lien chanson
 
 ## Name and short description
 
@@ -34,7 +34,7 @@ The long description, sent as is to addons.mozilla.org by `pnpm amo-listing` (so
 - English: [`description-en.md`](description-en.md)
 - Français : [`description-fr.md`](description-fr.md)
 
-**Chrome Web Store**: its spam policy limits lists of other brands, so its listing has its own description, with 5 third-party names at most (Spotify, Apple Music, Deezer, YouTube Music, Odesli):
+**Chrome Web Store**: its spam policy limits lists of other brands, so its listing has its own description, with 5 third-party names at most (Deezer, Spotify, Apple Music, YouTube Music, Odesli):
 
 - English: [`description-chrome-en.md`](description-chrome-en.md)
 - Français : [`description-chrome-fr.md`](description-chrome-fr.md)
@@ -65,13 +65,13 @@ In English, for the reviewers of every store: [`notes-for-reviewers.md`](notes-f
 ### English
 
 - **storage**: Saves the user's settings: the chosen streaming platform, and whether to open links in its desktop app and close the tab afterwards. The settings stay in the browser.
-- **Host permission** (content script on the track and album pages of Spotify, Deezer, Apple Music, YouTube Music, Tidal, Pandora and Amazon Music): The content script runs on the track and album pages of the supported streaming platforms only. It reads the page address and redirects to the same music on the platform the user chose, through the extension's redirect service. It does not read page content.
+- **Host permission** (content script on the track and album pages of Deezer, Spotify, Apple Music, YouTube Music, Tidal, Pandora and Amazon Music): The content script runs on the track and album pages of the supported streaming platforms only. It reads the page address and redirects to the same music on the platform the user chose, through the extension's redirect service. It does not read page content.
 - **Remote code**: No. The redirect service answers with an HTTP redirect, never code run by the extension.
 
 ### Français
 
 - **storage** : enregistre les réglages de l'utilisateur : la plateforme de streaming choisie, et s'il faut ouvrir les liens dans son application de bureau puis fermer l'onglet. Les réglages restent dans le navigateur.
-- **Autorisation d'hôte** (script de contenu sur les pages de titres et d'albums de Spotify, Deezer, Apple Music, YouTube Music, Tidal, Pandora et Amazon Music) : le script de contenu ne s'exécute que sur les pages de titres et d'albums des plateformes prises en charge. Il lit l'adresse de la page et redirige vers la même musique sur la plateforme choisie par l'utilisateur, via le service de redirection de l'extension. Il ne lit pas le contenu de la page.
+- **Autorisation d'hôte** (script de contenu sur les pages de titres et d'albums de Deezer, Spotify, Apple Music, YouTube Music, Tidal, Pandora et Amazon Music) : le script de contenu ne s'exécute que sur les pages de titres et d'albums des plateformes prises en charge. Il lit l'adresse de la page et redirige vers la même musique sur la plateforme choisie par l'utilisateur, via le service de redirection de l'extension. Il ne lit pas le contenu de la page.
 - **Code distant** : non. Le service de redirection répond par une redirection HTTP, jamais par du code exécuté par l'extension.
 
 ## Privacy
