@@ -1,115 +1,71 @@
+// Class names follow BEM (block__element--modifier). Scripts and tests find elements by their IDs.
+
 :root {
+  color-scheme: light dark;
   font-size: 62.5%;
+
   --font-size: 1.6rem;
   --line-height: 1.5;
-  --border-radius: 0.5rem;
-  --color-dark-rgb: 32, 33, 36;
-  --color-white-rgb: 255, 255, 255;
-  --color-dark: rgb(var(--color-dark-rgb));
-  --color-white: rgb(var(--color-white-rgb));
-  --color-rgb: var(--color-dark-rgb);
-  --color: var(--color-dark);
-  --background: var(--color-white);
+  --radius: 0.8rem;
+  --text: #202124;
+  --muted: #5f6368;
+  --background: #fff;
+  --surface: #f6f5fb;
+  --border: #858196; // 3.7:1 on the background, above the 3:1 asked of input borders
+  // Violet of the logo, dark enough for white text (contrast 7:1)
+  --accent: #5b3fd0;
+  --on-accent: #fff;
+  --focus: #5b3fd0;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #e8eaed;
+    --muted: #b1b3b8;
+    --background: #202124;
+    --surface: #2b2a33;
+    --border: #86829a; // 4.3:1
+    --accent: #b9a8ff;
+    --on-accent: #1b1530;
+    --focus: #b9a8ff;
+  }
 }
 
 html,
 body {
   height: 100%;
-  min-height: 100%;
 }
 
 body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0 1.6rem;
 
-  padding: 0 0.5rem;
   background: var(--background);
-
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
   font-size: var(--font-size);
   line-height: var(--line-height);
-  color: var(--color);
+  color: var(--text);
 }
 
-main {
-  max-width: 100%;
-  padding: 2rem;
-  margin: auto;
+// Keyboard focus: a visible ring, never removed
+:focus-visible {
+  outline: 0.2rem solid var(--focus);
+  outline-offset: 0.2rem;
+}
 
-  .field {
-    margin: 0 0 1rem;
-  }
-
-  label {
-    display: block;
-    margin-bottom: 0.5rem;
-  }
-
-  select {
-    width: 100%;
-    max-width: 100%;
-    padding: 1rem 1.5rem;
-
-    background-color: var(--background);
-    border-radius: var(--border-radius);
-
-    font-size: 2rem;
-    color: var(--color);
-
-    &:hover,
-    &:focus-visible {
-      box-shadow: 0 0 0 0.2rem rgba(var(--color-rgb), 0.5);
-    }
-  }
-
-  #open-app-option,
-  #close-tab-option {
-    &[hidden] {
-      display: none;
-    }
-
-    label {
-      display: inline;
-    }
-
-    input[type='checkbox'] {
-      margin-right: 1rem;
-      vertical-align: middle;
-    }
-
-    .help {
-      margin: 0.25rem 0 0;
-      font-size: smaller;
-    }
-  }
-
-  #save-options {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 1rem;
-
-    [role='status'] {
-      margin: 0;
-      font-size: smaller;
-    }
-
-    button {
-      padding: 0.5rem 1rem;
-
-      background: transparent;
-      border: 0.1rem solid;
-      border-radius: var(--border-radius);
-
-      color: inherit;
-
-      &:hover,
-      &:focus-visible {
-        box-shadow: 0 0 0 0.2rem rgba(var(--color-rgb), 0.5);
-      }
-    }
-  }
+[hidden] {
+  display: none !important;
 }
 
 .visually-hidden {
@@ -121,26 +77,131 @@ main {
   white-space: nowrap;
 }
 
-footer {
-  padding: 0.5rem 0;
-  text-align: center;
-  font-size: smaller;
+// The options page
+.options {
+  width: 100%;
+  max-width: 48rem;
+  margin: auto;
+  padding: 2.4rem 0;
 
-  a {
+  // What the extension does: the first thing to read, in the main text color
+  &__intro {
+    margin: 0 0 2.4rem;
+    font-size: 1.7rem;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+  }
+}
+
+// A form field: a label and its control, or a checkbox with its label beside it and its help underneath
+.field {
+  &__label {
+    display: block;
+    margin-bottom: 0.6rem;
+    font-weight: 600;
+  }
+
+  &__select {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 4.4rem;
+    padding: 0.8rem 1.2rem;
+
+    background-color: var(--background);
+    border: 0.1rem solid var(--border);
+    border-radius: var(--radius);
+
+    font: inherit;
+    font-size: 1.8rem;
     color: inherit;
-    font-weight: 500;
 
-    &:hover,
-    &:focus-visible {
-      text-decoration: none;
+    &:hover {
+      border-color: var(--accent);
+    }
+  }
+
+  &--check {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 1rem;
+    align-items: center;
+    padding: 1.2rem 1.4rem;
+
+    background: var(--surface);
+    border-radius: var(--radius);
+  }
+
+  &--check &__label {
+    margin: 0;
+    font-weight: 500;
+  }
+
+  &__checkbox {
+    width: 2rem;
+    height: 2rem;
+    margin: 0;
+    accent-color: var(--accent);
+  }
+
+  &__help {
+    grid-column: 2;
+    margin: 0.2rem 0 0;
+    font-size: 1.4rem;
+    color: var(--muted);
+  }
+}
+
+// The save button and its confirmation
+.save {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1.2rem;
+  margin-top: 0.8rem;
+
+  &__status {
+    margin: 0;
+    font-size: 1.4rem;
+    color: var(--muted);
+  }
+
+  &__button {
+    min-height: 4.4rem;
+    padding: 0.8rem 2.4rem;
+
+    background: var(--accent);
+    border: 0.1rem solid var(--accent);
+    border-radius: var(--radius);
+
+    font: inherit;
+    font-weight: 600;
+    color: var(--on-accent);
+    cursor: pointer;
+
+    &:hover {
+      filter: brightness(1.1);
     }
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-rgb: var(--color-white-rgb);
-    --color: var(--color-white);
-    --background: var(--color-dark);
+// Credits, at the bottom of the page
+.credits {
+  padding: 1.2rem 0;
+  text-align: center;
+  font-size: 1.4rem;
+  color: var(--muted);
+
+  &__link {
+    color: inherit;
+    font-weight: 600;
+
+    &:hover {
+      text-decoration: none;
+    }
   }
 }

@@ -13,7 +13,7 @@ export const REDIRECT_SERVICE_URL = 'https://music-bridge-redirect.smndhm.worker
  * (already on the chosen platform's website, or no app link to build).
  */
 export function getRedirectUrl(href: string, { platform, openInApp }: Pick<Settings, 'platform' | 'openInApp'>, userAgent: string): string | undefined {
-  // There are no desktop apps on ChromeOS and Android
+  // No desktop apps on ChromeOS, Android, iOS and Linux
   const inApp = openInApp && platforms[platform].hasNativeAppLink === true && hasDesktopApps(userAgent);
   const onPlatform = isOnPlatform(href, platforms[platform]);
 

@@ -24,8 +24,8 @@ The links come from `pnpm test-links` (the Deezer charts give a track and an alb
 
 ## Other cases
 
-- [ ] A link from the chosen platform itself: nothing happens, or its desktop app opens with "Open in desktop app".
-- [ ] "Open in desktop app" (Apple Music, Deezer, Spotify, on Windows, macOS or Linux): the app opens, and with "Close the tab", the tab closes 5 seconds later.
+- [ ] A link from the chosen platform itself: nothing happens, or its desktop app opens with "Open links in the desktop app".
+- [ ] "Open links in the desktop app" (Apple Music, Deezer, Spotify, on Windows or macOS; never offered on ChromeOS, Android, iOS or Linux): the app opens, and with "Close the tab", the tab closes 5 seconds later.
 - [ ] A playlist link, [open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M](https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M): nothing happens, Music Bridge only handles tracks and albums.
 - [ ] SoundCloud or YouTube as the chosen platform: links from the other platforms land there.
 - [ ] Firefox for Android: the same links, pasted in the address bar, land on the chosen platform's web page; the app options are not shown.

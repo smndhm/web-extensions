@@ -28,8 +28,8 @@ Made with the [Odesli](https://odesli.co/) API, through the [music-bridge-redire
 
 The content script runs on the track and album pages of the supported platforms. With the platform chosen in the options:
 
-- on another platform's page, it sends the link to the redirect service, which answers with the same music on the chosen platform (in its desktop app with **Open in desktop app**);
-- on the chosen platform's page, it does nothing, or opens the desktop app with **Open in desktop app**. Deezer and Spotify app links are built without the service.
+- on another platform's page, it sends the link to the redirect service, which answers with the same music on the chosen platform (in its desktop app with **Open links in the desktop app**);
+- on the chosen platform's page, it does nothing, or opens the desktop app with **Open links in the desktop app**. Deezer and Spotify app links are built without the service.
 
 With **Close the tab once the app opens**, a tab opened for the link is closed 5 seconds after opening the app. Tick "Always allow" in the browser prompt the first time, or the tab closes before you answer it.
 
