@@ -21,6 +21,13 @@ it('closes with its button, which has a label', () => {
   expect(host.isConnected).toBe(false);
 });
 
+it('shows the logo, hidden from screen readers', () => {
+  const host = showNotice(document, 'Message', 'Close', '<svg viewBox="0 0 87 87"><path d="M0 0h1v1z"/></svg>');
+  const icon = host.shadowRoot!.querySelector('i')!;
+  expect(icon.querySelector('svg')).not.toBeNull();
+  expect(icon.getAttribute('aria-hidden')).toBe('true');
+});
+
 it('shows the text as text, not HTML', () => {
   const host = showNotice(document, '<img src=x>', 'Close');
   expect(host.shadowRoot!.querySelector('img')).toBeNull();
