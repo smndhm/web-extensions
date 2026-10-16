@@ -21,9 +21,9 @@ const MESSAGES: Record<string, string> = {
   'optionsTitle': 'Music Bridge - Options',
   'optionsIntro': 'Links to a track or an album on another streaming platform open on yours.',
   'optionsStreamingPlatformLabel': 'Select your streaming platform:',
-  'optionsOpenAppLabel': 'Open in desktop app.',
+  'optionsOpenAppLabel': 'Open links in the desktop app',
   'optionsOpenAppHelp': "The platform's app must be installed on this computer.",
-  'optionsCloseTabLabel': 'Close the tab once the app opens.',
+  'optionsCloseTabLabel': 'Close the tab once the app opens',
   'optionsCloseTabHelp': 'Tick “Always allow” in the browser prompt the first time.',
   'optionsSaveButton': 'Save',
   'optionsSaveConfirmation': 'Preferences saved.',
@@ -60,7 +60,7 @@ describe('options page', () => {
     expect(document.title).toBe('Music Bridge - Options');
     expect($('h1').textContent).toBe('Music Bridge - Options');
     expect($('label[for="streaming-platforms"]').textContent).toBe('Select your streaming platform:');
-    expect($('label[for="open-app"]').textContent).toBe('Open in desktop app.');
+    expect($('label[for="open-app"]').textContent).toBe('Open links in the desktop app');
     expect($('button').textContent).toBe('Save');
   });
 

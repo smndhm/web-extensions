@@ -2,7 +2,7 @@
  * Accessibility checks of the options page.
  *
  * Loads the Chrome build (.output/chrome-mv3) in Chromium, in English and French, light and dark, and
- * checks the options page in three states: as it opens, with Deezer chosen and "Open in desktop app"
+ * checks the options page in three states: as it opens, with Deezer chosen and "Open links in the desktop app"
  * ticked (the "Close the tab" option and its help show up), and once saved:
  * - axe-core (WCAG 2.2 A/AA and best practices) reports no violation;
  * - the keyboard order is platform → open in app → close the tab → Save → the Odesli link;
@@ -75,13 +75,13 @@ async function check(locale: string, colorScheme: 'light' | 'dark'): Promise<str
     await page.goto(`chrome-extension://${extensionId}/options.html`);
     await page.waitForFunction(() => document.querySelector('#streaming-platforms option') !== null);
 
-    // As it opens: the default platform, "Open in desktop app" unticked
+    // As it opens: the default platform, "Open links in the desktop app" unticked
     errors.push(...(await axe(page, 'as it opens')));
 
     // With the app option ticked: "Close the tab" and its help show up
     await page.selectOption('#streaming-platforms', 'deezer');
     await page.check('#open-app');
-    if (!(await page.isVisible('#close-tab'))) errors.push('"Close the tab" is not shown once "Open in desktop app" is ticked');
+    if (!(await page.isVisible('#close-tab'))) errors.push('"Close the tab" is not shown once "Open links in the desktop app" is ticked');
     errors.push(...(await axe(page, 'with the app option')));
     const order = await tabOrder(page);
     if (order.join(' → ') !== EXPECTED_TAB_ORDER.join(' → ')) {
