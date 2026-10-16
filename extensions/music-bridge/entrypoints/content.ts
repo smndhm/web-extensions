@@ -1,6 +1,11 @@
 import { getRedirectUrl, shouldCloseTab } from '@/utils/redirect';
 import { getSettings } from '@/utils/settings';
 import { CLOSE_TAB_MESSAGE } from '@/utils/close-tab';
+import { isServiceUrl, RESOLVE_MESSAGE_TYPE, type Resolution } from '@/utils/resolve';
+import { showNotice } from '@/utils/notice';
+import { platforms } from '@/utils/platforms';
+// The logo in the colors of this version, the toolbar icon, inlined: a page cannot load the extension's files
+import iconUrl from '@/public/icons/48.png?inline';
 
 export default defineContentScript({
   matches: [
@@ -27,8 +32,26 @@ export default defineContentScript({
     const settings = await getSettings();
     const redirect = getRedirectUrl(window.location.href, settings, navigator.userAgent);
     if (!redirect) return;
-    const closeTab = shouldCloseTab(redirect, settings, history.length);
-    window.location.href = redirect;
+
+    // Ask the service first, to stay on the page with a message when it has no link
+    let target = redirect;
+    if (isServiceUrl(redirect)) {
+      const resolution = (await browser.runtime.sendMessage({ type: RESOLVE_MESSAGE_TYPE, url: redirect })) as Resolution | undefined;
+      if (!resolution || !('url' in resolution)) {
+        const notFound = resolution?.status === 404;
+        showNotice(
+          document,
+          notFound ? browser.i18n.getMessage('noticeNotFound', platforms[settings.platform].name) : browser.i18n.getMessage('noticeUnavailable'),
+          browser.i18n.getMessage('noticeClose'),
+          iconUrl,
+        );
+        return;
+      }
+      target = resolution.url;
+    }
+
+    const closeTab = shouldCloseTab(target, settings, history.length);
+    window.location.href = target;
     if (closeTab) void browser.runtime.sendMessage(CLOSE_TAB_MESSAGE);
   },
 });

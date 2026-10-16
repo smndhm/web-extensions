@@ -7,8 +7,8 @@
  *   logo and runs axe-core (WCAG 2.2 A/AA);
  * - dzr-link: opens a Deezer track page from a script-opened tab and expects the content script
  *   to redirect it to the desktop app (deezer://) or to close the tab;
- * - music-bridge: opens a Tidal track page and expects the content script to send it to the
- *   redirect service (default platform: Spotify).
+ * - music-bridge: opens a Tidal track page and expects it to land on the same track on Spotify (default
+ *   platform), the link the redirect service answers.
  * Screenshots go to .output/firefox/.
  *
  * Usage: pnpm zip:firefox && pnpm test:firefox
@@ -144,8 +144,9 @@ try {
     await driver.switchTo().window(main);
   }
 
-  // music-bridge: the default platform is Spotify, so a Tidal page goes to the redirect service, which
-  // redirects to the track on Spotify (Never Gonna Give You Up)
+  // music-bridge: the default platform is Spotify, so the extension asks the redirect service for the Tidal
+  // track on Spotify (Never Gonna Give You Up) and goes there; it stays on Tidal with a message when it cannot
+  let notice = '';
   try {
     await driver.installAddon(await firefoxZip('music-bridge'), true);
     // It opens its options on install: let that tab open before counting tabs
@@ -159,18 +160,20 @@ try {
     let outcome = '';
     await driver.wait(
       async () => {
-        // The service may already have redirected to Spotify, or be down (error page with its URL)
         const url = decodeURIComponent(await driver.getCurrentUrl());
-        if (url.includes('music-bridge-redirect.smndhm.workers.dev/?url=')) return (outcome = `sent to the service (${url})`);
         if (url.startsWith('https://open.spotify.com/')) return (outcome = `redirected to Spotify (${url})`);
+        // The message the extension shows when the service has no link, or fails
+        notice = await driver
+          .executeScript<string>(() => document.querySelector('music-bridge-notice')?.shadowRoot?.textContent?.replace(/\s+/g, ' ').trim() ?? '')
+          .catch(() => '');
         return false;
       },
       20_000,
-      'the Tidal page was not sent to the redirect service',
+      'the Tidal page did not land on Spotify',
     );
     console.log(`music-bridge: ${outcome}`);
   } catch (error) {
-    errors.push(`music-bridge: ${(error as Error).message} (url: ${await driver.getCurrentUrl().catch(() => '?')})`);
+    errors.push(`music-bridge: ${(error as Error).message} (url: ${await driver.getCurrentUrl().catch(() => '?')}${notice ? `, message: ${notice}` : ''})`);
     await screenshot('music-bridge').catch(() => {});
   } finally {
     await driver.switchTo().window(main);
