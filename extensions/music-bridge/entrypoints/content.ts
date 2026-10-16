@@ -51,7 +51,9 @@ export default defineContentScript({
     }
 
     const closeTab = shouldCloseTab(target, settings, history.length);
-    window.location.href = target;
+    // Go through the service, which redirects to the same link (from its cache), rather than to the link itself: Android
+    // only opens a platform's app for a navigation it sees as a link, which a page script setting its address is not
+    window.location.href = redirect;
     if (closeTab) void browser.runtime.sendMessage(CLOSE_TAB_MESSAGE);
   },
 });
