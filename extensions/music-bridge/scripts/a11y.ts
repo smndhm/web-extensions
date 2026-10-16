@@ -63,6 +63,8 @@ async function check(locale: string, colorScheme: 'light' | 'dark'): Promise<str
     executablePath: process.env.CHROMIUM_PATH,
     locale,
     colorScheme,
+    // As on Windows: the desktop app options are hidden on Linux, where CI runs
+    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36',
     args: [`--disable-extensions-except=${EXTENSION_DIR}`, `--load-extension=${EXTENSION_DIR}`, `--lang=${locale}`],
   });
   try {

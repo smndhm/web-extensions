@@ -21,6 +21,7 @@ const MESSAGES: Record<string, string> = {
   'optionsTitle': 'Music Bridge - Options',
   'optionsStreamingPlatformLabel': 'Select your streaming platform:',
   'optionsOpenAppLabel': 'Open in desktop app.',
+  'optionsOpenAppHelp': "The platform's app must be installed on this computer.",
   'optionsCloseTabLabel': 'Close the tab once the app opens.',
   'optionsCloseTabHelp': 'Tick “Always allow” in the browser prompt the first time.',
   'optionsSaveButton': 'Save',
@@ -104,6 +105,13 @@ describe('options page', () => {
     select().dispatchEvent(new Event('change'));
     expect(openAppOption().hidden).toBe(false);
     expect(checkbox().checked).toBe(false);
+  });
+
+  it('says the app must be installed', async () => {
+    await browser.storage.local.set({ platform: 'deezer' });
+    await open();
+    expect($('#open-app-help').textContent).toBe("The platform's app must be installed on this computer.");
+    expect(checkbox().getAttribute('aria-describedby')).toBe('open-app-help');
   });
 
   it('never offers the app on ChromeOS', async () => {

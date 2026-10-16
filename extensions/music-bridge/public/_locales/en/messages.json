@@ -19,6 +19,10 @@
     "message": "Open in desktop app.",
     "description": "Options page label to open links in desktop app."
   },
+  "optionsOpenAppHelp": {
+    "message": "The platform's app must be installed on this computer.",
+    "description": "Options page help under the open in desktop app option."
+  },
   "optionsCloseTabLabel": {
     "message": "Close the tab once the app opens.",
     "description": "Options page label to close the tab after opening the desktop app."
