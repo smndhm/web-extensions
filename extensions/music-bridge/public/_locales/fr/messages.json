@@ -7,6 +7,10 @@
     "message": "Ouvrez n'importe quel titre ou album sur votre plateforme de streaming préférée, en un clic.",
     "description": "Extension description."
   },
+  "lang": {
+    "message": "fr",
+    "description": "Language of these messages (BCP 47), so screen readers read them with the right voice. Not translated: the code of this language."
+  },
   "optionsTitle": {
     "message": "Music Bridge - Options",
     "description": "Options page title."

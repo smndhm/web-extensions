@@ -28,7 +28,8 @@ function renderCredits(footer: HTMLElement) {
 }
 
 export async function initOptionsPage(doc: Document, userAgent: string): Promise<void> {
-  doc.documentElement.lang = t('@@ui_locale').replace('_', '-');
+  // The language of the messages, the browser's when the extension has it, English otherwise
+  doc.documentElement.lang = t('lang');
   doc.title = t('optionsTitle');
   for (const element of doc.querySelectorAll<HTMLElement>('[data-i18n]')) {
     element.textContent = t(element.dataset.i18n as MessageKey);
