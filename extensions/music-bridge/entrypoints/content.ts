@@ -4,10 +4,8 @@ import { CLOSE_TAB_MESSAGE } from '@/utils/close-tab';
 import { isServiceUrl, RESOLVE_MESSAGE_TYPE, type Resolution } from '@/utils/resolve';
 import { showNotice } from '@/utils/notice';
 import { platforms } from '@/utils/platforms';
-import iconSource from '@/assets/icon.svg?raw';
-
-// The logo in its original colors, cropped to the drawing (as `node scripts/logo.ts` crops it): assets/icon.svg has margins
-const iconSvg = iconSource.replace(/ width="[^"]*" height="[^"]*" viewBox="[^"]*"/, ' viewBox="11.545 11.55 63.51 63.51"');
+// The logo in the colors of this version, the toolbar icon, inlined: a page cannot load the extension's files
+import iconUrl from '@/public/icons/48.png?inline';
 
 export default defineContentScript({
   matches: [
@@ -45,7 +43,7 @@ export default defineContentScript({
           document,
           notFound ? browser.i18n.getMessage('noticeNotFound', platforms[settings.platform].name) : browser.i18n.getMessage('noticeUnavailable'),
           browser.i18n.getMessage('noticeClose'),
-          iconSvg,
+          iconUrl,
         );
         return;
       }
