@@ -1,5 +1,11 @@
 # music-bridge
 
+## 1.9.3
+
+### Patch Changes
+
+- 1e22f55: Updated dependency `playwright` to `1.64.1`.
+
 ## 1.9.2
 
 ### Patch Changes
