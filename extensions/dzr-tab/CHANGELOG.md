@@ -1,5 +1,11 @@
 # dzr-tab
 
+## 2.2.3
+
+### Patch Changes
+
+- 1e22f55: Updated dependency `playwright` to `1.64.1`.
+
 ## 2.2.2
 
 ### Patch Changes
