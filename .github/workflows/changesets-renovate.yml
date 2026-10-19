@@ -18,7 +18,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: ./.github/actions/setup
+      - uses: smndhm/dev-config/.github/actions/setup@1357deda5ed58ff8f4c71059ace883467cd319f9 # main
 
       - name: Generate changesets for the updated dependencies
         run: pnpm changeset:renovate
