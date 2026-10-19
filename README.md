@@ -106,7 +106,7 @@ Versions and changelogs are managed with [Changesets](https://github.com/changes
    - a **dry run** by default;
    - a real submission to the Chrome Web Store, addons.mozilla.org and Microsoft Edge Add-ons once the `SUBMIT_ON_RELEASE` repository variable (_Settings → Secrets and variables → Actions → Variables_) is `true`. Add **required reviewers** to the extension environments to approve each submission.
 
-Dependency updates come from [Renovate](renovate.json): minor and patch updates and lock file maintenance are merged automatically. The [Renovate → Changesets](.github/workflows/changesets-renovate.yml) workflow adds a changeset to each Renovate branch that updates an extension's dependencies, then runs the CI checks on that commit and reports them as commit statuses, since a commit pushed by a workflow does not trigger the CI.
+Dependency updates come from [Renovate](renovate.json), with the shared configuration of [smndhm/dev-config](https://github.com/smndhm/dev-config): minor and patch updates and lock file maintenance are merged automatically. The [Renovate → Changesets](.github/workflows/changesets-renovate.yml) workflow, smndhm/dev-config's reusable one, adds a changeset to each Renovate branch that updates an extension's dependencies, then runs the CI checks on that commit and reports them as the "Renovate changeset checks" status, since a commit pushed by a workflow does not trigger the CI.
 
 ## Publishing
 
