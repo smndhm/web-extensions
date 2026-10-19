@@ -24,7 +24,7 @@
     "browser"
   ],
   "author": "@smndhm",
-  "license": "ISC",
+  "license": "BSD-2-Clause",
   "devDependencies": {
     "@types/node": "24.19.2",
     "axe-core": "4.14.0",

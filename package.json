@@ -1,6 +1,7 @@
 {
   "name": "web-extensions",
   "private": true,
+  "license": "BSD-2-Clause",
   "type": "module",
   "packageManager": "pnpm@12.14.0",
   "scripts": {
