@@ -126,3 +126,7 @@ The workflow runs `wxt submit` with this configuration:
 Edge gets the Chrome zip: the Manifest V3 build runs as is. The Edge API only updates existing products: submit the first version of an extension by hand in Partner Center (the Chrome zip of its GitHub release), which gives its `EDGE_PRODUCT_ID`.
 
 The Firefox submission includes a sources zip (workspace root files and the extension only). AMO reviewers can rebuild the extension from it with `pnpm install --frozen-lockfile && pnpm --filter <extension> build:firefox`.
+
+## License
+
+[BSD 2-Clause](LICENSE): reuse the code freely, keeping the copyright notice, which names the extensions, in the code and in the documentation of what you distribute.
