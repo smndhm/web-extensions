@@ -37,7 +37,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - uses: smndhm/dev-config/.github/actions/setup@1357deda5ed58ff8f4c71059ace883467cd319f9 # main
+      - uses: smndhm/dev-config/.github/actions/setup@53b9676b0670cba6a8c4a396fb20e8db4d933956 # main
 
       - name: Update the listing
         env:
