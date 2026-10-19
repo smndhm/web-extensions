@@ -72,7 +72,7 @@ jobs:
           # The tags of the previous releases, to tell whether the listing texts changed
           fetch-depth: 0
 
-      - uses: ./.github/actions/setup
+      - uses: smndhm/dev-config/.github/actions/setup@1357deda5ed58ff8f4c71059ace883467cd319f9 # main
 
       - name: Type check
         run: pnpm compile
