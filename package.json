@@ -2,6 +2,7 @@
   "name": "web-extensions",
   "private": true,
   "license": "BSD-2-Clause",
+  "prettier": "@dume/linting/prettier",
   "type": "module",
   "packageManager": "pnpm@12.14.0",
   "scripts": {
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "3.0.3",
+    "@dume/linting": "1.1.0",
     "@fontsource-variable/bricolage-grotesque": "5.3.0",
     "@scaleway/changesets-renovate": "4.0.5",
     "oxlint": "1.88.0",

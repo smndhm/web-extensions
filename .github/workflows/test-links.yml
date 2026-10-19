@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - uses: ./.github/actions/setup
+      - uses: smndhm/dev-config/.github/actions/setup@1357deda5ed58ff8f4c71059ace883467cd319f9 # main
 
       - name: Check the links
         if: inputs.check

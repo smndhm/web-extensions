@@ -5,71 +5,23 @@ on:
     branches:
       - 'renovate/**'
 
-permissions:
-  contents: write # Push the changeset commit
-  statuses: write # Report the checks on the changeset commit
-
 jobs:
+  # Adds the changesets of the updated dependencies, then runs the CI checks on that commit (see smndhm/dev-config)
   changesets:
     name: Add changeset
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          fetch-depth: 0
-
-      - uses: ./.github/actions/setup
-
-      - name: Generate changesets for the updated dependencies
-        run: pnpm changeset:renovate
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
-      - name: Commit changesets
-        id: commit
-        run: |
-          # Authored by Renovate so that Renovate keeps rebasing the branch
-          export GIT_AUTHOR_NAME="renovate[bot]" GIT_AUTHOR_EMAIL="renovate[bot]@users.noreply.github.com"
-          export GIT_COMMITTER_NAME="renovate[bot]" GIT_COMMITTER_EMAIL="renovate[bot]@users.noreply.github.com"
-          git add .changeset
-          if git commit -m "chore(changesets): add changeset for renovate"; then
-            git push
-            echo "pushed=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "No changeset to commit"
-          fi
-
-      # A commit pushed with GITHUB_TOKEN does not trigger the CI workflow, so Renovate would automerge
-      # without checks. Run the same checks here and report them as commit statuses named like the CI jobs.
-      - name: Type check and build
-        id: build
-        if: ${{ !cancelled() && steps.commit.outputs.pushed == 'true' }}
-        run: pnpm lint && pnpm compile && pnpm test && pnpm build && pnpm build:firefox && pnpm lint:firefox
-
-      - name: Install Chromium
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: pnpm --filter dzr-tab exec playwright install --with-deps --no-shell chromium
-
-      - name: Accessibility (dzr-tab)
-        id: a11y
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: pnpm --filter dzr-tab a11y
-
-      - name: Firefox smoke tests
-        id: firefox
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: pnpm zip:firefox && pnpm test:firefox
-
-      - name: Report statuses
-        if: ${{ always() && steps.commit.outputs.pushed == 'true' }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        run: |
-          report() {
-            gh api "repos/${{ github.repository }}/statuses/$(git rev-parse HEAD)" \
-              -f state="$2" -f context="$1" -f description="$1 on the changeset commit" -f target_url="$TARGET_URL"
-          }
-          report "Type check and build" "${{ steps.build.outcome == 'success' && 'success' || 'failure' }}"
-          report "Accessibility (dzr-tab)" "${{ steps.a11y.outcome == 'success' && 'success' || 'failure' }}"
-          report "Firefox smoke tests" "${{ steps.firefox.outcome == 'success' && 'success' || 'failure' }}"
+    uses: smndhm/dev-config/.github/workflows/changesets-renovate.yml@53b9676b0670cba6a8c4a396fb20e8db4d933956 # main
+    permissions:
+      contents: write
+      statuses: write
+    with:
+      checks: |
+        pnpm lint
+        pnpm compile
+        pnpm test
+        pnpm build
+        pnpm build:firefox
+        pnpm lint:firefox
+        pnpm --filter dzr-tab exec playwright install --with-deps --no-shell chromium
+        pnpm a11y
+        pnpm zip:firefox
+        pnpm test:firefox

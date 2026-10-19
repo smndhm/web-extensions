@@ -1,17 +1,5 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["eslint", "typescript", "unicorn", "oxc", "import"],
-  "categories": {
-    "correctness": "error",
-    "suspicious": "error"
-  },
-  "ignorePatterns": ["**/.output/**", "**/.wxt/**"],
-  "rules": {
-    "import/no-unassigned-import": [
-      "error",
-      {
-        "allow": ["**/*.css", "**/*.scss"]
-      }
-    ]
-  }
+  "extends": ["./node_modules/@dume/linting/src/oxlint.json"],
+  "ignorePatterns": ["**/.output/**", "**/.wxt/**"]
 }
