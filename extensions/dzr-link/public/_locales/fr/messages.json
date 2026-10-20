@@ -6,5 +6,45 @@
   "description": {
     "message": "Ouvrez les liens Deezer dans l'application de bureau plutôt que dans le navigateur.",
     "description": "Extension description."
+  },
+  "lang": {
+    "message": "fr",
+    "description": "Language of the pages, for the lang attribute."
+  },
+  "movingTitle": {
+    "message": "Deezer Link devient Music Bridge",
+    "description": "Title of the page opened once when Deezer Link is updated."
+  },
+  "movingIntro": {
+    "message": "Deezer Link ne sera plus mis à jour. Music Bridge, du même développeur, fait tout ce qu'il fait : il ouvre les liens Deezer dans l'application de bureau. Et plus encore : il ouvre aussi sur Deezer les liens de Spotify, Apple Music, YouTube Music et d'autres plateformes.",
+    "description": "Introduction of the moving page."
+  },
+  "movingInstallStep": {
+    "message": "Installez Music Bridge.",
+    "description": "First step."
+  },
+  "movingInstallButton": {
+    "message": "Installer Music Bridge",
+    "description": "Link to Music Bridge in the store."
+  },
+  "movingSettingsStep": {
+    "message": "Dans ses options, choisissez Deezer, puis cochez « Ouvrir les liens dans l'application de bureau » (et, si vous voulez, « Fermer l'onglet une fois l'application ouverte »).",
+    "description": "Second step: the Music Bridge options to set."
+  },
+  "movingUninstallStep": {
+    "message": "Supprimez Deezer Link.",
+    "description": "Third step."
+  },
+  "movingUninstallButton": {
+    "message": "Supprimer Deezer Link",
+    "description": "Button removing Deezer Link, after the browser asks."
+  },
+  "movingMeanwhile": {
+    "message": "D'ici là, Deezer Link s'efface sur les pages que Music Bridge ouvre : l'application de bureau ne s'ouvre pas deux fois.",
+    "description": "Note at the end of the moving page."
+  },
+  "movingNewTab": {
+    "message": " (ouvre un nouvel onglet)",
+    "description": "Read by assistive technologies after the store link: it opens a new tab, so that the moving page stays open for the last step."
   }
 }

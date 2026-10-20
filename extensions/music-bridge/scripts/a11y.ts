@@ -75,9 +75,18 @@ async function check(locale: string, colorScheme: 'light' | 'dark'): Promise<str
     const extensionId = new URL(worker.url()).host;
     const page = await context.newPage();
     page.on('pageerror', error => errors.push(`page error: ${error.message}`));
-    // On install, the extension opens its options page in chrome://extensions, which can interrupt this navigation
+    // On install, the extension opens its options page (runtime.openOptionsPage), which can interrupt this navigation,
+    // more than once: try again, a few times
     const optionsUrl = `chrome-extension://${extensionId}/options.html`;
-    await page.goto(optionsUrl).catch(() => page.goto(optionsUrl));
+    for (let attempt = 1; ; attempt++) {
+      try {
+        await page.goto(optionsUrl);
+        break;
+      } catch (error) {
+        if (attempt === 5) throw error;
+        await page.waitForTimeout(500);
+      }
+    }
     await page.waitForFunction(() => document.querySelector('#streaming-platforms option') !== null);
 
     // As it opens: the default platform, "Open links in the desktop app" unticked

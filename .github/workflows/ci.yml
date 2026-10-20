@@ -55,7 +55,7 @@ jobs:
       - name: Build for Chrome
         run: pnpm build
 
-      # Every extension with an a11y script (dzr-tab's new tab, music-bridge's options), one after the other
+      # Every extension with an a11y script (dzr-link's moving page, dzr-tab's new tab, music-bridge's options), one after the other
       - name: Check accessibility
         run: pnpm a11y
 

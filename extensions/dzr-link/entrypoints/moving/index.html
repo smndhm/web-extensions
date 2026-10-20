@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deezer Link</title>
+  </head>
+  <body>
+    <main class="moving">
+      <h1 data-i18n="movingTitle"></h1>
+      <p data-i18n="movingIntro"></p>
+      <ol class="moving__steps">
+        <li>
+          <p data-i18n="movingInstallStep"></p>
+          <a class="moving__button" id="install" target="_blank" rel="noopener"
+            ><span data-i18n="movingInstallButton"></span><span class="visually-hidden" data-i18n="movingNewTab"></span
+          ></a>
+        </li>
+        <li>
+          <p data-i18n="movingSettingsStep"></p>
+        </li>
+        <li>
+          <p data-i18n="movingUninstallStep"></p>
+          <button class="moving__button" id="uninstall" type="button" data-i18n="movingUninstallButton"></button>
+        </li>
+      </ol>
+      <p class="moving__note" data-i18n="movingMeanwhile"></p>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

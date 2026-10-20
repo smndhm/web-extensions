@@ -6,5 +6,45 @@
   "description": {
     "message": "Open Deezer links in the desktop app instead of the browser.",
     "description": "Extension description."
+  },
+  "lang": {
+    "message": "en",
+    "description": "Language of the pages, for the lang attribute."
+  },
+  "movingTitle": {
+    "message": "Deezer Link becomes Music Bridge",
+    "description": "Title of the page opened once when Deezer Link is updated."
+  },
+  "movingIntro": {
+    "message": "Deezer Link will no longer be updated. Music Bridge, from the same developer, does everything it does: it opens Deezer links in the desktop app. And more: it opens the links of Spotify, Apple Music, YouTube Music and other platforms on Deezer too.",
+    "description": "Introduction of the moving page."
+  },
+  "movingInstallStep": {
+    "message": "Install Music Bridge.",
+    "description": "First step."
+  },
+  "movingInstallButton": {
+    "message": "Install Music Bridge",
+    "description": "Link to Music Bridge in the store."
+  },
+  "movingSettingsStep": {
+    "message": "In its options, choose Deezer, then tick \"Open links in the desktop app\" (and, if you like, \"Close the tab once the app opens\").",
+    "description": "Second step: the Music Bridge options to set."
+  },
+  "movingUninstallStep": {
+    "message": "Remove Deezer Link.",
+    "description": "Third step."
+  },
+  "movingUninstallButton": {
+    "message": "Remove Deezer Link",
+    "description": "Button removing Deezer Link, after the browser asks."
+  },
+  "movingMeanwhile": {
+    "message": "Until then, Deezer Link steps aside on the pages Music Bridge opens: the desktop app does not open twice.",
+    "description": "Note at the end of the moving page."
+  },
+  "movingNewTab": {
+    "message": " (opens a new tab)",
+    "description": "Read by assistive technologies after the store link: it opens a new tab, so that the moving page stays open for the last step."
   }
 }
