@@ -31,6 +31,8 @@ The content script runs on the track and album pages of the supported platforms.
 - on another platform's page, it asks the redirect service (through the background script, with `format=json`) for the same music on the chosen platform, then goes there through the service, which redirects to it (in its desktop app with **Open links in the desktop app**): on Android, a redirect lets the platform's app open the link, a page script setting the address does not. When the service has no link, because the music is not on the chosen platform or the service fails, it stays on the page with a message;
 - on the chosen platform's page, it does nothing, or opens the desktop app with **Open links in the desktop app**. Deezer and Spotify app links are built without the service.
 
+With Deezer and **Open links in the desktop app**, it also opens Deezer's playlists, artists, podcasts, episodes and profiles in the Deezer app, as Deezer Link did; Odesli knows only music, so these pages are left alone with another platform. When it takes a page over, it sets `data-music-bridge` on the page's root element, which tells Deezer Link, if it is also installed, not to open the Deezer app a second time.
+
 With **Close the tab once the app opens**, a tab opened for the link is closed 5 seconds after opening the app. Tick "Always allow" in the browser prompt the first time, or the tab closes before you answer it.
 
 There are no desktop apps on ChromeOS and Android: the app options are hidden there. On Android, Firefox itself offers to open the platform's links in its app (Settings, Open links in apps).

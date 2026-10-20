@@ -37,8 +37,19 @@ describe('getRedirectUrl', () => {
       expect(getRedirectUrl(SPOTIFY_TRACK, { platform: 'spotify', openInApp: true }, WINDOWS)).toBe('spotify:track:4uLU6hMCjMI75M1A2tKUQC');
     });
 
+    it('opens the other Deezer pages in the Deezer app', () => {
+      expect(getRedirectUrl('https://www.deezer.com/fr/playlist/1', { platform: 'deezer', openInApp: true }, WINDOWS)).toBe('deezer://playlist/1');
+      expect(getRedirectUrl('https://www.deezer.com/fr/artist/27', { platform: 'deezer', openInApp: true }, WINDOWS)).toBe('deezer://artist/27');
+    });
+
+    it('stays on the other Deezer pages without the app, or with another platform: Odesli only knows music', () => {
+      expect(getRedirectUrl('https://www.deezer.com/fr/playlist/1', { platform: 'deezer', openInApp: false }, WINDOWS)).toBeUndefined();
+      expect(getRedirectUrl('https://www.deezer.com/fr/playlist/1', { platform: 'spotify', openInApp: true }, WINDOWS)).toBeUndefined();
+      expect(getRedirectUrl('https://www.deezer.com/fr/artist/27', { platform: 'spotify', openInApp: false }, WINDOWS)).toBeUndefined();
+    });
+
     it('stays on a Deezer page that has no app link', () => {
-      expect(getRedirectUrl('https://www.deezer.com/fr/playlist/1', { platform: 'deezer', openInApp: true }, WINDOWS)).toBeUndefined();
+      expect(getRedirectUrl('https://www.deezer.com/fr/account', { platform: 'deezer', openInApp: true }, WINDOWS)).toBeUndefined();
     });
 
     it('asks the service for the desktop app link from another platform', () => {
