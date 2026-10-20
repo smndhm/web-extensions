@@ -65,7 +65,7 @@ In English, for the reviewers of every store: [`notes-for-reviewers.md`](notes-f
 ### English
 
 - **storage**: Saves the user's settings: the chosen streaming platform, and whether to open links in its desktop app and close the tab afterwards. The settings stay in the browser.
-- **Host permission** (content script on the track and album pages of Deezer, Spotify, Apple Music, YouTube Music, Tidal, Pandora and Amazon Music): The content script runs on the track and album pages of the supported streaming platforms only. It reads the page address and redirects to the same music on the platform the user chose, through the extension's redirect service. It does not read page content.
+- **Host permission** (content script on the track and album pages of Deezer, Spotify, Apple Music, YouTube Music, Tidal, Pandora and Amazon Music, and on Deezer's playlist, artist, podcast, episode and profile pages): The content script runs on the track and album pages of the supported streaming platforms only, and on those Deezer pages to open them in the Deezer desktop app when the user asks for it. It reads the page address and redirects to the same music on the platform the user chose, through the extension's redirect service. It does not read page content.
 - **Remote code**: No. The redirect service answers with an HTTP redirect, never code run by the extension.
 
 ### Français

@@ -13,6 +13,12 @@ export default defineContentScript({
     'https://open.spotify.com/*/album/*',
     'https://www.deezer.com/*/track/*',
     'https://www.deezer.com/*/album/*',
+    // Opened in the Deezer app only, with Deezer chosen and "Open links in the desktop app"
+    'https://www.deezer.com/*/playlist/*',
+    'https://www.deezer.com/*/artist/*',
+    'https://www.deezer.com/*/show/*',
+    'https://www.deezer.com/*/episode/*',
+    'https://www.deezer.com/*/profile/*',
     'https://music.apple.com/*/album/*',
     'https://beta.music.apple.com/*/album/*',
     'https://music.youtube.com/watch?v=*',
@@ -32,6 +38,8 @@ export default defineContentScript({
     const settings = await getSettings();
     const redirect = getRedirectUrl(window.location.href, settings, navigator.userAgent);
     if (!redirect) return;
+    // Music Bridge takes the page over: tells Deezer Link, when it is also installed, not to open the Deezer app too
+    document.documentElement.dataset.musicBridge = 'redirect';
 
     // Ask the service first, to stay on the page with a message when it has no link
     let target = redirect;

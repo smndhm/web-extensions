@@ -1,4 +1,4 @@
-import { getDeezerDesktopUri, getSpotifyDesktopUri, hasDesktopApps } from './links';
+import { getDeezerDesktopUri, getSpotifyDesktopUri, hasDesktopApps, isDeezerNonMusicPage } from './links';
 import { isOnPlatform, platforms } from './platforms';
 import type { Settings } from './settings';
 
@@ -16,6 +16,9 @@ export function getRedirectUrl(href: string, { platform, openInApp }: Pick<Setti
   // No desktop apps on ChromeOS, Android, iOS and Linux
   const inApp = openInApp && platforms[platform].hasNativeAppLink === true && hasDesktopApps(userAgent);
   const onPlatform = isOnPlatform(href, platforms[platform]);
+
+  // Odesli only knows music: Deezer's other pages (playlists, artists, podcasts…) can only open in the Deezer app
+  if (isDeezerNonMusicPage(href)) return platform === 'deezer' && inApp ? getDeezerDesktopUri(href) : undefined;
 
   if (onPlatform) {
     if (!inApp) return undefined;
