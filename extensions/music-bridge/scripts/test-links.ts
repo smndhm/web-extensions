@@ -21,6 +21,8 @@ import { parseArgs } from 'node:util';
 
 const FILE = resolve(import.meta.dirname, '../TESTING.md');
 const REDIRECT_SERVICE_URL = 'https://music-bridge-redirect.smndhm.workers.dev/';
+// Marks the calls as tests in the redirect service's logs, run from GitHub or from a computer
+const TEST_HEADERS = { 'User-Agent': 'music-bridge-test (test-links)' };
 // Top Worldwide, as on the store screenshots (scripts/screenshots.ts), and the album chart
 const TRACKS = 'https://api.deezer.com/playlist/3155776842/tracks?limit=50';
 const ALBUMS = 'https://api.deezer.com/chart/0/albums?limit=50';
@@ -69,11 +71,11 @@ async function redirect(source: string, platform: string): Promise<{ status: num
     asked.add(`${source} ${country}`);
   }
   const url = `${REDIRECT_SERVICE_URL}?${new URLSearchParams({ url: source, platform, country })}`;
-  let response = await fetch(url, { redirect: 'manual' });
+  let response = await fetch(url, { redirect: 'manual', headers: TEST_HEADERS });
   if (response.status === 429) {
     await sleep(60_000);
     lastCall = Date.now();
-    response = await fetch(url, { redirect: 'manual' });
+    response = await fetch(url, { redirect: 'manual', headers: TEST_HEADERS });
   }
   return { status: response.status, location: response.headers.get('location') ?? undefined };
 }
