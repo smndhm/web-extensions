@@ -4,7 +4,7 @@
  * Loads the Chrome build (.output/chrome-mv3) in Chromium, in English and French, light and dark, and
  * checks the options page in three states: as it opens, with Deezer chosen and "Open links in the desktop app"
  * ticked (the "Close the tab" option and its help show up), and once saved:
- * - axe-core (WCAG 2.2 A/AA and best practices) reports no violation;
+ * - axe-core (@dume/dev-config/a11y: WCAG 2.2 A/AA, best practices, RGAA 4, EN 301 549) reports no violation;
  * - the keyboard order is platform → open in app → close the tab → Save → the Odesli link;
  * - the save confirmation is in a status live region, so screen readers announce it.
  *
@@ -16,13 +16,11 @@
  * CHROMIUM_PATH can point to a Chromium binary other than the one Playwright installs.
  */
 
-import { readFile } from 'node:fs/promises';
-import { createRequire } from 'node:module';
 import { resolve } from 'node:path';
+import { audit, tabOrder } from '@dume/dev-config/a11y';
 import { chromium, type BrowserContext, type Page } from 'playwright';
 
 const EXTENSION_DIR = resolve(import.meta.dirname, '../.output/chrome-mv3');
-const AXE_SOURCE = await readFile(createRequire(import.meta.url).resolve('axe-core/axe.min.js'), 'utf8');
 
 const EXPECTED_TAB_ORDER = ['#streaming-platforms', '#open-app', '#close-tab', 'button[type=submit]', 'footer a'];
 const REDIRECT_SERVICE_URL = 'https://music-bridge-redirect.smndhm.workers.dev/';
@@ -31,36 +29,7 @@ const MUSIC_PAGE_URL = 'https://open.spotify.com/intl-en/track/00000000000000000
 const MUSIC_PAGE = '<!doctype html><html lang="en"><head><title>Spotify</title></head><body><main><h1>A track</h1></main></body></html>';
 
 async function axe(page: Page, state: string): Promise<string[]> {
-  // evaluate() runs in the page through the DevTools protocol, so the extension CSP does not block it
-  await page.evaluate(AXE_SOURCE);
-  const { violations } = await page.evaluate(() =>
-    // @ts-expect-error axe is injected above
-    axe.run(document, { runOnly: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'] }),
-  );
-  return (violations as { id: string; help: string; nodes: { target: string[] }[] }[]).map(
-    violation => `${state}: axe ${violation.id}: ${violation.help} (${violation.nodes.map(n => n.target.join(' ')).join(', ')})`,
-  );
-}
-
-/** The selector of EXPECTED_TAB_ORDER each Tab press lands on, or what it lands on instead */
-async function tabOrder(page: Page): Promise<string[]> {
-  // Start from the top of the page: after blur(), Chrome would resume from the last focused element
-  await page.evaluate(() => {
-    document.body.tabIndex = -1;
-    document.body.focus();
-    document.body.removeAttribute('tabindex');
-  });
-  const order: string[] = [];
-  for (let i = 0; i < EXPECTED_TAB_ORDER.length; i++) {
-    await page.keyboard.press('Tab');
-    order.push(
-      await page.evaluate(selectors => {
-        const element = document.activeElement!;
-        return selectors.find(selector => element.matches(selector)) ?? element.outerHTML.slice(0, 60);
-      }, EXPECTED_TAB_ORDER),
-    );
-  }
-  return order;
+  return (await audit(page)).map(violation => `${state}: ${violation}`);
 }
 
 /** The message on a music page Music Bridge cannot redirect, the platform chosen being another one */
@@ -119,8 +88,8 @@ async function check(locale: string, colorScheme: 'light' | 'dark'): Promise<str
     await page.check('#open-app');
     if (!(await page.isVisible('#close-tab'))) errors.push('"Close the tab" is not shown once "Open links in the desktop app" is ticked');
     errors.push(...(await axe(page, 'with the app option')));
-    const order = await tabOrder(page);
-    if (order.join(' → ') !== EXPECTED_TAB_ORDER.join(' → ')) {
+    const { ok, order } = await tabOrder(page, EXPECTED_TAB_ORDER);
+    if (!ok) {
       errors.push(`keyboard order is ${order.join(' → ')}, expected ${EXPECTED_TAB_ORDER.join(' → ')}`);
     }
 
