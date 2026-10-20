@@ -42,5 +42,9 @@
   "movingMeanwhile": {
     "message": "Until then, Deezer Link steps aside on the pages Music Bridge opens: the desktop app does not open twice.",
     "description": "Note at the end of the moving page."
+  },
+  "movingNewTab": {
+    "message": " (opens a new tab)",
+    "description": "Read by assistive technologies after the store link: it opens a new tab, so that the moving page stays open for the last step."
   }
 }

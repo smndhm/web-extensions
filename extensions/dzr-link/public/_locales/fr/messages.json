@@ -42,5 +42,9 @@
   "movingMeanwhile": {
     "message": "D'ici là, Deezer Link s'efface sur les pages que Music Bridge ouvre : l'application de bureau ne s'ouvre pas deux fois.",
     "description": "Note at the end of the moving page."
+  },
+  "movingNewTab": {
+    "message": " (ouvre un nouvel onglet)",
+    "description": "Read by assistive technologies after the store link: it opens a new tab, so that the moving page stays open for the last step."
   }
 }
