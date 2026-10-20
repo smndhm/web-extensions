@@ -36,13 +36,13 @@ The long description, sent as is to addons.mozilla.org by `pnpm amo-listing` (so
 
 ## Images
 
-| Image                         | English                                                                       | Français                                                                                   |
-| ----------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| Store icon (128×128)          | [`icon-128x128.png`](icon-128x128.png)                                        | [`icon-128x128.png`](icon-128x128.png)                                                     |
-| Logo (300×300)                | [`logo-300x300.png`](logo-300x300.png)                                        | [`logo-300x300.png`](logo-300x300.png)                                                     |
-| Small promo tile (440×280)    | [`promo-440x280-en.png`](promo-440x280-en.png)                                | [`promo-440x280-fr.png`](promo-440x280-fr.png)                                             |
-| Marquee promo tile (1400×560) | [`promo-1400x560-en.png`](promo-1400x560-en.png)                              | [`promo-1400x560-fr.png`](promo-1400x560-fr.png)                                           |
-| Screenshots (1280×800)        | none: the extension has no page, use the marquee tile if a store requires one | aucune : l'extension n'a pas de page, utiliser la grande vignette si un store en exige une |
+| Image                         | English                                                                                                               | Français                                                                                                                   |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| Store icon (128×128)          | [`icon-128x128.png`](icon-128x128.png)                                                                                | [`icon-128x128.png`](icon-128x128.png)                                                                                     |
+| Logo (300×300)                | [`logo-300x300.png`](logo-300x300.png)                                                                                | [`logo-300x300.png`](logo-300x300.png)                                                                                     |
+| Small promo tile (440×280)    | [`promo-440x280-en.png`](promo-440x280-en.png)                                                                        | [`promo-440x280-fr.png`](promo-440x280-fr.png)                                                                             |
+| Marquee promo tile (1400×560) | [`promo-1400x560-en.png`](promo-1400x560-en.png)                                                                      | [`promo-1400x560-fr.png`](promo-1400x560-fr.png)                                                                           |
+| Screenshots (1280×800)        | none: the extension's only page tells its users to move to Music Bridge, use the marquee tile if a store requires one | aucune : la seule page de l'extension invite à passer à Music Bridge, utiliser la grande vignette si un store en exige une |
 
 ## Notes for reviewers
 
@@ -58,12 +58,14 @@ In English, for the reviewers of every store: [`notes-for-reviewers.md`](notes-f
 ### English
 
 - **storage**: not requested.
+- **tabs**, **management**: not requested. Opening the moving page (`tabs.create`) and removing the extension itself (`management.uninstallSelf`) need no permission.
 - **Host permission** (content script on `https://www.deezer.com/*`): The content script runs on deezer.com pages only, to open the same page in the Deezer desktop app (deezer:// link). It reads only the page address, and sends nothing anywhere.
 - **Remote code**: No.
 
 ### Français
 
 - **storage** : non demandée.
+- **tabs**, **management** : non demandées. Ouvrir la page de migration (`tabs.create`) et supprimer l'extension elle-même (`management.uninstallSelf`) ne demandent aucune autorisation.
 - **Autorisation d'hôte** (script de contenu sur `https://www.deezer.com/*`) : le script de contenu ne s'exécute que sur les pages deezer.com, pour ouvrir la même page dans l'application Deezer pour ordinateur (lien deezer://). Il ne lit que l'adresse de la page et n'envoie rien nulle part.
 - **Code distant** : non.
 
