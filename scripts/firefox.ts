@@ -4,7 +4,7 @@
  * Installs each extension's Firefox zip (.output/*-firefox.zip) as a temporary add-on with
  * Selenium and geckodriver, then:
  * - dzr-tab: opens the new tab page, waits for a real Deezer track and its gradient, checks the
- *   logo and runs axe-core (WCAG 2.2 A/AA);
+ *   logo and runs the shared accessibility audit (@dume/dev-config/a11y);
  * - dzr-link: opens a Deezer track page from a script-opened tab and expects the content script
  *   to redirect it to the desktop app (deezer://) or to close the tab;
  * - music-bridge: opens a Tidal track page and expects it to land on the same track on Spotify (default
@@ -16,15 +16,13 @@
  */
 
 import { readFile, readdir, mkdir, writeFile } from 'node:fs/promises';
-import { createRequire } from 'node:module';
 import { resolve } from 'node:path';
+import { axeScript, describeViolations } from '@dume/dev-config/a11y';
 import webdriver from 'selenium-webdriver';
 import firefox from 'selenium-webdriver/firefox.js';
 
 const ROOT = resolve(import.meta.dirname, '..');
 const OUTPUT_DIR = resolve(ROOT, '.output/firefox');
-const require = createRequire(resolve(ROOT, 'extensions/dzr-tab/package.json'));
-const AXE_SOURCE = await readFile(require.resolve('axe-core/axe.min.js'), 'utf8');
 
 // Fixed moz-extension:// hosts for the extensions whose pages the tests open, keyed by add-on ID
 const UUIDS = {
@@ -97,14 +95,10 @@ try {
     console.log(`dzr-tab: ${page.title} – ${page.artist}`);
     if (!page.logo) errors.push('dzr-tab: the Deezer logo is missing');
 
-    const violations = (await driver.executeAsyncScript(
-      `${AXE_SOURCE}
-      const done = arguments[arguments.length - 1];
-      axe
-        .run(document, { runOnly: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'] })
-        .then((result) => done(result.violations.map((v) => v.id + ': ' + v.help)), (error) => done(['axe failed: ' + error]));`,
-    )) as string[];
-    errors.push(...violations.map(violation => `dzr-tab: axe ${violation}`));
+    // The same audit as the accessibility scripts (@dume/dev-config/a11y), in Firefox
+    const result = await driver.executeAsyncScript(axeScript());
+    if ('error' in (result as object)) throw new Error(`axe failed: ${(result as { error: string }).error}`);
+    errors.push(...describeViolations(result as Parameters<typeof describeViolations>[0]).map(violation => `dzr-tab: axe ${violation}`));
     await screenshot('dzr-tab');
   } catch (error) {
     errors.push(`dzr-tab: ${(error as Error).message}`);

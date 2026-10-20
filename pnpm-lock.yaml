@@ -170,8 +170,8 @@ importers:
         specifier: 3.0.3
         version: 3.0.3
       '@dume/dev-config':
-        specifier: 1.1.0
-        version: 1.1.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.88.0)(playwright@1.64.1)(postcss@8.5.30)(prettier@3.9.10)(stylelint@17.16.0(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)
+        specifier: 1.2.0
+        version: 1.2.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.88.0)(playwright@1.64.1)(postcss@8.5.30)(prettier@3.9.10)(stylelint@17.16.0(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)
       '@fontsource-variable/bricolage-grotesque':
         specifier: 5.3.0
         version: 5.3.0
@@ -213,14 +213,11 @@ importers:
         version: 4.0.4
     devDependencies:
       '@dume/dev-config':
-        specifier: 1.1.0
-        version: 1.1.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.88.0)(playwright@1.64.1)(postcss@8.5.30)(prettier@3.9.10)(stylelint@17.16.0(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)
+        specifier: 1.2.0
+        version: 1.2.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.88.0)(playwright@1.64.1)(postcss@8.5.30)(prettier@3.9.10)(stylelint@17.16.0(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)
       '@types/node':
         specifier: 24.19.2
         version: 24.19.2
-      axe-core:
-        specifier: 4.14.0
-        version: 4.14.0
       jsdom:
         specifier: 30.1.3
         version: 30.1.3
@@ -240,8 +237,8 @@ importers:
   extensions/music-bridge:
     devDependencies:
       '@dume/dev-config':
-        specifier: 1.1.0
-        version: 1.1.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.88.0)(playwright@1.64.1)(postcss@8.5.30)(prettier@3.9.10)(stylelint@17.16.0(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)
+        specifier: 1.2.0
+        version: 1.2.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.88.0)(playwright@1.64.1)(postcss@8.5.30)(prettier@3.9.10)(stylelint@17.16.0(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)
       '@types/node':
         specifier: 24.19.2
         version: 24.19.2
@@ -470,8 +467,8 @@ packages:
     engines: {node: '>= 0.10.4'}
     hasBin: true
 
-  '@dume/dev-config@1.1.0':
-    resolution: {integrity: sha512-75jd2liMb073ukbKInuVzP3hbJfU3rb/cslwGhLwxSshOUujeMDejmdJ1an3v+0Uiz+j5IwfI75kdyhsqv/qog==}
+  '@dume/dev-config@1.2.0':
+    resolution: {integrity: sha512-rgoyTlvNhm2ePE7TTUe6VsxB+AQ8ILqwTLAN/1hMsAvzP+ch8vYL1BDm8F5PrNY/geZSfG/RNcpV2WnsZTYp0g==}
     hasBin: true
     peerDependencies:
       eslint: '>=10'
@@ -3936,7 +3933,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@dume/dev-config@1.1.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.88.0)(playwright@1.64.1)(postcss@8.5.30)(prettier@3.9.10)(stylelint@17.16.0(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)':
+  '@dume/dev-config@1.2.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.88.0)(playwright@1.64.1)(postcss@8.5.30)(prettier@3.9.10)(stylelint@17.16.0(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)':
     dependencies:
       '@eslint/json': 2.1.1
       '@eslint/markdown': 8.0.3(supports-color@7.2.0)
