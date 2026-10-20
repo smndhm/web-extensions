@@ -9,6 +9,7 @@ const MUSIC_BRIDGE = import.meta.env.FIREFOX
 
 type MessageKey = Parameters<typeof browser.i18n.getMessage>[0];
 
+// The language of the messages, the browser's when the extension has it, English (the default of index.html) otherwise
 document.documentElement.lang = browser.i18n.getMessage('lang');
 document.title = browser.i18n.getMessage('movingTitle');
 for (const element of document.querySelectorAll<HTMLElement>('[data-i18n]')) {
