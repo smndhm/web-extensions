@@ -22,11 +22,12 @@
     "changeset": "changeset",
     "changeset:version": "changeset version && (git diff --quiet extensions/music-bridge/package.json || (node extensions/music-bridge/scripts/logo.ts --draw && prettier --write extensions/music-bridge/assets/colors.json && node scripts/store-assets.ts music-bridge))",
     "changeset:publish": "changeset publish",
-    "changeset:renovate": "changesets-renovate"
+    "changeset:renovate": "changesets-renovate",
+    "prepare": "dev-config hooks"
   },
   "devDependencies": {
     "@changesets/cli": "3.0.3",
-    "@dume/dev-config": "1.2.0",
+    "@dume/dev-config": "1.3.0",
     "@fontsource-variable/bricolage-grotesque": "5.3.0",
     "@scaleway/changesets-renovate": "4.0.5",
     "oxlint": "1.88.0",
