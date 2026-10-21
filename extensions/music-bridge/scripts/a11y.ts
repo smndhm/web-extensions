@@ -23,7 +23,8 @@ import { chromium, type BrowserContext, type Page } from 'playwright';
 const EXTENSION_DIR = resolve(import.meta.dirname, '../.output/chrome-mv3');
 
 const EXPECTED_TAB_ORDER = ['#streaming-platforms', '#open-app', '#close-tab', 'button[type=submit]', 'footer a'];
-const REDIRECT_SERVICE_URL = 'https://music-bridge-redirect.smndhm.workers.dev/';
+// The redirect service, at both its addresses (bricodage.fr, workers.dev when it cannot be reached)
+const REDIRECT_SERVICE_URLS = ['https://music-bridge.bricodage.fr/', 'https://music-bridge-redirect.smndhm.workers.dev/'];
 // A Spotify page in English, whatever the extension's language: the message must say its own
 const MUSIC_PAGE_URL = 'https://open.spotify.com/intl-en/track/0000000000000000000000';
 const MUSIC_PAGE = '<!doctype html><html lang="en"><head><title>Spotify</title></head><body><main><h1>A track</h1></main></body></html>';
@@ -36,7 +37,7 @@ async function axe(page: Page, state: string): Promise<string[]> {
 async function checkNotice(context: BrowserContext, locale: string): Promise<string[]> {
   const errors: string[] = [];
   // The redirect service has no link for this music, and the music page is ours: the check needs no network
-  await context.route(`${REDIRECT_SERVICE_URL}**`, route => route.fulfill({ status: 404, json: { error: 'Not found' } }));
+  for (const service of REDIRECT_SERVICE_URLS) await context.route(`${service}**`, route => route.fulfill({ status: 404, json: { error: 'Not found' } }));
   await context.route(MUSIC_PAGE_URL, route => route.fulfill({ contentType: 'text/html', body: MUSIC_PAGE }));
   const page = await context.newPage();
   page.on('pageerror', error => errors.push(`music page error: ${error.message}`));

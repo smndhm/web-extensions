@@ -10,7 +10,7 @@ Available for:
 - [Firefox](https://addons.mozilla.org/firefox/addon/music-bridge/), also on Android
 - [Edge](https://microsoftedge.microsoft.com/addons/detail/kfbedaeciahfjnknbjkcnjknkbdlcnld)
 
-Made with the [Odesli](https://odesli.co/) API, through the [music-bridge-redirect](https://github.com/smndhm/music-bridge-redirect) service.
+Made with the [Odesli](https://odesli.co/) API, through the [music-bridge-redirect](https://github.com/smndhm/music-bridge-redirect) service, at `music-bridge.bricodage.fr`, where its cache works. When that domain cannot be reached, the extension asks the same Worker on `music-bridge-redirect.smndhm.workers.dev`.
 
 ## Supported platforms
 
