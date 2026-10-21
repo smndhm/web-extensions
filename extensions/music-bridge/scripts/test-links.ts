@@ -20,7 +20,7 @@ import { resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 
 const FILE = resolve(import.meta.dirname, '../TESTING.md');
-const REDIRECT_SERVICE_URL = 'https://music-bridge-redirect.smndhm.workers.dev/';
+const REDIRECT_SERVICE_URL = 'https://music-bridge.bricodage.fr/';
 // Marks the calls as tests in the redirect service's logs, run from GitHub or from a computer
 const TEST_HEADERS = { 'User-Agent': 'music-bridge-test (test-links)' };
 // Top Worldwide, as on the store screenshots (scripts/screenshots.ts), and the album chart

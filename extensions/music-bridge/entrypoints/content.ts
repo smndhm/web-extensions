@@ -43,6 +43,7 @@ export default defineContentScript({
 
     // Ask the service first, to stay on the page with a message when it has no link
     let target = redirect;
+    let navigation = redirect;
     if (isServiceUrl(redirect)) {
       const resolution = (await browser.runtime.sendMessage({ type: RESOLVE_MESSAGE_TYPE, url: redirect })) as Resolution | undefined;
       if (!resolution || !('url' in resolution)) {
@@ -56,12 +57,14 @@ export default defineContentScript({
         return;
       }
       target = resolution.url;
+      // The service address that answered: workers.dev when bricodage.fr cannot be reached
+      navigation = resolution.service;
     }
 
     const closeTab = shouldCloseTab(target, settings, history.length);
     // Go through the service, which redirects to the same link (from its cache), rather than to the link itself: Android
     // only opens a platform's app for a navigation it sees as a link, which a page script setting its address is not
-    window.location.href = redirect;
+    window.location.href = navigation;
     if (closeTab) void browser.runtime.sendMessage(CLOSE_TAB_MESSAGE);
   },
 });
