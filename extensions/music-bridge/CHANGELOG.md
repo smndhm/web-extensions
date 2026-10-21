@@ -1,5 +1,20 @@
 # music-bridge
 
+## 1.10.0
+
+### Minor Changes
+
+- 9e47a9f: With Deezer and "Open links in the desktop app", Deezer's playlists, artists, podcasts, episodes and profiles also open in the Deezer app, as with Deezer Link. Music Bridge marks the pages it takes over, so that Deezer Link, if it is also installed, does not open the app a second time.
+
+### Patch Changes
+
+- 593b3e5: The redirect service is called at music-bridge.bricodage.fr, where its cache answers faster, and at music-bridge-redirect.smndhm.workers.dev when that domain cannot be reached.
+- 6826043: The options page has a default language (English) before its script sets the browser's.
+- 117c11b: Updated dependency `sass` to `1.105.2`.
+- 715d098: Updated dependency `playwright` to `1.64.1`.
+- 02d2589: Updated dependency `vitest` to `5.0.5`.
+- 1ba255f: Updated dependency `jsdom` to `30.1.3`.
+
 ## 1.9.2
 
 ### Patch Changes
