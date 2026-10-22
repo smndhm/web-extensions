@@ -61,3 +61,21 @@ it('shows the text as text, not HTML', () => {
   expect(text.children).toHaveLength(0);
   expect(text.textContent).toBe('<b>bold</b>');
 });
+
+it('shows a link after the text, in the keyboard order before the close button', () => {
+  const host = showNotice(document, {
+    text: 'Message',
+    lang: 'en',
+    closeLabel: 'Close',
+    link: { text: 'Search Deezer for “<b>Be Her</b>”', href: 'https://www.deezer.com/search/Ella%20Langley%20Be%20Her' },
+  });
+  const link = host.shadowRoot!.querySelector('a')!;
+  expect(link.href).toBe('https://www.deezer.com/search/Ella%20Langley%20Be%20Her');
+  expect(link.textContent).toBe('Search Deezer for “<b>Be Her</b>”');
+  expect(link.compareDocumentPosition(host.shadowRoot!.querySelector('button')!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+});
+
+it('has no link without one', () => {
+  const host = showNotice(document, { text: 'Message', lang: 'en', closeLabel: 'Close' });
+  expect(host.shadowRoot!.querySelector('a')!.hasAttribute('href')).toBe(false);
+});

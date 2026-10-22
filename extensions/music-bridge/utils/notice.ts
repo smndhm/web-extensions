@@ -7,6 +7,8 @@ export interface Notice {
   closeLabel: string;
   /** The logo, as a data URL: a page cannot load the extension's files */
   iconUrl?: string;
+  /** A link after the text, such as a search for the music on the chosen platform */
+  link?: { text: string; href: string };
 }
 
 /**
@@ -18,7 +20,7 @@ export interface Notice {
  * `lang` is the language of the text, the extension's, not always the page's: screen readers read
  * it with the right voice. The button, or Escape while the focus is in the message, closes it.
  */
-export function showNotice(doc: Document, { text, lang, closeLabel, iconUrl = '' }: Notice): HTMLElement {
+export function showNotice(doc: Document, { text, lang, closeLabel, iconUrl = '', link }: Notice): HTMLElement {
   const host = doc.createElement('music-bridge-notice');
   const shadow = host.attachShadow({ mode: 'open' });
   shadow.innerHTML = `
@@ -37,6 +39,10 @@ export function showNotice(doc: Document, { text, lang, closeLabel, iconUrl = ''
       }
       img { flex: none; width: 24px; height: 24px; }
       img:not([src]) { display: none; }
+      p { margin: 0; }
+      a { color: var(--accent); text-underline-offset: 2px; border-radius: 2px; }
+      a:not([href]) { display: none; }
+      a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
       button {
         flex: none; width: 32px; height: 32px; padding: 0; border: 0; border-radius: 4px;
         background: transparent; color: inherit; font: inherit; font-size: 20px; line-height: 1; cursor: pointer;
@@ -44,11 +50,16 @@ export function showNotice(doc: Document, { text, lang, closeLabel, iconUrl = ''
       button:hover { background: var(--hover); }
       button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
     </style>
-    <div><img alt=""><span role="status"></span><button type="button">×</button></div>
+    <div><img alt=""><p><span role="status"></span> <a></a></p><button type="button">×</button></div>
   `;
   const notice = shadow.querySelector('div')!;
   notice.lang = lang;
   if (iconUrl) shadow.querySelector('img')!.src = iconUrl;
+  if (link) {
+    const anchor = shadow.querySelector('a')!;
+    anchor.href = link.href;
+    anchor.textContent = link.text;
+  }
   const button = shadow.querySelector('button')!;
   button.setAttribute('aria-label', closeLabel);
   button.addEventListener('click', () => host.remove());

@@ -48,11 +48,20 @@ export default defineContentScript({
       const resolution = (await browser.runtime.sendMessage({ type: RESOLVE_MESSAGE_TYPE, url: redirect })) as Resolution | undefined;
       if (!resolution || !('url' in resolution)) {
         const notFound = resolution?.status === 404;
+        const platform = platforms[settings.platform];
+        // The service tells the music it could not find: the platform's search may still find it, under another name
+        const music = resolution && 'music' in resolution ? resolution.music : undefined;
+        let text = browser.i18n.getMessage('noticeUnavailable');
+        if (notFound) text = browser.i18n.getMessage(music ? 'noticeNotFoundSearch' : 'noticeNotFound', platform.name);
         showNotice(document, {
-          text: notFound ? browser.i18n.getMessage('noticeNotFound', platforms[settings.platform].name) : browser.i18n.getMessage('noticeUnavailable'),
+          text,
           lang: browser.i18n.getMessage('lang'),
           closeLabel: browser.i18n.getMessage('noticeClose'),
           iconUrl,
+          link:
+            notFound && music
+              ? { text: browser.i18n.getMessage('noticeSearch', [platform.name, music.title]), href: platform.search(`${music.artistName} ${music.title}`) }
+              : undefined,
         });
         return;
       }

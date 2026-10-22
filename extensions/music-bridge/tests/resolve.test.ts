@@ -29,6 +29,19 @@ describe('resolve', () => {
     expect(await resolve(SERVICE_URL)).toEqual({ status });
   });
 
+  it('answers the music the service could not find, to search the platform for it', async () => {
+    fetchMock.mockResolvedValue(Response.json({ type: 'song', title: 'Be Her', artistName: 'Ella Langley', extra: 1 }, { status: 404 }));
+    expect(await resolve(SERVICE_URL)).toEqual({ status: 404, music: { type: 'song', title: 'Be Her', artistName: 'Ella Langley' } });
+  });
+
+  it.each([[''], ['{"type":"video","title":"Be Her","artistName":"Ella Langley"}'], ['{"type":"song","title":" ","artistName":"Ella Langley"}'], ['not json']])(
+    'answers a 404 without music for the body %s',
+    async body => {
+      fetchMock.mockResolvedValue(new Response(body, { status: 404 }));
+      expect(await resolve(SERVICE_URL)).toEqual({ status: 404 });
+    },
+  );
+
   it('asks workers.dev when bricodage.fr is unreachable, and answers it as the service to go through', async () => {
     fetchMock.mockRejectedValueOnce(new TypeError('Failed to fetch')).mockResolvedValueOnce(Response.json({ url: 'https://www.deezer.com/track/123' }));
     expect(await resolve(SERVICE_URL)).toEqual({ url: 'https://www.deezer.com/track/123', service: `${FALLBACK_SERVICE_URL}${QUERY}` });

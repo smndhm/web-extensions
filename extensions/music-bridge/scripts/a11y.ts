@@ -10,7 +10,8 @@
  *
  * Then, on a music page (served by the script, as the redirect service's "not on this platform" answer), it checks
  * the message Music Bridge shows when it cannot redirect: axe-core again, its text in a status live region, in the
- * extension's language, and its close button, reached with Tab, and Escape, which closes it.
+ * extension's language, its link to search the platform then its close button, reached with Tab, and Escape, which
+ * closes it.
  *
  * Usage: pnpm build && pnpm a11y
  * CHROMIUM_PATH can point to a Chromium binary other than the one Playwright installs.
@@ -27,6 +28,8 @@ const EXPECTED_TAB_ORDER = ['#streaming-platforms', '#open-app', '#close-tab', '
 const REDIRECT_SERVICE_URLS = ['https://music-bridge.bricodage.fr/', 'https://music-bridge-redirect.smndhm.workers.dev/'];
 // A Spotify page in English, whatever the extension's language: the message must say its own
 const MUSIC_PAGE_URL = 'https://open.spotify.com/intl-en/track/0000000000000000000000';
+// What the redirect service tells of the music it has no link for
+const NOT_FOUND_MUSIC = { type: 'song', title: 'A track', artistName: 'An artist' };
 const MUSIC_PAGE = '<!doctype html><html lang="en"><head><title>Spotify</title></head><body><main><h1>A track</h1></main></body></html>';
 
 async function axe(page: Page, state: string): Promise<string[]> {
@@ -37,7 +40,7 @@ async function axe(page: Page, state: string): Promise<string[]> {
 async function checkNotice(context: BrowserContext, locale: string): Promise<string[]> {
   const errors: string[] = [];
   // The redirect service has no link for this music, and the music page is ours: the check needs no network
-  for (const service of REDIRECT_SERVICE_URLS) await context.route(`${service}**`, route => route.fulfill({ status: 404, json: { error: 'Not found' } }));
+  for (const service of REDIRECT_SERVICE_URLS) await context.route(`${service}**`, route => route.fulfill({ status: 404, json: NOT_FOUND_MUSIC }));
   await context.route(MUSIC_PAGE_URL, route => route.fulfill({ contentType: 'text/html', body: MUSIC_PAGE }));
   const page = await context.newPage();
   page.on('pageerror', error => errors.push(`music page error: ${error.message}`));
@@ -48,11 +51,16 @@ async function checkNotice(context: BrowserContext, locale: string): Promise<str
   const lang = await status.evaluate(element => element.closest('[lang]')?.getAttribute('lang'));
   if (lang !== locale) errors.push(`the message "${await status.textContent()}" is in ${lang}, expected ${locale}`);
 
-  // Its close button is in the keyboard order, and Escape there closes the message
+  // Its search link, then its close button, are in the keyboard order, and Escape there closes the message
+  const search = await page.evaluate(() => document.querySelector('music-bridge-notice')?.shadowRoot?.querySelector('a')?.href);
+  if (!search?.startsWith('https://www.deezer.com/search/')) errors.push(`the message's search link is ${search}, expected a Deezer search`);
   await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
-  await page.keyboard.press('Tab');
-  const focused = await page.evaluate(() => document.querySelector('music-bridge-notice')?.shadowRoot?.activeElement?.tagName);
-  if (focused !== 'BUTTON') errors.push(`Tab on the music page lands on ${focused ?? 'the page'}, expected the message's close button`);
+  const focusedOnTab = async () => {
+    await page.keyboard.press('Tab');
+    return page.evaluate(() => document.querySelector('music-bridge-notice')?.shadowRoot?.activeElement?.tagName);
+  };
+  const focused = [await focusedOnTab(), await focusedOnTab()];
+  if (focused.join() !== 'A,BUTTON') errors.push(`Tab on the music page lands on ${focused.join(' → ')}, expected the message's search link → close button`);
   await page.keyboard.press('Escape');
   if (await page.locator('music-bridge-notice').count()) errors.push('Escape on the close button does not close the message');
   await page.close();
