@@ -137,3 +137,11 @@ describe('shouldCloseTab', () => {
     expect(shouldCloseTab('deezer://track/3135556', { closeTab: true }, 2)).toBe(false);
   });
 });
+
+describe('platform search', () => {
+  it.each(PLATFORM_IDS)('searches %s on its website, the query encoded', id => {
+    const search = platforms[id].search('AC/DC Back in Black & more');
+    expect(search.startsWith(`${platforms[id].url}/`)).toBe(true);
+    expect(search).toContain(encodeURIComponent('AC/DC Back in Black & more'));
+  });
+});

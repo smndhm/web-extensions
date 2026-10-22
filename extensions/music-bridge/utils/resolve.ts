@@ -4,11 +4,26 @@ import { FALLBACK_SERVICE_URL, REDIRECT_SERVICE_URL } from './redirect';
 /** Sent by the content script to have the background ask the redirect service where to go */
 export const RESOLVE_MESSAGE_TYPE = 'resolve';
 
+/** A song or an album, by its title and artist: the service tells it with a 404, to search the platform for it */
+export interface Music {
+  type: 'song' | 'album';
+  title: string;
+  artistName: string;
+}
+
 /**
  * Where the service sends a link: the music's link and the service address that answered (the one to go through), or
- * the error status (404: not on the platform)
+ * the error status (404: not on the platform, with the music when the service knows it, and its release date,
+ * YYYY-MM-DD, when it is not out yet)
  */
-export type Resolution = { url: string; service: string } | { status: number };
+export type Resolution = { url: string; service: string } | { status: number; music?: Music; releaseDate?: string };
+
+/** The music a 404 of the service tells, if any: only its title and artist, checked */
+function musicOf(body: unknown): Music | undefined {
+  const { type, title, artistName } = (body ?? {}) as Partial<Record<keyof Music, unknown>>;
+  if ((type !== 'song' && type !== 'album') || typeof title !== 'string' || !title.trim() || typeof artistName !== 'string') return undefined;
+  return { type, title, artistName };
+}
 
 /** Whether `redirect` goes through the redirect service, rather than straight to an app link */
 export const isServiceUrl = (redirect: string) => redirect.startsWith(REDIRECT_SERVICE_URL) || redirect.startsWith(FALLBACK_SERVICE_URL);
@@ -19,6 +34,16 @@ async function ask(serviceUrl: string): Promise<Resolution> {
   url.searchParams.set('format', 'json');
   try {
     const response = await fetch(url);
+    if (response.status === 404) {
+      const body: unknown = await response.json().catch(() => undefined);
+      const music = musicOf(body);
+      const { releaseDate } = (body ?? {}) as { releaseDate?: unknown };
+      return {
+        status: 404,
+        ...(music && { music }),
+        ...(typeof releaseDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(releaseDate) && { releaseDate }),
+      };
+    }
     if (!response.ok) return { status: response.status };
     const { url: found } = (await response.json()) as { url?: unknown };
     return typeof found === 'string' ? { url: found, service: serviceUrl } : { status: 502 };

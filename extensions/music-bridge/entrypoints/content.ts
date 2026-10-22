@@ -3,6 +3,7 @@ import { getSettings } from '@/utils/settings';
 import { CLOSE_TAB_MESSAGE } from '@/utils/close-tab';
 import { isServiceUrl, RESOLVE_MESSAGE_TYPE, type Resolution } from '@/utils/resolve';
 import { showNotice } from '@/utils/notice';
+import { daysUntil, releaseWhen } from '@/utils/release';
 import { platforms } from '@/utils/platforms';
 // The logo in the colors of this version, the toolbar icon, inlined: a page cannot load the extension's files
 import iconUrl from '@/public/icons/48.png?inline';
@@ -48,11 +49,31 @@ export default defineContentScript({
       const resolution = (await browser.runtime.sendMessage({ type: RESOLVE_MESSAGE_TYPE, url: redirect })) as Resolution | undefined;
       if (!resolution || !('url' in resolution)) {
         const notFound = resolution?.status === 404;
+        const platform = platforms[settings.platform];
+        const lang = browser.i18n.getMessage('lang');
+        // The service tells the music it could not find: the platform's search may still find it, under another name
+        const music = resolution && 'music' in resolution ? resolution.music : undefined;
+        // Or that it is not out yet: say when (a release date already past, on the user's clock, is a plain not found)
+        const releaseDate = resolution && 'releaseDate' in resolution ? resolution.releaseDate : undefined;
+        const upcoming = notFound && releaseDate && daysUntil(releaseDate) >= 0 ? releaseWhen(releaseDate, lang) : undefined;
+        let text = browser.i18n.getMessage('noticeUnavailable');
+        if (upcoming) {
+          const when = upcoming.soon ? browser.i18n.getMessage('noticeWhenSoon', [upcoming.soon, upcoming.date]) : browser.i18n.getMessage('noticeWhenDate', upcoming.date);
+          const message = { song: 'noticeUpcomingSong', album: 'noticeUpcomingAlbum' } as const;
+          text = browser.i18n.getMessage(music ? message[music.type] : 'noticeUpcoming', [platform.name, when]);
+        } else if (notFound) {
+          text = browser.i18n.getMessage(music ? 'noticeNotFoundSearch' : 'noticeNotFound', platform.name);
+        }
         showNotice(document, {
-          text: notFound ? browser.i18n.getMessage('noticeNotFound', platforms[settings.platform].name) : browser.i18n.getMessage('noticeUnavailable'),
-          lang: browser.i18n.getMessage('lang'),
+          text,
+          lang,
           closeLabel: browser.i18n.getMessage('noticeClose'),
           iconUrl,
+          // Nothing to search for before its release
+          link:
+            notFound && music && !upcoming
+              ? { text: browser.i18n.getMessage('noticeSearch', [platform.name, music.title]), href: platform.search(`${music.artistName} ${music.title}`) }
+              : undefined,
         });
         return;
       }
