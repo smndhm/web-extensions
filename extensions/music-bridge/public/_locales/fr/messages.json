@@ -73,6 +73,45 @@
       "title": { "content": "$2", "example": "Be Her" }
     }
   },
+  "noticeUpcomingSong": {
+    "message": "Vous êtes en avance ! Ce titre sort $WHEN$. Music Bridge pourra l'ouvrir sur $PLATFORM$ à sa sortie.",
+    "description": "Message on the music page when the track is not out yet.",
+    "placeholders": {
+      "platform": { "content": "$1", "example": "Deezer" },
+      "when": { "content": "$2", "example": "tomorrow, on October 23" }
+    }
+  },
+  "noticeUpcomingAlbum": {
+    "message": "Vous êtes en avance ! Cet album sort $WHEN$. Music Bridge pourra l'ouvrir sur $PLATFORM$ à sa sortie.",
+    "description": "Message on the music page when the album is not out yet.",
+    "placeholders": {
+      "platform": { "content": "$1", "example": "Deezer" },
+      "when": { "content": "$2", "example": "tomorrow, on October 23" }
+    }
+  },
+  "noticeUpcoming": {
+    "message": "Vous êtes en avance ! Cette musique sort $WHEN$. Music Bridge pourra l'ouvrir sur $PLATFORM$ à sa sortie.",
+    "description": "Message on the music page when the music is not out yet, neither known as a track nor as an album.",
+    "placeholders": {
+      "platform": { "content": "$1", "example": "Deezer" },
+      "when": { "content": "$2", "example": "tomorrow, on October 23" }
+    }
+  },
+  "noticeWhenSoon": {
+    "message": "$SOON$, le $DATE$",
+    "description": "When music not out yet comes out, within a week: how soon, then its date.",
+    "placeholders": {
+      "soon": { "content": "$1", "example": "tomorrow" },
+      "date": { "content": "$2", "example": "October 23" }
+    }
+  },
+  "noticeWhenDate": {
+    "message": "le $DATE$",
+    "description": "When music not out yet comes out, a week or more ahead: its date.",
+    "placeholders": {
+      "date": { "content": "$1", "example": "November 14" }
+    }
+  },
   "noticeUnavailable": {
     "message": "Music Bridge n'a pas pu rediriger ce lien pour l'instant. Réessayez plus tard.",
     "description": "Message on the music page when the redirect service fails."

@@ -73,6 +73,45 @@
       "title": { "content": "$2", "example": "Be Her" }
     }
   },
+  "noticeUpcomingSong": {
+    "message": "You're early! This track comes out $WHEN$. Music Bridge can open it on $PLATFORM$ once it's out.",
+    "description": "Message on the music page when the track is not out yet.",
+    "placeholders": {
+      "platform": { "content": "$1", "example": "Deezer" },
+      "when": { "content": "$2", "example": "tomorrow, on October 23" }
+    }
+  },
+  "noticeUpcomingAlbum": {
+    "message": "You're early! This album comes out $WHEN$. Music Bridge can open it on $PLATFORM$ once it's out.",
+    "description": "Message on the music page when the album is not out yet.",
+    "placeholders": {
+      "platform": { "content": "$1", "example": "Deezer" },
+      "when": { "content": "$2", "example": "tomorrow, on October 23" }
+    }
+  },
+  "noticeUpcoming": {
+    "message": "You're early! This music comes out $WHEN$. Music Bridge can open it on $PLATFORM$ once it's out.",
+    "description": "Message on the music page when the music is not out yet, neither known as a track nor as an album.",
+    "placeholders": {
+      "platform": { "content": "$1", "example": "Deezer" },
+      "when": { "content": "$2", "example": "tomorrow, on October 23" }
+    }
+  },
+  "noticeWhenSoon": {
+    "message": "$SOON$, on $DATE$",
+    "description": "When music not out yet comes out, within a week: how soon, then its date.",
+    "placeholders": {
+      "soon": { "content": "$1", "example": "tomorrow" },
+      "date": { "content": "$2", "example": "October 23" }
+    }
+  },
+  "noticeWhenDate": {
+    "message": "on $DATE$",
+    "description": "When music not out yet comes out, a week or more ahead: its date.",
+    "placeholders": {
+      "date": { "content": "$1", "example": "November 14" }
+    }
+  },
   "noticeUnavailable": {
     "message": "Music Bridge could not redirect this link for now. Try again later.",
     "description": "Message on the music page when the redirect service fails."

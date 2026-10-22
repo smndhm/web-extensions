@@ -13,9 +13,10 @@ export interface Music {
 
 /**
  * Where the service sends a link: the music's link and the service address that answered (the one to go through), or
- * the error status (404: not on the platform, with the music when the service knows it)
+ * the error status (404: not on the platform, with the music when the service knows it, and its release date,
+ * YYYY-MM-DD, when it is not out yet)
  */
-export type Resolution = { url: string; service: string } | { status: number; music?: Music };
+export type Resolution = { url: string; service: string } | { status: number; music?: Music; releaseDate?: string };
 
 /** The music a 404 of the service tells, if any: only its title and artist, checked */
 function musicOf(body: unknown): Music | undefined {
@@ -34,8 +35,14 @@ async function ask(serviceUrl: string): Promise<Resolution> {
   try {
     const response = await fetch(url);
     if (response.status === 404) {
-      const music = musicOf(await response.json().catch(() => undefined));
-      return music ? { status: 404, music } : { status: 404 };
+      const body: unknown = await response.json().catch(() => undefined);
+      const music = musicOf(body);
+      const { releaseDate } = (body ?? {}) as { releaseDate?: unknown };
+      return {
+        status: 404,
+        ...(music && { music }),
+        ...(typeof releaseDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(releaseDate) && { releaseDate }),
+      };
     }
     if (!response.ok) return { status: response.status };
     const { url: found } = (await response.json()) as { url?: unknown };

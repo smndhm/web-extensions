@@ -34,6 +34,15 @@ describe('resolve', () => {
     expect(await resolve(SERVICE_URL)).toEqual({ status: 404, music: { type: 'song', title: 'Be Her', artistName: 'Ella Langley' } });
   });
 
+  it('answers the release date of music not out yet', async () => {
+    fetchMock.mockResolvedValue(Response.json({ type: 'album', title: 'EXTASIAAAAA', artistName: 'Ino Casablanca', releaseDate: '2026-10-23' }, { status: 404 }));
+    expect(await resolve(SERVICE_URL)).toEqual({ status: 404, music: { type: 'album', title: 'EXTASIAAAAA', artistName: 'Ino Casablanca' }, releaseDate: '2026-10-23' });
+    fetchMock.mockResolvedValue(Response.json({ releaseDate: '2026-10-23' }, { status: 404 }));
+    expect(await resolve(SERVICE_URL)).toEqual({ status: 404, releaseDate: '2026-10-23' });
+    fetchMock.mockResolvedValue(Response.json({ releaseDate: 'tomorrow' }, { status: 404 }));
+    expect(await resolve(SERVICE_URL)).toEqual({ status: 404 });
+  });
+
   it.each([[''], ['{"type":"video","title":"Be Her","artistName":"Ella Langley"}'], ['{"type":"song","title":" ","artistName":"Ella Langley"}'], ['not json']])(
     'answers a 404 without music for the body %s',
     async body => {
