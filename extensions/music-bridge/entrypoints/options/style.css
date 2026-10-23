@@ -1,0 +1,97 @@
+/*
+ * The options page, on @dume/ds (smndhm/blu): its tokens, base and utilities come first (main.ts). Class names follow
+ * BEM; scripts and tests find elements by their IDs.
+ */
+
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  block-size: 100%;
+}
+
+/* Chrome gives extension pages a font of its own on body, at 75%: the design system's, from the root */
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font: inherit;
+  padding-inline: var(--ds-b-size-16);
+}
+
+/* The options page */
+.options {
+  inline-size: 100%;
+  max-inline-size: 30rem;
+  margin: auto;
+  padding-block: var(--ds-b-size-24);
+}
+
+/* What the extension does: the first thing to read, in the main text color */
+.options__intro {
+  margin-block: 0 var(--ds-b-size-24);
+}
+
+.options__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-b-size-16);
+}
+
+/* The platform's select, a field of @dume/ds (`.ds-c-field`) across the page */
+.options__select {
+  inline-size: 100%;
+  min-block-size: 2.75rem;
+
+  &:hover {
+    border-color: var(--ds-b-color-primary);
+  }
+}
+
+/* "Saved.", for two seconds after a change: its line is kept, so that nothing moves when it shows */
+.options__status {
+  min-block-size: 1lh;
+  margin: 0;
+  color: var(--ds-b-color-primary);
+  font-weight: 700;
+}
+
+/* A checkbox, its label beside it and its help underneath */
+.check {
+  display: grid;
+  align-items: center;
+  padding: var(--ds-b-size-12) var(--ds-b-size-16);
+  border-radius: var(--ds-b-size-radius);
+  background-color: var(--ds-b-color-background-surface);
+  column-gap: var(--ds-b-size-12);
+  grid-template-columns: auto 1fr;
+}
+
+.check__box {
+  margin: 0;
+  block-size: 1.25rem;
+  inline-size: 1.25rem;
+}
+
+.check__label {
+  font-weight: 500;
+}
+
+.check__help {
+  margin: var(--ds-b-size-4) 0 0;
+  color: var(--ds-b-color-text-muted);
+  grid-column: 2;
+}
+
+/* Credits, at the bottom of the page */
+.credits {
+  color: var(--ds-b-color-text-muted);
+  padding-block: var(--ds-b-size-12);
+  text-align: center;
+}
+
+.credits__link {
+  font-weight: 700;
+}

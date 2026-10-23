@@ -22,7 +22,7 @@ function renderCredits(footer: HTMLElement) {
   link.rel = 'noopener';
   link.textContent = 'Odesli';
   const newTab = doc.createElement('span');
-  newTab.className = 'visually-hidden';
+  newTab.className = 'ds-u-visually-hidden';
   newTab.textContent = ` ${t('optionsNewTab')}`;
   link.append(newTab);
   footer.replaceChildren(before, link, after);
