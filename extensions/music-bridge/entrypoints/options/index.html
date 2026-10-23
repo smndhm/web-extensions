@@ -15,20 +15,19 @@
         <div class="field">
           <label class="field__label" for="streaming-platforms" data-i18n="optionsStreamingPlatformLabel"></label>
           <select class="field__select" id="streaming-platforms" name="platform"></select>
-          <p class="field__status" role="status" id="streaming-platforms-status"></p>
         </div>
         <div class="field field--check" id="open-app-option">
           <input class="field__checkbox" type="checkbox" id="open-app" name="openInApp" aria-describedby="open-app-help" />
           <label class="field__label" for="open-app" data-i18n="optionsOpenAppLabel"></label>
           <p class="field__help" id="open-app-help" data-i18n="optionsOpenAppHelp"></p>
-          <p class="field__status" role="status" id="open-app-status"></p>
         </div>
         <div class="field field--check" id="close-tab-option">
           <input class="field__checkbox" type="checkbox" id="close-tab" name="closeTab" aria-describedby="close-tab-help" />
           <label class="field__label" for="close-tab" data-i18n="optionsCloseTabLabel"></label>
           <p class="field__help" id="close-tab-help" data-i18n="optionsCloseTabHelp"></p>
-          <p class="field__status" role="status" id="close-tab-status"></p>
         </div>
+        <!-- Settings are saved as they change, as in the browser's own: no message to see, one for screen readers to hear -->
+        <p class="visually-hidden" role="status" id="save-status"></p>
       </form>
     </main>
     <footer class="credits"></footer>

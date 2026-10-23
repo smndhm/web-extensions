@@ -6,7 +6,7 @@
  * ticked (the "Close the tab" option and its help show up), saved as it changes:
  * - axe-core (@dume/dev-config/a11y: WCAG 2.2 A/AA, best practices, RGAA 4, EN 301 549) reports no violation;
  * - the keyboard order is platform → open in app → close the tab → the Odesli link;
- * - the confirmation next to a setting changed is in a status live region, so screen readers announce it.
+ * - the confirmation of a setting changed is in a status live region, so screen readers announce it.
  *
  * Then, on a music page (served by the script, as the redirect service's "not on this platform" answer), it checks
  * the message Music Bridge shows when it cannot redirect: axe-core again, its text in a status live region, in the
@@ -111,10 +111,10 @@ async function check(locale: string, colorScheme: 'light' | 'dark'): Promise<str
       errors.push(`keyboard order is ${order.join(' → ')}, expected ${EXPECTED_TAB_ORDER.join(' → ')}`);
     }
 
-    // Saved as it changes: the confirmation next to the option ticked is announced
-    await page.waitForFunction(() => document.querySelector('#open-app-status')?.textContent);
+    // Saved as it changes: the confirmation is announced
+    await page.waitForFunction(() => document.querySelector('#save-status')?.textContent);
     const status = await page.evaluate(() => {
-      const element = document.querySelector('#open-app-status')!;
+      const element = document.querySelector('#save-status')!;
       return { role: element.getAttribute('role'), text: element.textContent };
     });
     if (status.role !== 'status') errors.push(`the save confirmation "${status.text}" is not in a status live region`);

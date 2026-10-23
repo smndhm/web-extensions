@@ -41,7 +41,7 @@
   },
   "optionsSaveConfirmation": {
     "message": "Saved.",
-    "description": "Said next to a setting once it is saved, as soon as it changes"
+    "description": "Read by screen readers once a setting is saved, as soon as it changes (not shown)"
   },
   "optionsCredits": {
     "message": "Uses the %LINK% API.",

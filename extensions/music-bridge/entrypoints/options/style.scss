@@ -151,20 +151,6 @@ body {
     font-size: 1.4rem;
     color: var(--muted);
   }
-
-  // "Saved.", for two seconds after a change: empty, it takes no room, and stays in the page for screen readers to
-  // announce its text
-  &__status {
-    grid-column: 2;
-    margin: 0;
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: var(--accent);
-
-    &:not(:empty) {
-      margin-top: 0.4rem;
-    }
-  }
 }
 
 // Credits, at the bottom of the page
