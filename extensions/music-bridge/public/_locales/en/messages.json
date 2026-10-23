@@ -39,13 +39,9 @@
     "message": "Tick “Always allow” in the browser prompt the first time, or the tab closes before you answer it.",
     "description": "Options page help under the close tab option."
   },
-  "optionsSaveButton": {
-    "message": "Save",
-    "description": "Save options button"
-  },
   "optionsSaveConfirmation": {
-    "message": "Preferences saved.",
-    "description": "Save options button confirmation"
+    "message": "Saved.",
+    "description": "Said next to a setting once it is saved, as soon as it changes"
   },
   "optionsCredits": {
     "message": "Uses the %LINK% API.",

@@ -42,7 +42,6 @@ export async function initOptionsPage(doc: Document, userAgent: string): Promise
   const openAppOption = doc.querySelector<HTMLElement>('#open-app-option')!;
   const closeTab = doc.querySelector<HTMLInputElement>('#close-tab')!;
   const closeTabOption = doc.querySelector<HTMLElement>('#close-tab-option')!;
-  const status = doc.querySelector<HTMLElement>('#save-status')!;
 
   const settings = await getSettings();
   select.append(
@@ -73,14 +72,20 @@ export async function initOptionsPage(doc: Document, userAgent: string): Promise
     updateOpenAppOption();
   });
 
-  let clearStatus: ReturnType<typeof setTimeout> | undefined;
-  form.addEventListener('submit', async event => {
-    event.preventDefault();
+  // Each change is saved at once, and said next to the setting changed: no button to forget. Its status is a live
+  // region: screen readers announce the confirmation.
+  const statuses = new Map<HTMLElement, ReturnType<typeof setTimeout>>();
+  const save = async (input: HTMLElement) => {
     if (!isPlatformId(select.value)) return;
     await saveSettings({ platform: select.value, openInApp: checkbox.checked, closeTab: closeTab.checked });
-    // The status is a live region: screen readers announce the confirmation
+    const status = doc.querySelector<HTMLElement>(`#${input.id}-status`)!;
     status.textContent = t('optionsSaveConfirmation');
-    clearTimeout(clearStatus);
-    clearStatus = setTimeout(() => (status.textContent = ''), SAVE_STATUS_DURATION);
-  });
+    clearTimeout(statuses.get(status));
+    statuses.set(
+      status,
+      setTimeout(() => (status.textContent = ''), SAVE_STATUS_DURATION),
+    );
+  };
+  for (const input of [select, checkbox, closeTab]) input.addEventListener('change', () => void save(input));
+  form.addEventListener('submit', event => event.preventDefault());
 }

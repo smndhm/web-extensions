@@ -151,38 +151,18 @@ body {
     font-size: 1.4rem;
     color: var(--muted);
   }
-}
 
-// The save button and its confirmation
-.save {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 1.2rem;
-  margin-top: 0.8rem;
-
+  // "Saved.", for two seconds after a change: empty, it takes no room, and stays in the page for screen readers to
+  // announce its text
   &__status {
+    grid-column: 2;
     margin: 0;
     font-size: 1.4rem;
-    color: var(--muted);
-  }
-
-  &__button {
-    min-height: 4.4rem;
-    padding: 0.8rem 2.4rem;
-
-    background: var(--accent);
-    border: 0.1rem solid var(--accent);
-    border-radius: var(--radius);
-
-    font: inherit;
     font-weight: 600;
-    color: var(--on-accent);
-    cursor: pointer;
+    color: var(--accent);
 
-    &:hover {
-      filter: brightness(1.1);
+    &:not(:empty) {
+      margin-top: 0.4rem;
     }
   }
 }

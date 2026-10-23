@@ -3,10 +3,10 @@
  *
  * Loads the Chrome build (.output/chrome-mv3) in Chromium, in English and French, light and dark, and
  * checks the options page in three states: as it opens, with Deezer chosen and "Open links in the desktop app"
- * ticked (the "Close the tab" option and its help show up), and once saved:
+ * ticked (the "Close the tab" option and its help show up), saved as it changes:
  * - axe-core (@dume/dev-config/a11y: WCAG 2.2 A/AA, best practices, RGAA 4, EN 301 549) reports no violation;
- * - the keyboard order is platform → open in app → close the tab → Save → the Odesli link;
- * - the save confirmation is in a status live region, so screen readers announce it.
+ * - the keyboard order is platform → open in app → close the tab → the Odesli link;
+ * - the confirmation next to a setting changed is in a status live region, so screen readers announce it.
  *
  * Then, on a music page (served by the script, as the redirect service's "not on this platform" answer), it checks
  * the message Music Bridge shows when it cannot redirect: axe-core again, its text in a status live region, in the
@@ -23,7 +23,7 @@ import { chromium, type BrowserContext, type Page } from 'playwright';
 
 const EXTENSION_DIR = resolve(import.meta.dirname, '../.output/chrome-mv3');
 
-const EXPECTED_TAB_ORDER = ['#streaming-platforms', '#open-app', '#close-tab', 'button[type=submit]', 'footer a'];
+const EXPECTED_TAB_ORDER = ['#streaming-platforms', '#open-app', '#close-tab', 'footer a'];
 // The redirect service, at both its addresses (bricodage.fr, workers.dev when it cannot be reached)
 const REDIRECT_SERVICE_URLS = ['https://music-bridge.bricodage.fr/', 'https://music-bridge-redirect.smndhm.workers.dev/'];
 // A Spotify page in English, whatever the extension's language: the message must say its own
@@ -111,11 +111,10 @@ async function check(locale: string, colorScheme: 'light' | 'dark'): Promise<str
       errors.push(`keyboard order is ${order.join(' → ')}, expected ${EXPECTED_TAB_ORDER.join(' → ')}`);
     }
 
-    // Saved: the confirmation is announced
-    await page.click('button[type=submit]');
-    await page.waitForFunction(() => document.querySelector('#save-status')?.textContent);
+    // Saved as it changes: the confirmation next to the option ticked is announced
+    await page.waitForFunction(() => document.querySelector('#open-app-status')?.textContent);
     const status = await page.evaluate(() => {
-      const element = document.querySelector('#save-status')!;
+      const element = document.querySelector('#open-app-status')!;
       return { role: element.getAttribute('role'), text: element.textContent };
     });
     if (status.role !== 'status') errors.push(`the save confirmation "${status.text}" is not in a status live region`);
