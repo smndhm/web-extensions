@@ -73,9 +73,8 @@ export async function initOptionsPage(doc: Document, userAgent: string): Promise
     updateOpenAppOption();
   });
 
-  // Each change is saved at once, as in the browser's own settings: the setting changed is its own feedback, with no
-  // message to see. Screen readers hear "Saved." from a status live region, emptied first so that each change is
-  // announced, the same text again too.
+  // Each change is saved at once, no button to forget, and "Saved." shows under the settings for a moment. Its status
+  // live region is emptied first, so that screen readers announce each change, the same text again too.
   const status = doc.querySelector<HTMLElement>('#save-status')!;
   let clearStatus: ReturnType<typeof setTimeout> | undefined;
   const save = async () => {

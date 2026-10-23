@@ -135,12 +135,11 @@ describe('options page', () => {
     expect(checkbox().checked).toBe(false);
   });
 
-  it('saves each change at once, and tells screen readers only, for two seconds', async () => {
+  it('saves each change at once, and says so under the settings for two seconds', async () => {
     vi.useFakeTimers();
     await open();
     const status = $('#save-status');
     expect(status.getAttribute('role')).toBe('status');
-    expect(status.classList).toContain('visually-hidden');
     select().value = 'deezer';
     select().dispatchEvent(new Event('change'));
     await vi.waitFor(async () => expect((await browser.storage.local.get('platform')).platform).toBe('deezer'));
@@ -152,7 +151,7 @@ describe('options page', () => {
     check(checkbox(), true);
     await vi.waitFor(async () => expect((await browser.storage.local.get('openInApp')).openInApp).toBe(true));
     await vi.waitFor(() => expect(status.textContent).toBe('Saved.'));
-    // The only status on the page: nothing shown next to the settings
+    // One message for every setting, in one place
     expect(document.querySelectorAll('[role="status"]')).toHaveLength(1);
     vi.useRealTimers();
   });
