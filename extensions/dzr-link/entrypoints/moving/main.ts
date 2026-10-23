@@ -1,4 +1,3 @@
-import '@dume/ds/fonts.css';
 import '@dume/ds/tokens.css';
 import '@dume/ds/base.css';
 import '@dume/ds/utilities.css';

@@ -1,4 +1,7 @@
-/* The moving page, on @dume/ds (smndhm/blu), as Music Bridge's options: its tokens, font and base come first (main.ts) */
+/*
+ * The moving page, on @dume/ds (smndhm/blu), as Music Bridge's options: its tokens and base come first (main.ts).
+ * Without the heading font: 60 kB for one heading, three times the rest of the extension
+ */
 
 /* Chrome gives extension pages a font of its own on body, at 75%: the design system's, from the root */
 body {
