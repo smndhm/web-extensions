@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - uses: smndhm/dev-config/ci/setup@54649d01461714ef6c79fae46e5cadb5ab44b029 # main
+      - uses: smndhm/dev-config/ci/setup@19119a179a8e532ef1f8d5d386d146b6a54a7535 # main
 
       - name: Lint and format check
         run: pnpm lint
@@ -47,7 +47,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - uses: smndhm/dev-config/ci/setup@54649d01461714ef6c79fae46e5cadb5ab44b029 # main
+      - uses: smndhm/dev-config/ci/setup@19119a179a8e532ef1f8d5d386d146b6a54a7535 # main
 
       - name: Install Chromium
         run: pnpm --filter dzr-tab exec playwright install --with-deps --no-shell chromium
@@ -65,7 +65,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - uses: smndhm/dev-config/ci/setup@54649d01461714ef6c79fae46e5cadb5ab44b029 # main
+      - uses: smndhm/dev-config/ci/setup@19119a179a8e532ef1f8d5d386d146b6a54a7535 # main
 
       - name: Zip for Firefox
         run: pnpm zip:firefox
