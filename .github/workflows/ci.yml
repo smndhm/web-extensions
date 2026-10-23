@@ -49,8 +49,10 @@ jobs:
 
       - uses: smndhm/dev-config/ci/setup@19119a179a8e532ef1f8d5d386d146b6a54a7535 # main
 
+      # Chromium only: GitHub-hosted Ubuntu runners have Google Chrome, so the libraries it needs. Without --with-deps,
+      # which installed them again with fonts and Xvfb the headless checks do not need (14 of the step's 20 s)
       - name: Install Chromium
-        run: pnpm --filter dzr-tab exec playwright install --with-deps --no-shell chromium
+        run: pnpm --filter dzr-tab exec playwright install --no-shell chromium
 
       - name: Build for Chrome
         run: pnpm build
