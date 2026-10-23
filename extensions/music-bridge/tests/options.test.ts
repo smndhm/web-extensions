@@ -25,8 +25,7 @@ const MESSAGES: Record<string, string> = {
   optionsOpenAppHelp: "The platform's app must be installed on this computer.",
   optionsCloseTabLabel: 'Close the tab once the app opens',
   optionsCloseTabHelp: 'Tick “Always allow” in the browser prompt the first time.',
-  optionsSaveButton: 'Save',
-  optionsSaveConfirmation: 'Preferences saved.',
+  optionsSaveConfirmation: 'Saved.',
   optionsCredits: 'Uses the %LINK% API.',
   optionsNewTab: '(opens in a new tab)',
 };
@@ -41,7 +40,6 @@ const check = (input: HTMLInputElement, checked: boolean) => {
   input.checked = checked;
   input.dispatchEvent(new Event('change'));
 };
-const submit = () => $<HTMLFormElement>('form').dispatchEvent(new Event('submit', { cancelable: true }));
 
 async function open(userAgent = WINDOWS) {
   document.documentElement.innerHTML = new DOMParser().parseFromString(HTML, 'text/html').documentElement.innerHTML;
@@ -61,7 +59,8 @@ describe('options page', () => {
     expect($('h1').textContent).toBe('Music Bridge - Options');
     expect($('label[for="streaming-platforms"]').textContent).toBe('Select your streaming platform:');
     expect($('label[for="open-app"]').textContent).toBe('Open links in the desktop app');
-    expect($('button').textContent).toBe('Save');
+    // Saved as they change: no button
+    expect(document.querySelector('button')).toBeNull();
   });
 
   it('credits Odesli with a link that tells it opens a new tab', async () => {
@@ -136,18 +135,33 @@ describe('options page', () => {
     expect(checkbox().checked).toBe(false);
   });
 
-  it('saves the settings and announces it for two seconds', async () => {
+  it('saves each change at once, and says so under the settings for two seconds', async () => {
     vi.useFakeTimers();
     await open();
+    const status = $('#save-status');
+    expect(status.getAttribute('role')).toBe('status');
     select().value = 'deezer';
     select().dispatchEvent(new Event('change'));
-    checkbox().checked = true;
-    submit();
-    await vi.waitFor(async () => expect(await browser.storage.local.get(['platform', 'openInApp'])).toEqual({ platform: 'deezer', openInApp: true }));
-    await vi.waitFor(() => expect($('[role="status"]').textContent).toBe('Preferences saved.'));
+    await vi.waitFor(async () => expect((await browser.storage.local.get('platform')).platform).toBe('deezer'));
+    await vi.waitFor(() => expect(status.textContent).toBe('Saved.'));
+
     await vi.advanceTimersByTimeAsync(2000);
-    expect($('[role="status"]').textContent).toBe('');
+    expect(status.textContent).toBe('');
+
+    check(checkbox(), true);
+    await vi.waitFor(async () => expect((await browser.storage.local.get('openInApp')).openInApp).toBe(true));
+    await vi.waitFor(() => expect(status.textContent).toBe('Saved.'));
+    // One message for every setting, in one place
+    expect(document.querySelectorAll('[role="status"]')).toHaveLength(1);
     vi.useRealTimers();
+  });
+
+  it('saves the app option cleared with another platform', async () => {
+    await browser.storage.local.set({ platform: 'deezer', openInApp: true, closeTab: true });
+    await open();
+    select().value = 'tidal';
+    select().dispatchEvent(new Event('change'));
+    await vi.waitFor(async () => expect(await browser.storage.local.get(['platform', 'openInApp', 'closeTab'])).toEqual({ platform: 'tidal', openInApp: false, closeTab: false }));
   });
 
   describe('close tab option', () => {
@@ -180,7 +194,6 @@ describe('options page', () => {
       await browser.storage.local.set({ platform: 'deezer', openInApp: true });
       await open();
       check(closeTab(), true);
-      submit();
       await vi.waitFor(async () => expect((await browser.storage.local.get('closeTab')).closeTab).toBe(true));
     });
   });

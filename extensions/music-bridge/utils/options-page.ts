@@ -1,6 +1,7 @@
 import { browser } from 'wxt/browser';
 import { hasDesktopApps } from './links';
 import { isPlatformId, platforms, PLATFORM_IDS } from './platforms';
+import { ANNOUNCE_DELAY } from './notice';
 import { getSettings, saveSettings } from './settings';
 
 const SAVE_STATUS_DURATION = 2000;
@@ -42,7 +43,6 @@ export async function initOptionsPage(doc: Document, userAgent: string): Promise
   const openAppOption = doc.querySelector<HTMLElement>('#open-app-option')!;
   const closeTab = doc.querySelector<HTMLInputElement>('#close-tab')!;
   const closeTabOption = doc.querySelector<HTMLElement>('#close-tab-option')!;
-  const status = doc.querySelector<HTMLElement>('#save-status')!;
 
   const settings = await getSettings();
   select.append(
@@ -73,14 +73,20 @@ export async function initOptionsPage(doc: Document, userAgent: string): Promise
     updateOpenAppOption();
   });
 
+  // Each change is saved at once, no button to forget, and "Saved." shows under the settings for a moment. Its status
+  // live region is emptied first, so that screen readers announce each change, the same text again too.
+  const status = doc.querySelector<HTMLElement>('#save-status')!;
   let clearStatus: ReturnType<typeof setTimeout> | undefined;
-  form.addEventListener('submit', async event => {
-    event.preventDefault();
+  const save = async () => {
     if (!isPlatformId(select.value)) return;
     await saveSettings({ platform: select.value, openInApp: checkbox.checked, closeTab: closeTab.checked });
-    // The status is a live region: screen readers announce the confirmation
-    status.textContent = t('optionsSaveConfirmation');
+    status.textContent = '';
     clearTimeout(clearStatus);
-    clearStatus = setTimeout(() => (status.textContent = ''), SAVE_STATUS_DURATION);
-  });
+    clearStatus = setTimeout(() => {
+      status.textContent = t('optionsSaveConfirmation');
+      clearStatus = setTimeout(() => (status.textContent = ''), SAVE_STATUS_DURATION);
+    }, ANNOUNCE_DELAY);
+  };
+  for (const input of [select, checkbox, closeTab]) input.addEventListener('change', () => void save());
+  form.addEventListener('submit', event => event.preventDefault());
 }

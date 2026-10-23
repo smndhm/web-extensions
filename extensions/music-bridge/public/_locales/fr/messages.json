@@ -39,13 +39,9 @@
     "message": "Cochez « Toujours autoriser » dans la fenêtre du navigateur la première fois, sinon l'onglet se ferme avant votre réponse.",
     "description": "Options page help under the close tab option."
   },
-  "optionsSaveButton": {
-    "message": "Enregistrer",
-    "description": "Save options button"
-  },
   "optionsSaveConfirmation": {
-    "message": "Préférences enregistrées.",
-    "description": "Save options button confirmation"
+    "message": "Enregistré.",
+    "description": "Shown under the settings for two seconds once one is saved, as soon as it changes"
   },
   "optionsCredits": {
     "message": "Utilise l'API d'%LINK%.",

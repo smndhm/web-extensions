@@ -93,6 +93,15 @@ body {
     flex-direction: column;
     gap: 1.6rem;
   }
+
+  // "Saved.", for two seconds after a change: its room is kept, so that nothing moves when it shows
+  &__status {
+    min-height: calc(1.4rem * var(--line-height));
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
 }
 
 // A form field: a label and its control, or a checkbox with its label beside it and its help underneath
@@ -150,40 +159,6 @@ body {
     margin: 0.2rem 0 0;
     font-size: 1.4rem;
     color: var(--muted);
-  }
-}
-
-// The save button and its confirmation
-.save {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 1.2rem;
-  margin-top: 0.8rem;
-
-  &__status {
-    margin: 0;
-    font-size: 1.4rem;
-    color: var(--muted);
-  }
-
-  &__button {
-    min-height: 4.4rem;
-    padding: 0.8rem 2.4rem;
-
-    background: var(--accent);
-    border: 0.1rem solid var(--accent);
-    border-radius: var(--radius);
-
-    font: inherit;
-    font-weight: 600;
-    color: var(--on-accent);
-    cursor: pointer;
-
-    &:hover {
-      filter: brightness(1.1);
-    }
   }
 }
 

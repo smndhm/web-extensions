@@ -26,10 +26,8 @@
           <label class="field__label" for="close-tab" data-i18n="optionsCloseTabLabel"></label>
           <p class="field__help" id="close-tab-help" data-i18n="optionsCloseTabHelp"></p>
         </div>
-        <div class="save" id="save-options">
-          <p class="save__status" role="status" id="save-status"></p>
-          <button class="save__button" type="submit" data-i18n="optionsSaveButton"></button>
-        </div>
+        <!-- Settings are saved as they change: one message under them says so, for a moment, and screen readers announce it -->
+        <p class="options__status" role="status" id="save-status"></p>
       </form>
     </main>
     <footer class="credits"></footer>

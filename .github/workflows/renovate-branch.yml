@@ -21,7 +21,7 @@ jobs:
         pnpm build
         pnpm build:firefox
         pnpm lint:firefox
-        pnpm --filter dzr-tab exec playwright install --with-deps --no-shell chromium
+        pnpm --filter dzr-tab exec playwright install --no-shell chromium
         pnpm a11y
         pnpm zip:firefox
         pnpm test:firefox
