@@ -1,15 +1,19 @@
 import { getDeezerDesktopUri, getSpotifyDesktopUri, hasDesktopApps, isDeezerNonMusicPage } from './links';
 import { isOnPlatform, platforms } from './platforms';
 import type { Settings } from './settings';
+import { STUB_SERVICE_URL } from './stub-service';
+
+/** The Firefox smoke tests' build: it asks a stand-in of the service on this computer, never the real one */
+const stub = import.meta.env.MODE === 'stub';
 
 /**
  * The music-bridge-redirect service (a Cloudflare Worker): looks the music up with Odesli and
  * redirects to it. Served at music-bridge.bricodage.fr, where its cache works.
  */
-export const REDIRECT_SERVICE_URL = 'https://music-bridge.bricodage.fr/';
+export const REDIRECT_SERVICE_URL = stub ? STUB_SERVICE_URL : 'https://music-bridge.bricodage.fr/';
 
 /** The same Worker on Cloudflare's own domain, used when bricodage.fr cannot be reached (its DNS, its registration) */
-export const FALLBACK_SERVICE_URL = 'https://music-bridge-redirect.smndhm.workers.dev/';
+export const FALLBACK_SERVICE_URL = stub ? STUB_SERVICE_URL : 'https://music-bridge-redirect.smndhm.workers.dev/';
 
 /**
  * Where to send the user from the music page `href`, or `undefined` to stay on it

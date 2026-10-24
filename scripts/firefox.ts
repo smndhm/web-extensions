@@ -11,32 +11,61 @@
  *   platform), the link the redirect service answers.
  * Screenshots go to .output/firefox/.
  *
- * Usage: pnpm zip:firefox && pnpm test:firefox
+ * Music Bridge asks a stand-in of its redirect service, run here (its "stub" build, which pnpm test:firefox zips): the
+ * tests do not call the real service, a production one. With --live, they install its published build, which asks the
+ * real service: the live test of the "Version Packages" pull request, before a release (.github/workflows/release.yml).
+ *
+ * Usage: pnpm zip:firefox && pnpm test:firefox (pnpm test:firefox:live: against the real service)
  * Needs Firefox; Selenium finds or downloads geckodriver.
  */
 
 import { readFile, readdir, mkdir, writeFile } from 'node:fs/promises';
+import { createServer } from 'node:http';
 import { resolve } from 'node:path';
 import { axeScript, describeViolations } from '@dume/dev-config/a11y';
 import webdriver from 'selenium-webdriver';
 import firefox from 'selenium-webdriver/firefox.js';
+import { STUB_SERVICE_URL } from '../extensions/music-bridge/utils/stub-service.ts';
 
 const ROOT = resolve(import.meta.dirname, '..');
 const OUTPUT_DIR = resolve(ROOT, '.output/firefox');
+const LIVE = process.argv.includes('--live');
+
+// The Tidal track the music-bridge test opens, and the same track on Spotify (Never Gonna Give You Up)
+const TIDAL_TRACK_URL = 'https://tidal.com/track/491206012';
+const SPOTIFY_TRACK_URL = 'https://open.spotify.com/track/4PTG3Z6ehGkBFwjybzWkR8';
 
 // Fixed moz-extension:// hosts for the extensions whose pages the tests open, keyed by add-on ID
 const UUIDS = {
   'dzr-tab': { id: '{52114cbe-92a2-4828-8b44-109c35fbc0e7}', uuid: '6f0c1a52-0d5e-4d5b-9a51-6c1b0d6c0002' },
 } as const;
 
-async function firefoxZip(extension: 'dzr-link' | 'dzr-tab' | 'music-bridge') {
+async function firefoxZip(extension: 'dzr-link' | 'dzr-tab' | 'music-bridge', mode?: 'stub') {
   const dir = resolve(ROOT, 'extensions', extension);
   const { version } = JSON.parse(await readFile(resolve(dir, 'package.json'), 'utf8'));
-  const zip = `${extension}-${version}-firefox.zip`;
+  const zip = `${extension}-${version}-firefox${mode ? `-${mode}` : ''}.zip`;
   if (!(await readdir(resolve(dir, '.output')).catch(() => [])).includes(zip)) {
-    throw new Error(`No ${zip} in ${dir}/.output. Did you run pnpm zip:firefox?`);
+    throw new Error(`No ${zip} in ${dir}/.output. Did you run ${mode ? 'pnpm test:firefox' : 'pnpm zip:firefox'}?`);
   }
   return resolve(dir, '.output', zip);
+}
+
+// The stand-in of the redirect service: the Spotify track for the Tidal track, in JSON (format=json) or as a
+// redirect, as the real service answers. Records the links Music Bridge asks for.
+const stubRequests: URL[] = [];
+const stubService = createServer((request, response) => {
+  const url = new URL(request.url ?? '/', STUB_SERVICE_URL);
+  stubRequests.push(url);
+  // The background asks it from its moz-extension:// page
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  const known = url.searchParams.get('url') === TIDAL_TRACK_URL && url.searchParams.get('platform') === 'spotify';
+  if (!known) response.writeHead(404, { 'Content-Type': 'application/json' }).end('{}');
+  else if (url.searchParams.get('format') === 'json') response.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify({ url: SPOTIFY_TRACK_URL }));
+  else response.writeHead(302, { Location: SPOTIFY_TRACK_URL }).end();
+});
+if (!LIVE) {
+  const { hostname, port } = new URL(STUB_SERVICE_URL);
+  await new Promise<void>(listening => stubService.listen(Number(port), hostname, listening));
 }
 
 const options = new firefox.Options()
@@ -142,12 +171,12 @@ try {
   // track on Spotify (Never Gonna Give You Up) and goes there; it stays on Tidal with a message when it cannot
   let notice = '';
   try {
-    await driver.installAddon(await firefoxZip('music-bridge'), true);
+    await driver.installAddon(await firefoxZip('music-bridge', LIVE ? undefined : 'stub'), true);
     // It opens its options on install: let that tab open before counting tabs
     await driver.sleep(2000);
     await driver.switchTo().window(main);
     const before = await driver.getAllWindowHandles();
-    await driver.executeScript(() => window.open('https://tidal.com/track/491206012', '_blank'));
+    await driver.executeScript((url: string) => window.open(url, '_blank'), TIDAL_TRACK_URL);
     await driver.wait(async () => (await driver.getAllWindowHandles()).length > before.length, 10_000, 'the Tidal tab did not open');
     await driver.switchTo().window((await driver.getAllWindowHandles()).find(handle => !before.includes(handle))!);
 
@@ -165,7 +194,9 @@ try {
       20_000,
       'the Tidal page did not land on Spotify',
     );
-    console.log(`music-bridge: ${outcome}`);
+    console.log(`music-bridge: ${outcome}${LIVE ? ', through the real service' : ''}`);
+    // The stand-in answered it: Music Bridge asked it for the Tidal link, then went through it
+    if (!LIVE && !stubRequests.some(url => url.searchParams.get('format') === 'json')) errors.push('music-bridge: the redirect service was not asked');
   } catch (error) {
     errors.push(`music-bridge: ${(error as Error).message} (url: ${await driver.getCurrentUrl().catch(() => '?')}${notice ? `, message: ${notice}` : ''})`);
     await screenshot('music-bridge').catch(() => {});
@@ -174,6 +205,7 @@ try {
   }
 } finally {
   await driver.quit();
+  stubService.close();
 }
 
 if (errors.length) {
