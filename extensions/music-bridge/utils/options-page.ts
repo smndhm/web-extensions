@@ -1,7 +1,7 @@
 import { browser } from 'wxt/browser';
 import { hasDesktopApps } from './links';
 import { isPlatformId, platforms, PLATFORM_IDS } from './platforms';
-import { ANNOUNCE_DELAY } from './notice';
+import { ANNOUNCE_DELAY } from '@dume/ds/web-components/banner.js';
 import { getSettings, saveSettings } from './settings';
 
 const SAVE_STATUS_DURATION = 2000;

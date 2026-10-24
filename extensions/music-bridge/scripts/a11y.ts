@@ -9,7 +9,7 @@
  * - the confirmation of a setting changed is in a status live region, so screen readers announce it.
  *
  * Then, on a music page (served by the script, as the redirect service's "not on this platform" answer), it checks
- * the message Music Bridge shows when it cannot redirect: axe-core again, its text in a status live region, in the
+ * the message Music Bridge shows when it cannot redirect (`<ds-banner>`, from @dume/ds): axe-core again, its text in a status live region, in the
  * extension's language, its link to search the platform then its close button, reached with Tab, and Escape, which
  * closes it.
  *
@@ -45,24 +45,24 @@ async function checkNotice(context: BrowserContext, locale: string): Promise<str
   const page = await context.newPage();
   page.on('pageerror', error => errors.push(`music page error: ${error.message}`));
   await page.goto(MUSIC_PAGE_URL);
-  const status = page.locator('music-bridge-notice [role="status"]');
+  const status = page.locator('ds-banner [role="status"]');
   await status.filter({ hasText: /\S/ }).waitFor({ timeout: 10_000 });
   errors.push(...(await axe(page, 'message')));
   const lang = await status.evaluate(element => element.closest('[lang]')?.getAttribute('lang'));
   if (lang !== locale) errors.push(`the message "${await status.textContent()}" is in ${lang}, expected ${locale}`);
 
   // Its search link, then its close button, are in the keyboard order, and Escape there closes the message
-  const search = await page.evaluate(() => document.querySelector('music-bridge-notice')?.shadowRoot?.querySelector('a')?.href);
+  const search = await page.evaluate(() => document.querySelector('ds-banner')?.shadowRoot?.querySelector('a')?.href);
   if (!search?.startsWith('https://www.deezer.com/search/')) errors.push(`the message's search link is ${search}, expected a Deezer search`);
   await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
   const focusedOnTab = async () => {
     await page.keyboard.press('Tab');
-    return page.evaluate(() => document.querySelector('music-bridge-notice')?.shadowRoot?.activeElement?.tagName);
+    return page.evaluate(() => document.querySelector('ds-banner')?.shadowRoot?.activeElement?.tagName);
   };
   const focused = [await focusedOnTab(), await focusedOnTab()];
   if (focused.join() !== 'A,BUTTON') errors.push(`Tab on the music page lands on ${focused.join(' → ')}, expected the message's search link → close button`);
   await page.keyboard.press('Escape');
-  if (await page.locator('music-bridge-notice').count()) errors.push('Escape on the close button does not close the message');
+  if (await page.locator('ds-banner').count()) errors.push('Escape on the close button does not close the message');
   await page.close();
   return errors;
 }
