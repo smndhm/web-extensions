@@ -1,3 +1,7 @@
+import '@dume/ds/tokens.css';
+import '@dume/ds/base.css';
+import '@dume/ds/utilities.css';
+import '@dume/ds/components/button.css';
 import './style.css';
 
 // Music Bridge's listing in the store of this browser (Edge runs the Chrome build)

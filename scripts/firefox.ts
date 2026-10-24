@@ -197,9 +197,7 @@ try {
         const url = decodeURIComponent(await driver.getCurrentUrl());
         if (url.startsWith('https://open.spotify.com/')) return (outcome = `redirected to Spotify (${url})`);
         // The message the extension shows when the service has no link, or fails
-        notice = await driver
-          .executeScript<string>(() => document.querySelector('music-bridge-notice')?.shadowRoot?.textContent?.replace(/\s+/g, ' ').trim() ?? '')
-          .catch(() => '');
+        notice = await driver.executeScript<string>(() => document.querySelector('ds-banner')?.shadowRoot?.textContent?.replace(/\s+/g, ' ').trim() ?? '').catch(() => '');
         return false;
       },
       20_000,
