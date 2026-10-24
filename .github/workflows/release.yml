@@ -28,7 +28,7 @@ jobs:
         with:
           fetch-depth: 0 # changeset publish compares against the existing tags
 
-      - uses: smndhm/dev-config/ci/setup@4f61116ca71fba9ca8a8b9e1d4e3953d92edbf57 # main
+      - uses: smndhm/dev-config/ci/setup@73fa94bee891551a9ae9f455bf7c6dbb3f71bd09 # main
 
       # The version script draws Music Bridge's logo colors and renders its images when its version changes
       - name: Pending changesets
@@ -73,7 +73,7 @@ jobs:
             -f state=pending -f context="Live test" \
             -f description="The Firefox smoke tests against the real redirect service" -f target_url="$TARGET_URL"
 
-      - uses: smndhm/dev-config/ci/setup@4f61116ca71fba9ca8a8b9e1d4e3953d92edbf57 # main
+      - uses: smndhm/dev-config/ci/setup@73fa94bee891551a9ae9f455bf7c6dbb3f71bd09 # main
 
       - name: Zip for Firefox
         run: pnpm zip:firefox
