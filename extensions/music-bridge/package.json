@@ -1,6 +1,6 @@
 {
   "name": "music-bridge",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "description": "Open any music link on your favorite streaming platform, in one click.",
   "private": true,
   "license": "BSD-2-Clause",
