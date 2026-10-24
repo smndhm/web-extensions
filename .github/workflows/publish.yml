@@ -72,7 +72,7 @@ jobs:
           # The tags of the previous releases, to tell whether the listing texts changed
           fetch-depth: 0
 
-      - uses: smndhm/dev-config/ci/setup@19119a179a8e532ef1f8d5d386d146b6a54a7535 # main
+      - uses: smndhm/dev-config/ci/setup@73fa94bee891551a9ae9f455bf7c6dbb3f71bd09 # main
 
       - name: Type check
         run: pnpm compile
