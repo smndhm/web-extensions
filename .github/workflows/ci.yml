@@ -72,9 +72,10 @@ jobs:
       - name: Zip for Firefox
         run: pnpm zip:firefox
 
-      # Firefox is preinstalled on GitHub-hosted Ubuntu runners
+      # Firefox is preinstalled on GitHub-hosted Ubuntu runners. Against a stand-in of the redirect service, but on the
+      # "Version Packages" pull request, run once approved ("Approve and run"): against the real service, before a release
       - name: Test in Firefox
-        run: firefox --version && pnpm test:firefox
+        run: firefox --version && pnpm ${{ github.head_ref == 'changeset-release/main' && 'test:firefox:live' || 'test:firefox' }}
 
       - name: Upload screenshots
         if: always()
