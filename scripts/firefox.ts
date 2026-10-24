@@ -30,6 +30,8 @@ import { STUB_SERVICE_URL } from '../extensions/music-bridge/utils/stub-service.
 const ROOT = resolve(import.meta.dirname, '..');
 const OUTPUT_DIR = resolve(ROOT, '.output/firefox');
 const LIVE = process.argv.includes('--live');
+// Appended to Firefox's user agent: the redirect service logs its requests as this test's (music-bridge-redirect)
+const TEST_USER_AGENT = `music-bridge-test (${LIVE ? 'live-test' : 'smoke-test'})`;
 
 // The Tidal track the music-bridge test opens, and the same track on Spotify (Never Gonna Give You Up)
 const TIDAL_TRACK_URL = 'https://tidal.com/track/491206012';
@@ -52,10 +54,10 @@ async function firefoxZip(extension: 'dzr-link' | 'dzr-tab' | 'music-bridge', mo
 
 // The stand-in of the redirect service: the Spotify track for the Tidal track, in JSON (format=json) or as a
 // redirect, as the real service answers. Records the links Music Bridge asks for.
-const stubRequests: URL[] = [];
+const stubRequests: { url: URL; userAgent?: string }[] = [];
 const stubService = createServer((request, response) => {
   const url = new URL(request.url ?? '/', STUB_SERVICE_URL);
-  stubRequests.push(url);
+  stubRequests.push({ url, userAgent: request.headers['user-agent'] });
   // The background asks it from its moz-extension:// page
   response.setHeader('Access-Control-Allow-Origin', '*');
   const known = url.searchParams.get('url') === TIDAL_TRACK_URL && url.searchParams.get('platform') === 'spotify';
@@ -81,6 +83,15 @@ const service = new firefox.ServiceBuilder().addArguments('--allow-system-access
 const driver = await new webdriver.Builder().forBrowser('firefox').setFirefoxOptions(options).setFirefoxService(service).build();
 const errors: string[] = [];
 await mkdir(OUTPUT_DIR, { recursive: true });
+
+// The test's mark at the end of Firefox's user agent, for every request from now on
+await driver.setContext(firefox.Context.CHROME);
+const userAgent = await driver.executeScript<string>(
+  'const userAgent = `${navigator.userAgent} ${arguments[0]}`; Services.prefs.setStringPref("general.useragent.override", userAgent); return userAgent',
+  TEST_USER_AGENT,
+);
+await driver.setContext(firefox.Context.CONTENT);
+console.log(`User agent: ${userAgent}`);
 
 async function screenshot(name: string) {
   await writeFile(resolve(OUTPUT_DIR, `${name}.png`), await driver.takeScreenshot(), 'base64');
@@ -196,7 +207,10 @@ try {
     );
     console.log(`music-bridge: ${outcome}${LIVE ? ', through the real service' : ''}`);
     // The stand-in answered it: Music Bridge asked it for the Tidal link, then went through it
-    if (!LIVE && !stubRequests.some(url => url.searchParams.get('format') === 'json')) errors.push('music-bridge: the redirect service was not asked');
+    const asked = stubRequests.find(({ url }) => url.searchParams.get('format') === 'json');
+    if (!LIVE && !asked) errors.push('music-bridge: the redirect service was not asked');
+    // The mark the real service logs, on the stand-in's requests
+    else if (!LIVE && !asked?.userAgent?.endsWith(TEST_USER_AGENT)) errors.push(`music-bridge: the service was asked as ${asked?.userAgent}, without ${TEST_USER_AGENT}`);
   } catch (error) {
     errors.push(`music-bridge: ${(error as Error).message} (url: ${await driver.getCurrentUrl().catch(() => '?')}${notice ? `, message: ${notice}` : ''})`);
     await screenshot('music-bridge').catch(() => {});
