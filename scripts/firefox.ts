@@ -13,7 +13,7 @@
  *
  * Music Bridge asks a stand-in of its redirect service, run here (its "stub" build, which pnpm test:firefox zips): the
  * tests do not call the real service, a production one. With --live, they install its published build, which asks the
- * real service: the live test of the "Version Packages" pull request, before a release (.github/workflows/release.yml).
+ * real service: on the "Version Packages" pull request, before a release, when its CI is approved (.github/workflows/ci.yml).
  *
  * Usage: pnpm zip:firefox && pnpm test:firefox (pnpm test:firefox:live: against the real service)
  * Needs Firefox; Selenium finds or downloads geckodriver.
