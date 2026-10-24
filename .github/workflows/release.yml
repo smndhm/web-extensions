@@ -20,7 +20,7 @@ jobs:
       contents: write # Push the changeset-release/main branch, the tags and the GitHub releases
       pull-requests: write # Open the "Version Packages" pull request
     outputs:
-      has-changesets: ${{ steps.changesets.outputs.hasChangesets }}
+      has-changesets: ${{ steps.changesets.outputs.has-changesets }}
       published: ${{ steps.changesets.outputs.published }}
       published-packages: ${{ steps.changesets.outputs.published-packages }}
     steps:
