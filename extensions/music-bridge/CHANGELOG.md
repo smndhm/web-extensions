@@ -1,5 +1,16 @@
 # music-bridge
 
+## 1.12.0
+
+### Minor Changes
+
+- e59fc0a: The options are saved as they change, without a Save button: "Saved." shows under them for two seconds.
+
+### Patch Changes
+
+- fbc7d0e: Updated dependency `@dume/dev-config` to `1.4.0`.
+- 3d1bc79: Updated dependency `sass` to `1.106.0`.
+
 ## 1.11.0
 
 ### Minor Changes
