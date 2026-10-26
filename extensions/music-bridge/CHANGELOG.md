@@ -1,5 +1,18 @@
 # music-bridge
 
+## 1.12.0
+
+### Minor Changes
+
+- e59fc0a: The options are saved as they change, without a Save button: "Saved." shows under them for two seconds.
+
+### Patch Changes
+
+- c9da75f: The message Music Bridge shows on a music page when it cannot redirect it is @dume/ds' `<ds-banner>`: the same message, its colors from the design system's tokens, its text at 16px in the text's weight, its close button's hover rounded as the design system's buttons.
+- c9da75f: The options page of Music Bridge and the moving page of Deezer Link take their style from @dume/ds, the design system of simon.duhem.fr: its tokens, base, field and button, in plain CSS. Sizes on the base 4, no more `font-size: 62.5%`, Sass nor normalize.css. Deezer Link's buttons are filled.
+- fbc7d0e: Updated dependency `@dume/dev-config` to `1.4.0`.
+- 3d1bc79: Updated dependency `sass` to `1.106.0`.
+
 ## 1.11.0
 
 ### Minor Changes
