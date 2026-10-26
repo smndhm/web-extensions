@@ -43,7 +43,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - uses: smndhm/dev-config/ci/setup@9d41c67e94c16344c78d4389a29fa0f0babfdcb6 # main
+      - uses: smndhm/dev-config/ci/setup@4074f1550123768d54f0d9da6af48521026f0c47 # main
 
       - name: Install Chromium
         run: pnpm exec playwright install --with-deps --no-shell chromium
