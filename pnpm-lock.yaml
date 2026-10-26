@@ -202,6 +202,9 @@ importers:
       '@dume/dev-config':
         specifier: 1.4.0
         version: 1.4.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.89.0)(playwright@1.64.1)(postcss@8.5.31)(prettier@3.9.10)(stylelint@16.26.1(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)
+      '@dume/ds':
+        specifier: 0.1.0
+        version: 0.1.0
       playwright:
         specifier: 1.64.1
         version: 1.64.1
@@ -245,24 +248,21 @@ importers:
       '@dume/dev-config':
         specifier: 1.4.0
         version: 1.4.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.89.0)(playwright@1.64.1)(postcss@8.5.31)(prettier@3.9.10)(stylelint@16.26.1(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)
+      '@dume/ds':
+        specifier: 0.1.0
+        version: 0.1.0
       '@types/node':
         specifier: 24.19.2
         version: 24.19.2
       jsdom:
         specifier: 30.1.3
         version: 30.1.3
-      normalize.css:
-        specifier: 8.0.1
-        version: 8.0.1
       playwright:
         specifier: 1.64.1
         version: 1.64.1
       rampensau:
         specifier: 2.4.0
         version: 2.4.0
-      sass:
-        specifier: 1.106.1
-        version: 1.106.1
       typescript:
         specifier: 7.0.2
         version: 7.0.2
@@ -503,6 +503,9 @@ packages:
         optional: true
       stylelint:
         optional: true
+
+  '@dume/ds@0.1.0':
+    resolution: {integrity: sha512-EjHhcHS4MC3TXbLAT0i6ODlIYRHAJphZogKYIsGT+mBpbQCDaOKc8jtPEdRyTIHyop1cnfAQRcuBDBlR1iOh4A==}
 
   '@eslint-community/eslint-utils@4.10.1':
     resolution: {integrity: sha512-cuadcxVFE8sDK6iWJbs8Sn0av2Nrh2QSGQhVlBW9AaAHqHwjWsZHT8LJ4hFGPh7ASBV2deFdM7H/DPjulmh8rg==}
@@ -2884,6 +2887,10 @@ packages:
   mlly@1.8.2:
     resolution: {integrity: sha512-d+ObxMQFmbt10sretNDytwt85VrbkhhUA/JBGm1MPaWJ65Cl4wOgLaB1NYvJSZ0Ef03MMEU/0xpPMXUIQ29UfA==}
 
+  modern-normalize@3.0.1:
+    resolution: {integrity: sha512-VqlMdYi59Uch6fnUPxnpijWUQe+TW6zeWCvyr6Mb7JibheHzSuAAoJi2c71ZwIaWKpECpGpYHoaaBp6rBRr+/g==}
+    engines: {node: '>=6'}
+
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
@@ -2921,9 +2928,6 @@ packages:
   normalize-path@3.0.0:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
     engines: {node: '>=0.10.0'}
-
-  normalize.css@8.0.1:
-    resolution: {integrity: sha512-qizSNPO93t1YUuUhP22btGOo3chcvDFqFaj2TRybP0DMxkHOCTYwp3n34fel4a31ORXy4m1Xq0Gyqpb5m33qIg==}
 
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
@@ -3166,6 +3170,10 @@ packages:
     resolution: {integrity: sha512-skGHTH1Yb9QvaTC4hWnRTzEYtCpApF0UMBPz+t/0ZPzP8ihefo/btKd+QA7pUE0fEwA1SbS/NmhyEcstdXOIdA==}
     engines: {node: '>=14'}
     hasBin: true
+
+  prismjs@1.30.0:
+    resolution: {integrity: sha512-DEvV2ZF2r2/63V+tK8hQvrR2ZGn10srHbXviTlcv7Kpzw8jWiNTqbVgjO3IY8RxrrOUF8VPMQQFysYYYv0YZxw==}
+    engines: {node: '>=6'}
 
   process-nextick-args@2.0.1:
     resolution: {integrity: sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==}
@@ -4356,6 +4364,12 @@ snapshots:
     transitivePeerDependencies:
       - postcss
       - supports-color
+
+  '@dume/ds@0.1.0':
+    dependencies:
+      '@fontsource-variable/bricolage-grotesque': 5.3.0
+      modern-normalize: 3.0.1
+      prismjs: 1.30.0
 
   '@eslint-community/eslint-utils@4.10.1(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))':
     dependencies:
@@ -6030,7 +6044,8 @@ snapshots:
 
   immediate@3.0.6: {}
 
-  immutable@5.1.9: {}
+  immutable@5.1.9:
+    optional: true
 
   import-fresh@3.3.1:
     dependencies:
@@ -6844,6 +6859,8 @@ snapshots:
       pkg-types: 1.3.1
       ufo: 1.6.4
 
+  modern-normalize@3.0.1: {}
+
   ms@2.1.3: {}
 
   multimatch@6.0.0:
@@ -6878,8 +6895,6 @@ snapshots:
       - encoding
 
   normalize-path@3.0.0: {}
-
-  normalize.css@8.0.1: {}
 
   nth-check@2.1.1:
     dependencies:
@@ -7143,6 +7158,8 @@ snapshots:
 
   prettier@3.9.10: {}
 
+  prismjs@1.30.0: {}
+
   process-nextick-args@2.0.1: {}
 
   process-warning@5.1.1: {}
@@ -7329,6 +7346,7 @@ snapshots:
       source-map-js: 1.2.2
     optionalDependencies:
       '@parcel/watcher': 2.6.0
+    optional: true
 
   sax@1.6.1: {}
 
