@@ -1,5 +1,11 @@
 # dzr-tab
 
+## 2.2.4
+
+### Patch Changes
+
+- fbc7d0e: Updated dependency `@dume/dev-config` to `1.4.0`.
+
 ## 2.2.3
 
 ### Patch Changes
