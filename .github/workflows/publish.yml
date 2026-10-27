@@ -117,31 +117,55 @@ jobs:
           FIREFOX_JWT_ISSUER: ${{ secrets.FIREFOX_JWT_ISSUER }}
           FIREFOX_JWT_SECRET: ${{ secrets.FIREFOX_JWT_SECRET }}
         run: |
-          args=()
+          set -o pipefail
+          dryRun=()
+          if [[ "$DRY_RUN" == "true" ]]; then dryRun=(--dry-run); fi
+          # Each store is submitted, the step fails after if one did: one store refusing the version does not hold
+          # the others back
+          failed=0
+
+          # Chrome and Edge, both from the Chrome zip
+          others=()
           if [[ "$STORES" == *chrome* ]]; then
-            args+=(--chrome-zip .output/*-chrome.zip)
-          fi
-          if [[ "$STORES" == *firefox* ]]; then
-            args+=(--firefox-zip .output/*-firefox.zip --firefox-sources-zip .output/*-sources.zip)
-            # Notes for reviewers and release notes of the version
-            node ../../scripts/amo-listing.ts "$EXTENSION" --version-metadata .output/amo-version.json
-            args+=(--firefox-amo-metadata-file .output/amo-version.json)
+            others+=(--chrome-zip .output/*-chrome.zip)
           fi
           if [[ "$STORES" == *edge* ]]; then
             if [[ -n "$EDGE_PRODUCT_ID" ]]; then
-              args+=(--edge-zip .output/*-chrome.zip)
+              others+=(--edge-zip .output/*-chrome.zip)
             else
               echo "::notice::No EDGE_PRODUCT_ID in the ${{ inputs.extension }} environment: not submitted to Edge"
             fi
           fi
-          if [[ ${#args[@]} -eq 0 ]]; then
-            echo "Nothing to submit"
-            exit 0
+          if [[ ${#others[@]} -gt 0 ]]; then
+            pnpm exec wxt submit "${others[@]}" "${dryRun[@]}" || failed=1
           fi
-          if [[ "$DRY_RUN" == "true" ]]; then
-            args+=(--dry-run)
+
+          # addons.mozilla.org on its own, to try it again without submitting to the other stores twice: AMO throttles
+          # its API right after another extension's upload (429), as the AMO listing script does, wait as long as it
+          # says, three times at most and two minutes each
+          if [[ "$STORES" == *firefox* ]]; then
+            # Notes for reviewers and release notes of the version
+            node ../../scripts/amo-listing.ts "$EXTENSION" --version-metadata .output/amo-version.json
+            firefox=(--firefox-zip .output/*-firefox.zip --firefox-sources-zip .output/*-sources.zip --firefox-amo-metadata-file .output/amo-version.json)
+            for attempt in 1 2 3 4; do
+              if pnpm exec wxt submit "${firefox[@]}" "${dryRun[@]}" 2>&1 | tee .output/firefox-submit.log; then
+                break
+              fi
+              # A throttled call may come after the version is created: trying again finds it there
+              if grep -q 'already exists' .output/firefox-submit.log; then
+                echo "::warning::This version is already on addons.mozilla.org: check that its release notes and source code are there"
+                break
+              fi
+              wait=$(grep -oE 'available in [0-9]+ seconds' .output/firefox-submit.log | grep -oE '[0-9]+' | tail -n 1)
+              if [[ -z "$wait" || $attempt -eq 4 || $wait -gt 120 ]]; then
+                failed=1
+                break
+              fi
+              echo "AMO API throttled: retrying in $((wait + 5)) s"
+              sleep $((wait + 5))
+            done
           fi
-          pnpm exec wxt submit "${args[@]}"
+          exit "$failed"
 
       # Each AMO API call counts toward its rate limit, and a version upload uses much of it: update the
       # listing only when its texts changed since the previous release of the extension
