@@ -36,8 +36,11 @@ export default defineContentScript({
   ],
   runAt: 'document_start',
   async main() {
+    // The link opened, read as the page starts: while the settings are read, a web app (TIDAL) may already change the
+    // address, to a page the extension does not handle (an artist's), which the service cannot find
+    const href = window.location.href;
     const settings = await getSettings();
-    const redirect = getRedirectUrl(window.location.href, settings, navigator.userAgent);
+    const redirect = getRedirectUrl(href, settings, navigator.userAgent);
     if (!redirect) return;
     // Music Bridge takes the page over: tells Deezer Link, when it is also installed, not to open the Deezer app too
     document.documentElement.dataset.musicBridge = 'redirect';
