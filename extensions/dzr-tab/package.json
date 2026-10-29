@@ -32,7 +32,7 @@
     "playwright": "1.64.1",
     "typescript": "7.0.2",
     "vitest": "5.0.5",
-    "wxt": "0.21.4"
+    "wxt": "0.21.5"
   },
   "dependencies": {
     "node-vibrant": "^4.0.4"
