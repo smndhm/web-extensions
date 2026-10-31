@@ -1,5 +1,12 @@
 # music-bridge
 
+## 1.12.1
+
+### Patch Changes
+
+- db304f1: The link opened is read as the page starts, before the settings: TIDAL could already have changed the address to an artist's page, which the redirect service cannot find, and Music Bridge then said the music was not available.
+- b7f5406: Updated dependency `wxt` to `0.21.5`.
+
 ## 1.12.0
 
 ### Minor Changes
