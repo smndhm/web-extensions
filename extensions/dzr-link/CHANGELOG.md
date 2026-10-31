@@ -1,5 +1,11 @@
 # dzr-link
 
+## 1.5.2
+
+### Patch Changes
+
+- b7f5406: Updated dependency `wxt` to `0.21.5`.
+
 ## 1.5.1
 
 ### Patch Changes
