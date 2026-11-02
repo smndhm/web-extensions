@@ -16,7 +16,6 @@ function renderCredits(footer: HTMLElement) {
   const doc = footer.ownerDocument;
   const [before = '', after = ''] = t('optionsCredits').split(LINK_TOKEN);
   const link = doc.createElement('a');
-  link.className = 'credits__link';
   link.href = 'https://odesli.co/';
   link.target = '_blank';
   link.rel = 'noopener';

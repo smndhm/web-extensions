@@ -3,4 +3,4 @@
 'dzr-link': patch
 ---
 
-Less CSS of their own, more of the design system's. In Music Bridge, a select hovered like every field. In Deezer Link, its steps are cards.
+@dume/ds 0.4.0, and no CSS of their own: their pages use the design system's classes and only set their color.
