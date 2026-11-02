@@ -33,7 +33,7 @@
     "@scaleway/changesets-renovate": "4.0.6",
     "oxlint": "1.90.0",
     "prettier": "3.9.10",
-    "selenium-webdriver": "4.51.0",
+    "selenium-webdriver": "4.52.0",
     "typescript": "7.0.2",
     "vitest": "5.0.5",
     "web-ext": "10.8.0"
