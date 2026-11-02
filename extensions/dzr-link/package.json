@@ -1,6 +1,6 @@
 {
   "name": "dzr-link",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Open Deezer links in the desktop app instead of the browser.",
   "private": true,
   "license": "BSD-2-Clause",

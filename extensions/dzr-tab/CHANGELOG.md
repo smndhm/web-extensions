@@ -1,5 +1,11 @@
 # dzr-tab
 
+## 2.2.5
+
+### Patch Changes
+
+- b7f5406: Updated dependency `wxt` to `0.21.5`.
+
 ## 2.2.4
 
 ### Patch Changes
