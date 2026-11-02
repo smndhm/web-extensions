@@ -67,7 +67,7 @@ export default defineContentScript({
         } else if (notFound) {
           text = browser.i18n.getMessage(music ? 'noticeNotFoundSearch' : 'noticeNotFound', platform.name);
         }
-        showAlert(document, {
+        const alert = showAlert(document, {
           text,
           lang,
           closeLabel: browser.i18n.getMessage('noticeClose'),
@@ -78,6 +78,8 @@ export default defineContentScript({
               ? { text: browser.i18n.getMessage('noticeSearch', [platform.name, music.title]), href: platform.search(`${music.artistName} ${music.title}`) }
               : undefined,
         });
+        // Music Bridge's color, as on its options page (options/style.css): the page is not ours, so on the message itself
+        alert.style.setProperty('--ds-b-color-primary', 'light-dark(#a3176f, #f08ccf)');
         return;
       }
       target = resolution.url;

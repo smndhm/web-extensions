@@ -3,6 +3,11 @@
  * Without the heading font: 60 kB for one heading, three times the rest of the extension
  */
 
+/* Deezer Link's color, a discreet graphite, as it is going away: the states and the surface come from it */
+:root {
+  --ds-b-color-primary: light-dark(#2b3440, #b4bdc9);
+}
+
 /* Chrome gives extension pages a font of its own on body, at 75%: the design system's, from the root */
 body {
   font: inherit;
