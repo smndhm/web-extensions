@@ -3,6 +3,11 @@
  * BEM; scripts and tests find elements by their IDs.
  */
 
+/* Music Bridge's color, magenta: the states and the surface come from it. As in the message on music pages (content.ts) */
+:root {
+  --ds-b-color-primary: light-dark(#a3176f, #f08ccf);
+}
+
 [hidden] {
   display: none !important;
 }

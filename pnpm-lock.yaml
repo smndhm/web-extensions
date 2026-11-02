@@ -203,8 +203,8 @@ importers:
         specifier: 1.4.0
         version: 1.4.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.90.0)(playwright@1.64.1)(postcss@8.5.32)(prettier@3.9.10)(stylelint@16.26.1(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)
       '@dume/ds':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: 0.3.0
+        version: 0.3.0
       playwright:
         specifier: 1.64.1
         version: 1.64.1
@@ -249,8 +249,8 @@ importers:
         specifier: 1.4.0
         version: 1.4.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.90.0)(playwright@1.64.1)(postcss@8.5.32)(prettier@3.9.10)(stylelint@16.26.1(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)
       '@dume/ds':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: 0.3.0
+        version: 0.3.0
       '@types/node':
         specifier: 24.19.2
         version: 24.19.2
@@ -504,8 +504,8 @@ packages:
       stylelint:
         optional: true
 
-  '@dume/ds@0.1.0':
-    resolution: {integrity: sha512-EjHhcHS4MC3TXbLAT0i6ODlIYRHAJphZogKYIsGT+mBpbQCDaOKc8jtPEdRyTIHyop1cnfAQRcuBDBlR1iOh4A==}
+  '@dume/ds@0.3.0':
+    resolution: {integrity: sha512-uYzZks2sx3TzYtIcIwJokf2CrJddk7A+YqlM4JGJS8gevE7Iw43HYHORM/7QNCnR5vVuWdALABO+uC+jTiUauw==}
 
   '@eslint-community/eslint-utils@4.10.1':
     resolution: {integrity: sha512-cuadcxVFE8sDK6iWJbs8Sn0av2Nrh2QSGQhVlBW9AaAHqHwjWsZHT8LJ4hFGPh7ASBV2deFdM7H/DPjulmh8rg==}
@@ -576,6 +576,9 @@ packages:
 
   '@fontsource-variable/bricolage-grotesque@5.3.0':
     resolution: {integrity: sha512-TLi9Q4hJjS2UvoTMRSS2nHu6c4R56lAw60NR9QYtVRCHn0XtsFpiEhNffZ8Glsoxu6wEEwLKBP8lb94J52PNBA==}
+
+  '@fontsource-variable/instrument-sans@5.3.0':
+    resolution: {integrity: sha512-u4gKbDBTNFGkg997tfQn3eHOhHuquWUFTRT/rwzuKtrxX5P2ekfs2x+LgBPP4P32+cC+vUwF1Cr+IdRoPQbrGw==}
 
   '@fregante/relaxed-json@2.0.0':
     resolution: {integrity: sha512-PyUXQWB42s4jBli435TDiYuVsadwRHnMc27YaLouINktvTWsL3FcKrRMGawTayFk46X+n5bE23RjUTWQwrukWw==}
@@ -4274,9 +4277,10 @@ snapshots:
       - postcss
       - supports-color
 
-  '@dume/ds@0.1.0':
+  '@dume/ds@0.3.0':
     dependencies:
       '@fontsource-variable/bricolage-grotesque': 5.3.0
+      '@fontsource-variable/instrument-sans': 5.3.0
       modern-normalize: 3.0.1
       prismjs: 1.30.0
 
@@ -4363,6 +4367,8 @@ snapshots:
   '@fluent/syntax@0.19.0': {}
 
   '@fontsource-variable/bricolage-grotesque@5.3.0': {}
+
+  '@fontsource-variable/instrument-sans@5.3.0': {}
 
   '@fregante/relaxed-json@2.0.0': {}
 

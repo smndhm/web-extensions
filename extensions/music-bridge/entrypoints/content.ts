@@ -2,7 +2,7 @@ import { getRedirectUrl, shouldCloseTab } from '@/utils/redirect';
 import { getSettings } from '@/utils/settings';
 import { CLOSE_TAB_MESSAGE } from '@/utils/close-tab';
 import { isServiceUrl, RESOLVE_MESSAGE_TYPE, type Resolution } from '@/utils/resolve';
-import { showBanner } from '@dume/ds/web-components/banner.js';
+import { showAlert } from '@dume/ds/web-components/alert.js';
 import { daysUntil, releaseWhen } from '@/utils/release';
 import { platforms } from '@/utils/platforms';
 // The logo in the colors of this version, the toolbar icon, inlined: a page cannot load the extension's files
@@ -67,7 +67,7 @@ export default defineContentScript({
         } else if (notFound) {
           text = browser.i18n.getMessage(music ? 'noticeNotFoundSearch' : 'noticeNotFound', platform.name);
         }
-        showBanner(document, {
+        const alert = showAlert(document, {
           text,
           lang,
           closeLabel: browser.i18n.getMessage('noticeClose'),
@@ -78,6 +78,8 @@ export default defineContentScript({
               ? { text: browser.i18n.getMessage('noticeSearch', [platform.name, music.title]), href: platform.search(`${music.artistName} ${music.title}`) }
               : undefined,
         });
+        // Music Bridge's color, as on its options page (options/style.css): the page is not ours, so on the message itself
+        alert.style.setProperty('--ds-b-color-primary', 'light-dark(#a3176f, #f08ccf)');
         return;
       }
       target = resolution.url;
