@@ -8,10 +8,6 @@
   --ds-b-color-primary: light-dark(#a3176f, #f08ccf);
 }
 
-[hidden] {
-  display: none !important;
-}
-
 html,
 body {
   block-size: 100%;
@@ -48,11 +44,6 @@ body {
 /* The platform's select, a field of @dume/ds (`.ds-c-field`) across the page */
 .options__select {
   inline-size: 100%;
-  min-block-size: 2.75rem;
-
-  &:hover {
-    border-color: var(--ds-b-color-primary);
-  }
 }
 
 /* "Saved.", for two seconds after a change: its line is kept, so that nothing moves when it shows */
@@ -92,7 +83,6 @@ body {
 
 /* Credits, at the bottom of the page */
 .credits {
-  color: var(--ds-b-color-text-muted);
   padding-block: var(--ds-b-size-12);
   text-align: center;
 }

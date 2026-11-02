@@ -26,11 +26,8 @@ body {
   list-style-position: inside;
 }
 
+/* A step, a card of @dume/ds (`.ds-c-card`): its text beside its number */
 .moving__step {
-  padding: var(--ds-b-size-16);
-  border-radius: var(--ds-b-size-radius);
-  background-color: var(--ds-b-color-background-surface);
-
   & p {
     display: inline;
   }
@@ -42,8 +39,4 @@ body {
   inline-size: fit-content;
   margin-block-start: var(--ds-b-size-12);
   cursor: pointer;
-}
-
-.moving__note {
-  color: var(--ds-b-color-text-muted);
 }
