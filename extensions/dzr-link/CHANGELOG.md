@@ -1,5 +1,13 @@
 # dzr-link
 
+## 1.5.2
+
+### Patch Changes
+
+- 745614f: @dume/ds 0.3.0, and a color of its own for each extension: magenta for Music Bridge, a discreet graphite for Deezer Link.
+- 8109f81: @dume/ds 0.5.0, and no CSS of their own: their pages use the design system's classes and only set their color.
+- b7f5406: Updated dependency `wxt` to `0.21.5`.
+
 ## 1.5.1
 
 ### Patch Changes

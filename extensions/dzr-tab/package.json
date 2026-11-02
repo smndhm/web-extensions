@@ -1,6 +1,6 @@
 {
   "name": "dzr-tab",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "description": "Discover a Deezer track every time you open a new tab.",
   "private": true,
   "type": "module",

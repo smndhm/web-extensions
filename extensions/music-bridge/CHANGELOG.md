@@ -1,5 +1,14 @@
 # music-bridge
 
+## 1.12.1
+
+### Patch Changes
+
+- 745614f: @dume/ds 0.3.0, and a color of its own for each extension: magenta for Music Bridge, a discreet graphite for Deezer Link.
+- 8109f81: @dume/ds 0.5.0, and no CSS of their own: their pages use the design system's classes and only set their color.
+- db304f1: The link opened is read as the page starts, before the settings: TIDAL could already have changed the address to an artist's page, which the redirect service cannot find, and Music Bridge then said the music was not available.
+- b7f5406: Updated dependency `wxt` to `0.21.5`.
+
 ## 1.12.0
 
 ### Minor Changes
