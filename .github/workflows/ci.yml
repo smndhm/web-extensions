@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - uses: smndhm/dev-config/ci/setup@5860d0d1da14f56421b76f7453c5aad1cc2ce411 # main
+      - uses: smndhm/dev-config/ci/setup@94e3c86acbdc2ff1fe1c4fe2a710929a290baa2f # main
 
       - name: Lint and format check
         run: pnpm lint
@@ -47,7 +47,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - uses: smndhm/dev-config/ci/setup@5860d0d1da14f56421b76f7453c5aad1cc2ce411 # main
+      - uses: smndhm/dev-config/ci/setup@94e3c86acbdc2ff1fe1c4fe2a710929a290baa2f # main
 
       # Chromium only: GitHub-hosted Ubuntu runners have Google Chrome, so the libraries it needs. Without --with-deps,
       # which installed them again with fonts and Xvfb the headless checks do not need (14 of the step's 20 s)
@@ -67,7 +67,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - uses: smndhm/dev-config/ci/setup@5860d0d1da14f56421b76f7453c5aad1cc2ce411 # main
+      - uses: smndhm/dev-config/ci/setup@94e3c86acbdc2ff1fe1c4fe2a710929a290baa2f # main
 
       - name: Zip for Firefox
         run: pnpm zip:firefox
