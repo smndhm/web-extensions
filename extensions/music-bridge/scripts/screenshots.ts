@@ -45,9 +45,9 @@ const TEXTS: Record<string, { question: string; answer: string; more: string; pl
     platforms: 'All your tracks and albums, on the platform you choose',
   },
   fr: {
-    question: 'Un lien Spotify ?',
+    question: 'Un lien Spotify ?',
     answer: 'Ouvert sur Deezer.',
-    more: 'Et dans tous les sens : Apple Music, YouTube Music, Tidal, Amazon Music…',
+    more: 'Et dans tous les sens : Apple Music, YouTube Music, Tidal, Amazon Music…',
     platforms: 'Tous vos titres et albums, sur la plateforme de votre choix',
   },
 };

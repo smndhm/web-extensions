@@ -20,7 +20,7 @@
     "description": "Options page introduction: what the extension does."
   },
   "optionsStreamingPlatformLabel": {
-    "message": "Sélectionnez votre plateforme de streaming :",
+    "message": "Sélectionnez votre plateforme de streaming\u202f:",
     "description": "Options page label for the streaming platforms list."
   },
   "optionsOpenAppLabel": {
@@ -36,7 +36,7 @@
     "description": "Options page label to close the tab after opening the desktop app."
   },
   "optionsCloseTabHelp": {
-    "message": "Cochez « Toujours autoriser » dans la fenêtre du navigateur la première fois, sinon l'onglet se ferme avant votre réponse.",
+    "message": "Cochez «\u202fToujours autoriser\u202f» dans la fenêtre du navigateur la première fois, sinon l'onglet se ferme avant votre réponse.",
     "description": "Options page help under the close tab option."
   },
   "optionsSaveConfirmation": {
@@ -55,14 +55,14 @@
     }
   },
   "noticeNotFoundSearch": {
-    "message": "Music Bridge n'a pas trouvé cette musique sur $PLATFORM$. Vous la trouverez peut-être en la cherchant :",
+    "message": "Music Bridge n'a pas trouvé cette musique sur $PLATFORM$. Vous la trouverez peut-être en la cherchant\u202f:",
     "description": "Message on the music page when the music is not on the chosen platform, followed by a link to search the platform for it.",
     "placeholders": {
       "platform": { "content": "$1", "example": "Deezer" }
     }
   },
   "noticeSearch": {
-    "message": "Chercher « $TITLE$ » sur $PLATFORM$",
+    "message": "Chercher «\u202f$TITLE$\u202f» sur $PLATFORM$",
     "description": "Link after the message, to the chosen platform's search for the music.",
     "placeholders": {
       "platform": { "content": "$1", "example": "Deezer" },
@@ -70,7 +70,7 @@
     }
   },
   "noticeUpcomingSong": {
-    "message": "Vous êtes en avance ! Ce titre sort $WHEN$. Music Bridge pourra l'ouvrir sur $PLATFORM$ à sa sortie.",
+    "message": "Vous êtes en avance\u202f! Ce titre sort $WHEN$. Music Bridge pourra l'ouvrir sur $PLATFORM$ à sa sortie.",
     "description": "Message on the music page when the track is not out yet.",
     "placeholders": {
       "platform": { "content": "$1", "example": "Deezer" },
@@ -78,7 +78,7 @@
     }
   },
   "noticeUpcomingAlbum": {
-    "message": "Vous êtes en avance ! Cet album sort $WHEN$. Music Bridge pourra l'ouvrir sur $PLATFORM$ à sa sortie.",
+    "message": "Vous êtes en avance\u202f! Cet album sort $WHEN$. Music Bridge pourra l'ouvrir sur $PLATFORM$ à sa sortie.",
     "description": "Message on the music page when the album is not out yet.",
     "placeholders": {
       "platform": { "content": "$1", "example": "Deezer" },
@@ -86,7 +86,7 @@
     }
   },
   "noticeUpcoming": {
-    "message": "Vous êtes en avance ! Cette musique sort $WHEN$. Music Bridge pourra l'ouvrir sur $PLATFORM$ à sa sortie.",
+    "message": "Vous êtes en avance\u202f! Cette musique sort $WHEN$. Music Bridge pourra l'ouvrir sur $PLATFORM$ à sa sortie.",
     "description": "Message on the music page when the music is not out yet, neither known as a track nor as an album.",
     "placeholders": {
       "platform": { "content": "$1", "example": "Deezer" },
