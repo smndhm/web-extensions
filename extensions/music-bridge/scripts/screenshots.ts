@@ -5,6 +5,8 @@
  * 2. the supported platforms.
  * They are 1280×800 PNGs, the size both the Chrome Web Store and addons.mozilla.org accept, saved to
  * .output/screenshots/screenshot-1280x800-<locale>-<n>.png. The platforms appear by name only, without their logos.
+ * They use @dume/ds's classes alone, in its dark theme and the extension's color, as the promotional tiles
+ * (scripts/store-assets.ts): their size comes from the screenshot's scale, the design system's sizes growing with it.
  *
  * The track shown, its title, artist and cover, comes from the public Deezer API: the first track of the playlist
  * PLAYLISTS gives for the language, as "<locale>:<playlist ID>" (comma separated); by default
@@ -16,23 +18,38 @@
  * CHROMIUM_PATH can point to a Chromium binary other than the one Playwright installs.
  */
 
-import { mkdir, readFile, rm } from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { createRequire } from 'node:module';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { chromium } from 'playwright';
 import { logo } from './logo.ts';
 
-const ROOT = resolve(import.meta.dirname, '../../..');
 const OUTPUT_DIR = resolve(import.meta.dirname, '../.output/screenshots');
-const VIEWPORT = { width: 1280, height: 800 };
-// Bricolage Grotesque (SIL Open Font License), as on the promotional tiles (scripts/store-assets.ts)
-const FONT = 'node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2';
+// The window at a scale that makes 1280×800, wider by the room the design system keeps for a scrollbar, left out of the image
+const VIEWPORT = { width: 1120, height: 700, scale: 8 / 7 };
+const SCROLLBAR = 15;
+// The design system's stylesheet, from a file so that its fonts load, and the color of the options page
+const DESIGN_SYSTEM = pathToFileURL(createRequire(import.meta.url).resolve('@dume/ds/styles.css')).href;
+const COLOR = (await readFile(resolve(import.meta.dirname, '../entrypoints/options/style.css'), 'utf8')).match(/--ds-b-color-primary: (light-dark\([^;]+\));/)![1]!;
 
 // Deezer first, then roughly by audience
 const PLATFORMS = ['Deezer', 'Spotify', 'Apple Music', 'YouTube Music', 'Amazon Music', 'YouTube', 'SoundCloud', 'Tidal', 'Pandora'];
 
-const TEXTS: Record<string, { question: string; answer: string; platforms: string }> = {
-  en: { question: 'A Spotify link?', answer: 'Opened on Deezer.', platforms: 'All your tracks and albums,<br>on the platform you choose' },
-  fr: { question: 'Un lien Spotify ?', answer: 'Ouvert sur Deezer.', platforms: 'Tous vos titres et albums,<br>sur la plateforme de votre choix' },
+const TEXTS: Record<string, { question: string; answer: string; more: string; platforms: string }> = {
+  en: {
+    question: 'A Spotify link?',
+    answer: 'Opened on Deezer.',
+    more: 'And every other way: Apple Music, YouTube Music, Tidal, Amazon Music…',
+    platforms: 'All your tracks and albums, on the platform you choose',
+  },
+  fr: {
+    question: 'Un lien Spotify ?',
+    answer: 'Ouvert sur Deezer.',
+    more: 'Et dans tous les sens : Apple Music, YouTube Music, Tidal, Amazon Music…',
+    platforms: 'Tous vos titres et albums, sur la plateforme de votre choix',
+  },
 };
 const PLAYLISTS = Object.fromEntries(
   (process.env.PLAYLISTS?.trim() || 'en:3155776842,fr:1109890291')
@@ -52,29 +69,7 @@ interface DeezerTrack {
   album: { cover_big: string };
 }
 
-const dataUrl = async (file: string, type: string) => `data:${type};base64,${(await readFile(resolve(ROOT, file))).toString('base64')}`;
-const font = await dataUrl(FONT, 'font/woff2');
 const icon = `data:image/svg+xml;base64,${Buffer.from(await logo({ original: true })).toString('base64')}`;
-
-const style = `
-  @font-face { font-family: 'Bricolage Grotesque'; font-weight: 200 800; src: url(${font}); }
-  html, body { margin: 0; width: ${VIEWPORT.width}px; height: ${VIEWPORT.height}px; overflow: hidden; }
-  body {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    background: radial-gradient(circle at 15% 20%, #2f2448, #121216 70%); color: #fff; font-family: 'Bricolage Grotesque', sans-serif;
-  }
-  h1 { margin: 0; font-weight: 800; text-align: center; line-height: 1.06; }
-  h1 em { font-style: normal; color: #ff9fbf; }
-  .links { display: flex; align-items: center; gap: 34px; margin-top: 64px; }
-  .link { width: 390px; box-sizing: border-box; display: flex; gap: 18px; align-items: center; padding: 22px 26px; border-radius: 18px; background: #fff; color: #1b1b1f; font: 16px system-ui, sans-serif; }
-  .link small { display: block; color: #888; font-size: 16px; }
-  .link b { display: block; margin-top: 4px; font-size: 21px; }
-  .link span { display: block; margin-top: 2px; color: #555; font-size: 17px; }
-  .cover { width: 72px; height: 72px; flex: none; border-radius: 12px; background: #ddd center / cover; }
-  .links img { width: 84px; height: 84px; }
-  .platforms { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 18px; max-width: 1000px; margin-top: 46px; }
-  .platforms span { padding: 16px 30px; border: 1px solid #ffffff30; border-radius: 40px; background: #ffffff14; font-size: 26px; text-align: center; }
-`;
 
 async function deezer<T>(path: string): Promise<T> {
   const response = await fetch(`https://api.deezer.com/${path}`);
@@ -97,32 +92,57 @@ async function track(locale: string): Promise<{ title: string; artist: string; c
 
 const escape = (text: string) => text.replace(/[&<>"]/g, c => `&#${c.charCodeAt(0)};`);
 
+/** A link's preview: the cover, as high as its three lines (16px × 1.2 each, 8px between the address and the title), then the address, the title and the artist */
 const link = (url: string, { title, artist, cover }: Awaited<ReturnType<typeof track>>) =>
-  `<div class="link"><div class="cover" style="background-image: url(${cover})"></div><div><small>${url}</small><b>${escape(title)}</b><span>${escape(artist)}</span></div></div>`;
+  `<div class="ds-c-card ds-c-card--horizontal"><img src="${cover}" alt="" width="66" height="66"><div><p>${url}</p><p><strong>${escape(title)}</strong><br>${escape(artist)}</p></div></div>`;
 
+/** Each visual, centered: its heading, the answer in the extension's color, then the links or the platforms */
 const visuals = (texts: (typeof TEXTS)[string], shown: Awaited<ReturnType<typeof track>>) => [
-  `<h1 style="font-size: 68px">${texts.question}<br><em>${texts.answer}</em></h1>
-   <div class="links">${link('open.spotify.com/track/…', shown)}<img src="${icon}" alt="">${link('deezer.com/track/…', shown)}</div>`,
-  `<h1 style="font-size: 60px">${texts.platforms}</h1>
-   <div class="platforms">${PLATFORMS.map(platform => `<span>${platform}</span>`).join('')}</div>`,
+  `<div class="ds-c-hero"><h1 class="ds-u-text-center">${texts.question}<br><span class="ds-u-text-primary">${texts.answer}</span></h1></div>
+   <div class="ds-l-cluster ds-l-cluster--equal">${link('open.spotify.com/track/…', shown)}<img src="${icon}" alt="" width="72" height="72">${link('deezer.com/track/…', shown)}</div>
+   <p class="ds-u-text-center ds-u-text-muted">${texts.more}</p>`,
+  `<div class="ds-c-hero" style="--ds-c-hero-size-heading: var(--ds-b-size-48)"><h1 class="ds-u-text-center">${texts.platforms}</h1></div>
+   <ul class="ds-l-cluster ds-l-cluster--center" role="list">${PLATFORMS.map(platform => `<li class="ds-c-card">${platform}</li>`).join('')}</ul>`,
 ];
+
+/** A screenshot's page. Its font, the design system's printed one: a screenshot should not depend on the fonts of the computer that takes it */
+const html = (locale: string, body: string) => `<!doctype html>
+<html lang="${locale}" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="${DESIGN_SYSTEM}">
+<style>:root { --ds-b-color-primary: ${COLOR}; --ds-b-font-family: 'Instrument Sans', system-ui, sans-serif; }</style>
+</head>
+<body class="ds-l-page ds-l-page--centered ds-l-page--tinted">
+<main class="ds-l-page__main">
+${body}
+</main>
+</body>
+</html>`;
 
 await rm(OUTPUT_DIR, { recursive: true, force: true });
 await mkdir(OUTPUT_DIR, { recursive: true });
 
+const temporary = await mkdtemp(join(tmpdir(), 'screenshots-'));
 const browser = await chromium.launch({ channel: 'chromium', executablePath: process.env.CHROMIUM_PATH });
 try {
-  const page = await browser.newPage({ viewport: VIEWPORT });
+  const page = await browser.newPage({ viewport: { width: VIEWPORT.width + SCROLLBAR, height: VIEWPORT.height }, deviceScaleFactor: VIEWPORT.scale });
+  const source = join(temporary, 'screenshot.html');
   for (const [locale, texts] of Object.entries(TEXTS)) {
     const shown = await track(locale);
     for (const [index, body] of visuals(texts, shown).entries()) {
-      await page.setContent(`<!doctype html><html lang="${locale}"><style>${style}</style><body>${body}</body></html>`);
-      await page.evaluate(() => document.fonts.ready);
+      await writeFile(source, html(locale, body));
+      await page.goto(pathToFileURL(source).href);
+      await page.evaluate(async () => {
+        await document.fonts.ready;
+        await Promise.all([...document.images].map(img => img.decode()));
+      });
       const file = resolve(OUTPUT_DIR, `screenshot-1280x800-${locale}-${index + 1}.png`);
-      await page.screenshot({ path: file });
+      await page.screenshot({ path: file, clip: { x: 0, y: 0, width: VIEWPORT.width, height: VIEWPORT.height } });
       console.log(file);
     }
   }
 } finally {
   await browser.close();
+  await rm(temporary, { recursive: true });
 }
