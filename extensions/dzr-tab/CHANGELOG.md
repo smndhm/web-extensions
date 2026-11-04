@@ -1,5 +1,11 @@
 # dzr-tab
 
+## 2.2.6
+
+### Patch Changes
+
+- ed5feef: Updated dependency `@types/node` to `26.6.6`.
+
 ## 2.2.5
 
 ### Patch Changes

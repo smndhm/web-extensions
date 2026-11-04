@@ -1,5 +1,12 @@
 # music-bridge
 
+## 1.12.3
+
+### Patch Changes
+
+- 55eccd3: In Firefox, the options keep their margins: Firefox no longer adds its own styles to them, which took the margins away.
+- ed5feef: Updated dependency `@types/node` to `26.6.6`.
+
 ## 1.12.2
 
 ### Patch Changes
