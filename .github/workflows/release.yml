@@ -27,7 +27,7 @@ jobs:
         with:
           fetch-depth: 0 # changeset publish compares against the existing tags
 
-      - uses: smndhm/dev-config/ci/setup@94e3c86acbdc2ff1fe1c4fe2a710929a290baa2f # main
+      - uses: smndhm/dev-config/ci/setup@d1316aeef84394540fcf8701cc9d5e1866e26bb1 # main
 
       # The version script draws Music Bridge's logo colors and renders its images when its version changes
       - name: Pending changesets
