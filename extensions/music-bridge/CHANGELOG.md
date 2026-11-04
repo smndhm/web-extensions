@@ -1,5 +1,12 @@
 # music-bridge
 
+## 1.12.2
+
+### Patch Changes
+
+- 1a50700: In French, a narrow no-break space between a word and `?`, `!`, `;` or `:`, and inside « »: the punctuation never starts a line.
+- 7aed0c5: The options fit the browser's settings page: the whole width of its frame, the same margin on both sides, no empty space below.
+
 ## 1.12.1
 
 ### Patch Changes
