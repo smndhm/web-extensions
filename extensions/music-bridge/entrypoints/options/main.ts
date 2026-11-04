@@ -11,4 +11,7 @@ import '@dume/ds/components/footer.css';
 import './style.css';
 import { initOptionsPage } from '@/utils/options-page';
 
+// Firefox shows the options on its add-on card (style.css)
+if (import.meta.env.FIREFOX) document.documentElement.dataset.browser = 'firefox';
+
 void initOptionsPage(document, navigator.userAgent);

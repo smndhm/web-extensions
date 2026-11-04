@@ -2,3 +2,22 @@
 :root {
   --ds-b-color-primary: light-dark(#a3176f, #f08ccf);
 }
+
+/*
+ * The browser shows the options in its own settings page (Firefox's add-on card, Chrome's dialog), which frames them:
+ * no page layout around them, neither the screen's height nor a width and margins of its own
+ */
+.ds-l-page {
+  min-block-size: auto;
+  max-inline-size: none;
+  padding-inline: 0;
+}
+
+.ds-l-page__main {
+  padding-block: 0;
+}
+
+/* On Firefox's add-on card: the card's background, rather than a darker box on it */
+:root[data-browser='firefox'] {
+  background-color: transparent;
+}
