@@ -2,8 +2,3 @@
 :root {
   --ds-b-color-primary: light-dark(#a3176f, #f08ccf);
 }
-
-/* On Firefox's add-on card: the card's background, rather than a darker box on it */
-:root[data-browser='firefox'] {
-  background-color: transparent;
-}
