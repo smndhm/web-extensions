@@ -2,4 +2,4 @@
 'music-bridge': patch
 ---
 
-The options fit Firefox's add-on card: its background rather than a darker box, no empty space above and below, the same margins on both sides.
+The options fit the browser's settings page: no empty space above and below, a margin of 16px all around, and on Firefox the add-on card's background rather than a darker box.
