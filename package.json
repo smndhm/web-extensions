@@ -34,7 +34,7 @@
     "prettier": "3.9.10",
     "selenium-webdriver": "4.52.0",
     "typescript": "7.0.2",
-    "vitest": "5.0.5",
+    "vitest": "5.1.0",
     "web-ext": "10.8.0"
   }
 }
