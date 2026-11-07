@@ -1,5 +1,11 @@
 # dzr-tab
 
+## 2.2.7
+
+### Patch Changes
+
+- 82f4b39: Updated dependency `vitest` to `5.1.0`.
+
 ## 2.2.6
 
 ### Patch Changes

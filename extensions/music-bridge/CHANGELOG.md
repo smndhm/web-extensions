@@ -1,5 +1,11 @@
 # music-bridge
 
+## 1.12.4
+
+### Patch Changes
+
+- 82f4b39: Updated dependency `vitest` to `5.1.0`.
+
 ## 1.12.3
 
 ### Patch Changes
