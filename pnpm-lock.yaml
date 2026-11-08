@@ -171,7 +171,7 @@ importers:
         version: 3.0.3
       '@dume/dev-config':
         specifier: 1.4.0
-        version: 1.4.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.91.0)(playwright@1.64.1)(postcss@8.5.32)(prettier@3.9.10)(stylelint@16.26.1(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)
+        version: 1.4.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.91.0)(playwright@1.65.0)(postcss@8.5.32)(prettier@3.9.10)(stylelint@16.26.1(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)
       '@scaleway/changesets-renovate':
         specifier: 4.0.6
         version: 4.0.6(@changesets/cli@3.0.3)(supports-color@7.2.0)
@@ -198,13 +198,13 @@ importers:
     devDependencies:
       '@dume/dev-config':
         specifier: 1.4.0
-        version: 1.4.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.91.0)(playwright@1.64.1)(postcss@8.5.32)(prettier@3.9.10)(stylelint@16.26.1(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)
+        version: 1.4.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.91.0)(playwright@1.65.0)(postcss@8.5.32)(prettier@3.9.10)(stylelint@16.26.1(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)
       '@dume/ds':
         specifier: 0.8.0
         version: 0.8.0
       playwright:
-        specifier: 1.64.1
-        version: 1.64.1
+        specifier: 1.65.0
+        version: 1.65.0
       typescript:
         specifier: 7.0.2
         version: 7.0.2
@@ -220,7 +220,7 @@ importers:
     devDependencies:
       '@dume/dev-config':
         specifier: 1.4.0
-        version: 1.4.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.91.0)(playwright@1.64.1)(postcss@8.5.32)(prettier@3.9.10)(stylelint@16.26.1(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)
+        version: 1.4.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.91.0)(playwright@1.65.0)(postcss@8.5.32)(prettier@3.9.10)(stylelint@16.26.1(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)
       '@types/node':
         specifier: 26.6.6
         version: 26.6.6
@@ -228,8 +228,8 @@ importers:
         specifier: 30.1.3
         version: 30.1.3
       playwright:
-        specifier: 1.64.1
-        version: 1.64.1
+        specifier: 1.65.0
+        version: 1.65.0
       typescript:
         specifier: 7.0.2
         version: 7.0.2
@@ -244,7 +244,7 @@ importers:
     devDependencies:
       '@dume/dev-config':
         specifier: 1.4.0
-        version: 1.4.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.91.0)(playwright@1.64.1)(postcss@8.5.32)(prettier@3.9.10)(stylelint@16.26.1(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)
+        version: 1.4.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.91.0)(playwright@1.65.0)(postcss@8.5.32)(prettier@3.9.10)(stylelint@16.26.1(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)
       '@dume/ds':
         specifier: 0.8.0
         version: 0.8.0
@@ -255,8 +255,8 @@ importers:
         specifier: 30.1.3
         version: 30.1.3
       playwright:
-        specifier: 1.64.1
-        version: 1.64.1
+        specifier: 1.65.0
+        version: 1.65.0
       rampensau:
         specifier: 2.4.0
         version: 2.4.0
@@ -3006,13 +3006,13 @@ packages:
   pkg-types@2.4.0:
     resolution: {integrity: sha512-07Fys7iVx0X6TcviMOgogM1Lk33ZyqOezMnU79S+kffWqwolG/5W9V8EgQSeYCIfFTYVgssRbnH630Oa2+soBA==}
 
-  playwright-core@1.64.1:
-    resolution: {integrity: sha512-BC4s8y6SEVA6Q1rSxZTto8hI1KUI3xXlHGZgvGqP4IqPdI/a6FX9H29IDNz7vKo9l21b6LfYosScPL6M3xxyDQ==}
+  playwright-core@1.65.0:
+    resolution: {integrity: sha512-vNSKgH6YqtN7cdT/L334zo0a+YwkrpicyrHJlWWPIm/Q+Nn2SWInil01oT0mbu96U4GgoRtCYQD9CzJQgju+lA==}
     engines: {node: '>=20'}
     hasBin: true
 
-  playwright@1.64.1:
-    resolution: {integrity: sha512-HCrVhHr5QQuwYoswEUGTb7gGp522yflbv/ST8nF4sFWGuLjQCt17Q/EubpGGSNKYn1tsTCPZxqHhHCfVURu7UA==}
+  playwright@1.65.0:
+    resolution: {integrity: sha512-F3AMWcR44qMBt4kq+6Kb6mX7bjGXshktKFOPULd7reED6ZJWevjbNRqysP7q+AATE9kdPEZBibex1BYsvpVoeA==}
     engines: {node: '>=20'}
     hasBin: true
 
@@ -4246,7 +4246,7 @@ snapshots:
 
   '@dual-bundle/import-meta-resolve@4.2.1': {}
 
-  '@dume/dev-config@1.4.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.91.0)(playwright@1.64.1)(postcss@8.5.32)(prettier@3.9.10)(stylelint@16.26.1(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)':
+  '@dume/dev-config@1.4.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.91.0)(playwright@1.65.0)(postcss@8.5.32)(prettier@3.9.10)(stylelint@16.26.1(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)':
     dependencies:
       '@eslint/json': 2.1.1
       '@eslint/markdown': 8.0.3(supports-color@7.2.0)
@@ -4261,7 +4261,7 @@ snapshots:
     optionalDependencies:
       eslint: 9.39.4(jiti@2.7.0)(supports-color@7.2.0)
       oxlint: 1.91.0
-      playwright: 1.64.1
+      playwright: 1.65.0
       prettier: 3.9.10
       stylelint: 16.26.1(supports-color@7.2.0)(typescript@7.0.2)
     transitivePeerDependencies:
@@ -6946,11 +6946,11 @@ snapshots:
       exsolve: 1.2.0
       pathe: 2.0.3
 
-  playwright-core@1.64.1: {}
+  playwright-core@1.65.0: {}
 
-  playwright@1.64.1:
+  playwright@1.65.0:
     dependencies:
-      playwright-core: 1.64.1
+      playwright-core: 1.65.0
 
   pngjs@3.4.0: {}
 
