@@ -200,8 +200,8 @@ importers:
         specifier: 1.5.0
         version: 1.5.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.92.0)(playwright@1.65.0)(postcss@8.5.32)(prettier@3.9.10)(stylelint@16.26.1(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)
       '@dume/ds':
-        specifier: 0.8.0
-        version: 0.8.0
+        specifier: 0.10.0
+        version: 0.10.0
       playwright:
         specifier: 1.65.0
         version: 1.65.0
@@ -246,8 +246,8 @@ importers:
         specifier: 1.5.0
         version: 1.5.0(eslint@9.39.4(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.92.0)(playwright@1.65.0)(postcss@8.5.32)(prettier@3.9.10)(stylelint@16.26.1(supports-color@7.2.0)(typescript@7.0.2))(supports-color@7.2.0)
       '@dume/ds':
-        specifier: 0.8.0
-        version: 0.8.0
+        specifier: 0.10.0
+        version: 0.10.0
       '@types/node':
         specifier: 26.6.6
         version: 26.6.6
@@ -498,8 +498,8 @@ packages:
       stylelint:
         optional: true
 
-  '@dume/ds@0.8.0':
-    resolution: {integrity: sha512-D0fkL2ZtQ1IIZ0sSeiwnrdj7kA4wphTnDdGNwUaRMgkZiEQgBwAs6FkFxhcFLfrLDXOfjCJXg2hl7ZRadWj+Og==}
+  '@dume/ds@0.10.0':
+    resolution: {integrity: sha512-WbwxWYYyCvF/ZJFz7CKqiZ3MFDfGWCsxoaiD0LuLiIUNZN4Epf/DLXS2VOKHDZFCfqJUPqQSYPS2w48BIL8sbg==}
 
   '@eslint-community/eslint-utils@4.10.1':
     resolution: {integrity: sha512-cuadcxVFE8sDK6iWJbs8Sn0av2Nrh2QSGQhVlBW9AaAHqHwjWsZHT8LJ4hFGPh7ASBV2deFdM7H/DPjulmh8rg==}
@@ -4273,7 +4273,7 @@ snapshots:
       - postcss
       - supports-color
 
-  '@dume/ds@0.8.0':
+  '@dume/ds@0.10.0':
     dependencies:
       '@fontsource-variable/bricolage-grotesque': 5.3.0
       '@fontsource-variable/instrument-sans': 5.3.0
