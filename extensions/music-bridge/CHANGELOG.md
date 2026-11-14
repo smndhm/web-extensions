@@ -1,5 +1,15 @@
 # music-bridge
 
+## 1.12.4
+
+### Patch Changes
+
+- 82f4b39: Updated dependency `vitest` to `5.1.0`.
+- 26458e9: Updated dependency `@dume/ds` to `0.8.0`.
+- 2c84931: Updated dependency `playwright` to `1.65.0`.
+- 30cede6: Updated dependency `@dume/ds` to `0.10.0`.
+- 17b555b: Updated dependency `@dume/dev-config` to `1.5.0`.
+
 ## 1.12.3
 
 ### Patch Changes
