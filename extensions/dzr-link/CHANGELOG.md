@@ -1,5 +1,15 @@
 # dzr-link
 
+## 1.5.3
+
+### Patch Changes
+
+- 7f21a95: Updated dependency `playwright` to `1.65.1`.
+- 26458e9: Updated dependency `@dume/ds` to `0.8.0`.
+- 2c84931: Updated dependency `playwright` to `1.65.0`.
+- 30cede6: Updated dependency `@dume/ds` to `0.10.0`.
+- 17b555b: Updated dependency `@dume/dev-config` to `1.5.0`.
+
 ## 1.5.2
 
 ### Patch Changes
