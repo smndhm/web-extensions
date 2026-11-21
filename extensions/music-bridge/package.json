@@ -27,7 +27,7 @@
     "playwright": "1.65.1",
     "rampensau": "2.4.0",
     "typescript": "7.0.2",
-    "vitest": "5.1.0",
+    "vitest": "5.1.1",
     "wxt": "0.21.5"
   }
 }
