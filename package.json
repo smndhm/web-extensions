@@ -30,7 +30,7 @@
     "@changesets/cli": "3.0.3",
     "@dume/dev-config": "1.5.0",
     "@scaleway/changesets-renovate": "4.0.6",
-    "oxlint": "1.94.0",
+    "oxlint": "1.95.0",
     "prettier": "3.10.1",
     "selenium-webdriver": "4.54.0",
     "typescript": "7.0.2",
