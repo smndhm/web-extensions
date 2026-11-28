@@ -1,5 +1,16 @@
 # dzr-tab
 
+## 2.2.7
+
+### Patch Changes
+
+- 82f4b39: Updated dependency `vitest` to `5.1.0`.
+- 7f21a95: Updated dependency `playwright` to `1.65.1`.
+- 529dcbe: Updated dependency `vitest` to `5.1.1`.
+- 2c84931: Updated dependency `playwright` to `1.65.0`.
+- da5c70e: Updated dependency `@types/node` to `26.6.7`.
+- 17b555b: Updated dependency `@dume/dev-config` to `1.5.0`.
+
 ## 2.2.6
 
 ### Patch Changes
